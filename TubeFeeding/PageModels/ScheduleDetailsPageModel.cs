@@ -76,7 +76,7 @@ namespace TubeFeeding.PageModels
             set => SetProperty(ref _mealsPerDay, value);
         }
 
-        public ScheduleDetailsPageModel(ScheduleDetails model)
+        public ScheduleDetailsPageModel(Schedule model)
         {
             _id = model.Id;
             _bodyWeight = model.BodyWeight;

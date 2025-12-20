@@ -6,6 +6,7 @@ namespace TubeFeeding.PageModels
     public partial class FoodPageModel : ObservableObject
     {
         private int _id;
+        private string _name;
         private double _kcal;
         private double _grams;
         private double _kcalPerGram;
@@ -17,6 +18,12 @@ namespace TubeFeeding.PageModels
         {
             get => _id;
             set => SetProperty(ref _id, value);
+        }
+
+        public string Name
+        {
+            get => _name;
+            set => SetProperty(ref _name, value);
         }
 
         public double Kcal

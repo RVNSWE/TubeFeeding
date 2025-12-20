@@ -27,7 +27,6 @@ namespace TubeFeeding.Clients
 
             // otherwise
             conn = new SQLiteAsyncConnection(_dbPath); // connect to the database via the specified filepath
-            await conn.CreateTableAsync<Patient>();
             await conn.CreateTableAsync<Food>();
             await conn.CreateTableAsync<Schedule>();
         }
@@ -45,9 +44,9 @@ namespace TubeFeeding.Clients
          */
         public async Task OutputChart()
         {
-            try
+            /*try
             {
-                Patient patient = await conn.FindAsync<Patient>(App.PatientViewModel?.SelectedPatient.Id);
+                Food food = await conn.FindAsync<Food>(App.FoodPageModel?.SelectedPatient.Id);
                 Chart chart = await conn.FindAsync<Chart>(App.PatientViewModel?.LastPatientSelected.SelectedChart.Id);
 
                 int recordId = chart.Id;
@@ -84,110 +83,42 @@ namespace TubeFeeding.Clients
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine("Could not drop table. Error: {1}", ex.Message);
-            }
+            }*/
         }
 
         /*
-         * FOR DEBUGGING ONLY - Drop the current Patient table.
+         * FOR DEBUGGING ONLY - Drop the current Food table.
          */
-        public async Task DropPatientTable()
+        public async Task DropFoodTable()
         {
-            System.Diagnostics.Debug.WriteLine("Attempting to drop Patient table");
+            System.Diagnostics.Debug.WriteLine("Attempting to drop Food table");
 
             try
             {
-                await conn.DropTableAsync<Patient>();
-                System.Diagnostics.Debug.WriteLine("Dropping Patient table");
-                await conn.CreateTableAsync<Patient>(); // create a table for storing Patient data
+                await conn.DropTableAsync<Food>();
+                System.Diagnostics.Debug.WriteLine("Dropping Food table");
+                await conn.CreateTableAsync<Food>(); // create a table for storing Food data
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine("Could not drop table. Error: {1}", ex.Message);
             }
 
-            await DropChartTables();
+            await DropScheduleTable();
         }
 
         /*
-         * FOR DEBUGGING ONLY - Drop the current chart tables.
+         * FOR DEBUGGING ONLY - Drop the current Schedule table.
          */
-        public async Task DropChartTables()
+        public async Task DropScheduleTable()
         {
-            System.Diagnostics.Debug.WriteLine("Attempting to drop chart tables");
+            System.Diagnostics.Debug.WriteLine("Attempting to drop Schedule table");
 
             try
             {
-                await conn.DropTableAsync<Chart>();
-                System.Diagnostics.Debug.WriteLine("Dropping chart table");
-                await conn.CreateTableAsync<Chart>();
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("Could not drop table. Error: {1}", ex.Message);
-            }
-
-            try
-            {
-
-                await conn.DropTableAsync<PreAnaes>();
-                System.Diagnostics.Debug.WriteLine("Dropping pre an table");
-                await conn.CreateTableAsync<PreAnaes>();
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("Could not drop table. Error: {1}", ex.Message);
-            }
-
-            try
-            {
-
-                await conn.DropTableAsync<IntraAnaes>();
-                System.Diagnostics.Debug.WriteLine("Dropping intra an table");
-                await conn.CreateTableAsync<IntraAnaes>();
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("Could not drop table. Error: {1}", ex.Message);
-            }
-
-            try
-            {
-                await conn.DropTableAsync<PostAnaes>();
-                System.Diagnostics.Debug.WriteLine("Dropping post an table");
-                await conn.CreateTableAsync<PostAnaes>();
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("Could not drop table. Error: {1}", ex.Message);
-            }
-
-            try
-            {
-                await conn.DropTableAsync<Drug>();
-                System.Diagnostics.Debug.WriteLine("Dropping drugsfluids table");
-                await conn.CreateTableAsync<Drug>();
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("Could not drop table. Error: {1}", ex.Message);
-            }
-
-            try
-            {
-                await conn.DropTableAsync<Fluid>();
-                System.Diagnostics.Debug.WriteLine("Dropping drugsfluids table");
-                await conn.CreateTableAsync<Fluid>();
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("Could not drop table. Error: {1}", ex.Message);
-            }
-
-            try
-            {
-                await conn.DropTableAsync<MonitorParams>();
-                System.Diagnostics.Debug.WriteLine("Dropping params table");
-                await conn.CreateTableAsync<MonitorParams>();
+                await conn.DropTableAsync<Schedule>();
+                System.Diagnostics.Debug.WriteLine("Dropping Schedule table");
+                await conn.CreateTableAsync<Schedule>();
             }
             catch (Exception ex)
             {
@@ -196,39 +127,29 @@ namespace TubeFeeding.Clients
         }
 
         /*
-         * Add a new Patient to the Patient table.
+         * Add a new Food to the Food table.
          */
-        public async Task AddNewPatient(
-            string clientId,
-            string clientName,
-            string phoneNumber,
-            string patientId,
-            string patientName,
-            string species,
-            string age,
-            string sex,
-            string breed,
-            string neuteredStatus,
-            string temperament,
-            double weight
+        public async Task AddNewFood(
+            string name,
+            double kcal,
+            double grams,
+            double kcalPerGram,
+            double netWeight,
+            double dryWeight,
+            double waterContent
             )
         {
-            System.Diagnostics.Debug.WriteLine("Attempting to add Patient");
+            System.Diagnostics.Debug.WriteLine("Attempting to add Food");
 
-            Patient patient = new()
+            Food food = new()
             {
-                ClientId = clientId,
-                ClientName = clientName,
-                PhoneNumber = phoneNumber,
-                PatientId = patientId,
-                PatientName = patientName,
-                Species = species,
-                Age = age,
-                Sex = sex,
-                Breed = breed,
-                NeuteredStatus = neuteredStatus,
-                Temperament = temperament,
-                Weight = weight
+                Name = name,
+                Kcal = kcal,
+                Grams = grams,
+                KcalPerGram = kcalPerGram,
+                NetWeight = netWeight,
+                DryWeight = dryWeight,
+                WaterContent = waterContent
             };
 
             int result = 0;
@@ -237,40 +158,48 @@ namespace TubeFeeding.Clients
             {
                 await Init();
 
-                result = await conn.InsertAsync(patient);
+                result = await conn.InsertAsync(food);
 
-                StatusMessage = string.Format("{0} Patient(s) added (name: {1})", result, patientName);
-                System.Diagnostics.Debug.WriteLine("{0} Patient(s) added (name: {1})", result, patientName);
+                StatusMessage = string.Format("{0} Food added (name: {1})", result, name);
+                System.Diagnostics.Debug.WriteLine("{0} Food added (name: {1})", result, name);
 
-                await App.PatientViewModel?.UpdatePatients(patient);
+                await App.FoodPageModel?.UpdateFood(food);
             }
             catch (Exception ex)
             {
-                StatusMessage = string.Format("Could not add Patient {0}. Error: {1}", patientName, ex.Message);
-                System.Diagnostics.Debug.WriteLine("Could not add Patient {0}. Error: {1}", patientName, ex.Message);
+                StatusMessage = string.Format("Could not add Food {0}. Error: {1}", name, ex.Message);
+                System.Diagnostics.Debug.WriteLine("Could not add Food {0}. Error: {1}", name, ex.Message);
             }
         }
 
         /*
-         * Add a new chart to the Chart table.
+         * Add a new schedule to the Schedule table.
          */
-        public async Task AddNewChart(
-            int patientIdPKey,
-            string date,
-            string anaesthetist,
-            string clinician,
-            string procedure
+        public async Task AddNewSchedule(
+            double bodyWeight,
+            double rER,
+            double fluidsPerDayTotal,
+            double maxTotalVolumePerMeal,
+            double foodPerDay,
+            double foodPerMeal,
+            double waterPerDay,
+            double waterPerMeal,
+            int mealsPerDay
             )
         {
             System.Diagnostics.Debug.WriteLine("Attempting to add chart");
 
-            Chart chart = new()
+            Schedule schedule = new()
             {
-                PatientIdPKey = patientIdPKey,
-                Date = date,
-                Anaesthetist = anaesthetist,
-                Clinician = clinician,
-                Procedure = procedure
+                BodyWeight = bodyWeight,
+                RER = rER,
+                FluidsPerDayTotal = fluidsPerDayTotal,
+                MaxTotalVolumePerMeal = maxTotalVolumePerMeal,
+                FoodPerDay = foodPerDay,
+                FoodPerMeal = foodPerMeal,
+                WaterPerDay = waterPerDay,
+                WaterPerMeal = waterPerMeal,
+                MealsPerDay = mealsPerDay
             };
 
             int result = 0;
@@ -278,158 +207,20 @@ namespace TubeFeeding.Clients
             {
                 await Init();
 
-                result = await conn.InsertAsync(chart);
+                result = await conn.InsertAsync(schedule);
 
-                StatusMessage = string.Format("{0} procedure details added (record ID: {1})", result, chart.Id);
+                StatusMessage = string.Format("{0} procedure details added (record ID: {1})", result, schedule.Id);
 
-                System.Diagnostics.Debug.WriteLine("{0} procedure details added (record ID: {1})", result, chart.Id);
+                System.Diagnostics.Debug.WriteLine("{0} procedure details added (record ID: {1})", result, schedule.Id);
             }
             catch (Exception ex)
             {
-                StatusMessage = string.Format("Could not add procedure details record ID {0}. Error: {1}", chart.Id, ex.Message);
+                StatusMessage = string.Format("Could not add procedure details record ID {0}. Error: {1}", schedule.Id, ex.Message);
 
-                System.Diagnostics.Debug.WriteLine("Could not add procedure details record ID {0}. Error: {1}", chart.Id, ex.Message);
+                System.Diagnostics.Debug.WriteLine("Could not add procedure details record ID {0}. Error: {1}", schedule.Id, ex.Message);
             }
 
-            PreAnaes preAn = new()
-            {
-                RecordIdPKey = chart.Id
-            };
-
-            IntraAnaes intraAn = new()
-            {
-                RecordIdPKey = chart.Id
-            };
-
-            PostAnaes postAn = new()
-            {
-                RecordIdPKey = chart.Id
-            };
-
-            Drug drug = new()
-            {
-                RecordIdPKey = chart.Id
-            };
-
-            Fluid fluid = new()
-            {
-                RecordIdPKey = chart.Id
-            };
-
-            MonitorParams monitorParams = new()
-            {
-                RecordIdPKey = chart.Id,
-            };
-
-            result = 0;
-            try
-            {
-                await Init();
-
-                result = await conn.InsertAsync(preAn);
-
-                StatusMessage = string.Format("{0} pre anaes added (record ID: {1})", result, chart.Id);
-
-                System.Diagnostics.Debug.WriteLine("{0} pre anaes added (record ID: {1})", result, chart.Id);
-            }
-            catch (Exception ex)
-            {
-                StatusMessage = string.Format("Could not add pre anaes record ID {0}. Error: {1}", chart.Id, ex.Message);
-
-                System.Diagnostics.Debug.WriteLine("Could not add pre anaes record ID {0}. Error: {1}", chart.Id, ex.Message);
-            }
-
-            result = 0;
-            try
-            {
-                await Init();
-
-                result = await conn.InsertAsync(intraAn);
-
-                StatusMessage = string.Format("{0} intra anaes added (record ID: {1})", result, chart.Id);
-
-                System.Diagnostics.Debug.WriteLine("{0} intra anaes added (record ID: {1})", result, chart.Id);
-            }
-            catch (Exception ex)
-            {
-                StatusMessage = string.Format("Could not add intra anaes record ID {0}. Error: {1}", chart.Id, ex.Message);
-
-                System.Diagnostics.Debug.WriteLine("Could not add intra anaes record ID {0}. Error: {1}", chart.Id, ex.Message);
-            }
-
-            result = 0;
-            try
-            {
-                await Init();
-
-                result = await conn.InsertAsync(postAn);
-
-                StatusMessage = string.Format("{0} post anaes added (record ID: {1})", result, chart.Id);
-
-                System.Diagnostics.Debug.WriteLine("{0} post anaes added (record ID: {1})", result, chart.Id);
-            }
-            catch (Exception ex)
-            {
-                StatusMessage = string.Format("Could not add post anaes record ID {0}. Error: {1}", chart.Id, ex.Message);
-
-                System.Diagnostics.Debug.WriteLine("Could not add post anaes record ID {0}. Error: {1}", chart.Id, ex.Message);
-            }
-
-            result = 0;
-            try
-            {
-                await Init();
-
-                result = await conn.InsertAsync(drug);
-
-                StatusMessage = string.Format("{0} drugsfluids added (record ID: {1})", result, chart.Id);
-
-                System.Diagnostics.Debug.WriteLine("{0} drugsfluids added (record ID: {1})", result, chart.Id);
-            }
-            catch (Exception ex)
-            {
-                StatusMessage = string.Format("Could not add drugsfluids record ID {0}. Error: {1}", chart.Id, ex.Message);
-
-                System.Diagnostics.Debug.WriteLine("Could not add drugsfluids record ID {0}. Error: {1}", chart.Id, ex.Message);
-            }
-
-            result = 0;
-            try
-            {
-                await Init();
-
-                result = await conn.InsertAsync(fluid);
-
-                StatusMessage = string.Format("{0} drugsfluids added (record ID: {1})", result, chart.Id);
-
-                System.Diagnostics.Debug.WriteLine("{0} drugsfluids added (record ID: {1})", result, chart.Id);
-            }
-            catch (Exception ex)
-            {
-                StatusMessage = string.Format("Could not add drugsfluids record ID {0}. Error: {1}", chart.Id, ex.Message);
-
-                System.Diagnostics.Debug.WriteLine("Could not add drugsfluids record ID {0}. Error: {1}", chart.Id, ex.Message);
-            }
-
-            result = 0;
-            try
-            {
-                await Init();
-
-                result = await conn.InsertAsync(monitorParams);
-
-                StatusMessage = string.Format("{0} parameters added (record ID: {1})", result, chart.Id);
-
-                System.Diagnostics.Debug.WriteLine("{0} parameters added (record ID: {1})", result, chart.Id);
-            }
-            catch (Exception ex)
-            {
-                StatusMessage = string.Format("Could not add parameters record ID {0}. Error: {1}", chart.Id, ex.Message);
-
-                System.Diagnostics.Debug.WriteLine("Could not add parameters record ID {0}. Error: {1}", chart.Id, ex.Message);
-            }
-
-            await App.PatientViewModel?.UpdateCharts(chart);
+            await App.SchedulePageModel?.UpdateSchedule(schedule);
         }
 
         /*
