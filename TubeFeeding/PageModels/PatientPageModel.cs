@@ -3,7 +3,7 @@ using TubeFeeding.Models;
 
 namespace TubeFeeding.PageModels
 {
-    public partial class SchedulePageModel : ObservableObject
+    public partial class PatientPageModel : ObservableObject
     {
         private int _id;
         private int _foodIdPKey;
@@ -120,7 +120,7 @@ namespace TubeFeeding.PageModels
             set => SetProperty(ref _mealsPerDay, value);
         }
 
-        public SchedulePageModel(Schedule model)
+        public PatientPageModel(Patient model)
         {
             _id = model.Id;
             _foodIdPKey = model.FoodIdPKey;
@@ -142,7 +142,7 @@ namespace TubeFeeding.PageModels
             FeedingTimes = [];
         }
 
-        public async Task CalculateSchedule()
+        public async Task CalculatePatient()
         {
             double totalVolumePerMeal = FoodPerMeal + WaterPerMeal;
             double totalVolumePerDay = FoodPerDay + WaterPerDay;

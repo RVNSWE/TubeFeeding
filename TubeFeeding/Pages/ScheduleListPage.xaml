@@ -21,7 +21,7 @@
                     Margin="10"
                     Grid.Row="1" >
             <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="vm:SchedulePageModel">
+                <DataTemplate x:DataType="vm:PatientPageModel">
                     <HorizontalStackLayout>
                         <Label Text="{Binding PatientName}" Margin="5" />
                         <Label Text="{Binding ClientName}" Margin="5" Grid.Column="1" />

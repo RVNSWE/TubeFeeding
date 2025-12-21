@@ -4,7 +4,7 @@
              xmlns:vm="clr-namespace:TubeFeeding.PageModels"
              xmlns:local="clr-namespace:TubeFeeding"
              x:Class="TubeFeeding.Pages.CreateSchedulePage"
-             x:DataType="vm:SchedulePageModel"
+             x:DataType="vm:PatientPageModel"
              Title="Create New Schedule">
 
     <ScrollView Margin="10">

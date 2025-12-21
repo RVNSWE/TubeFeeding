@@ -2,8 +2,8 @@
 
 namespace TubeFeeding.Models
 {
-    [Table("Schedule")]
-    public class Schedule
+    [Table("Patient")]
+    public class Patient
     {
         [PrimaryKey, AutoIncrement, Column("id"), Unique, NotNull]
         public int Id { get; set; }

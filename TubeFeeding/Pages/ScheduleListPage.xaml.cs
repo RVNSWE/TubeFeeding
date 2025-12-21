@@ -17,7 +17,7 @@ public partial class ScheduleListPage : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        Dispatcher.DispatchAsync(App.SchedulePages.RefreshSchedules);
+        Dispatcher.DispatchAsync(App.SchedulePages.RefreshPatients);
         Dispatcher.DispatchAsync(App.SchedulePages.RefreshFoods);
     }
 
@@ -26,9 +26,9 @@ public partial class ScheduleListPage : ContentPage
      */
     public void OnCollectionViewSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        App.SchedulePages.SelectedSchedule = e.CurrentSelection.FirstOrDefault() as SchedulePageModel;
+        App.SchedulePages.SelectedPatient = e.CurrentSelection.FirstOrDefault() as PatientPageModel;
 
-        if (App.SchedulePages.SelectedSchedule != null)
+        if (App.SchedulePages.SelectedPatient != null)
         {
             Globals.GoToView();
         }

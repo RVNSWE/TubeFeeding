@@ -4,25 +4,25 @@ using TubeFeeding.Models;
 
 namespace TubeFeeding.PageModels
 {
-    public partial class ScheduleListPageModel : ObservableObject
+    public partial class PatientListPageModel : ObservableObject
     {
-        public ObservableCollection<SchedulePageModel> Schedules { get; set; }
+        public ObservableCollection<PatientPageModel> Patients { get; set; }
         public ObservableCollection<FoodPageModel> Foods { get; set; }
-        public SchedulePageModel LastScheduleSelected { get; set; }
+        public PatientPageModel LastPatientSelected { get; set; }
         public FoodPageModel LastFoodSelected { get; set; }
 
-        public ScheduleListPageModel()
+        public PatientListPageModel()
         {
-            Schedules = [];
+            Patients = [];
             Foods = [];
         }
 
-        private SchedulePageModel? _selectedSchedule;
+        private PatientPageModel? _selectedPatient;
 
-        public SchedulePageModel? SelectedSchedule
+        public PatientPageModel? SelectedPatient
         {
-            get => _selectedSchedule;
-            set => SetProperty(ref _selectedSchedule, value);
+            get => _selectedPatient;
+            set => SetProperty(ref _selectedPatient, value);
         }
 
         private FoodPageModel? _selectedFood;
@@ -45,37 +45,37 @@ namespace TubeFeeding.PageModels
         /*
          * Force chart selection.
          */
-        public void ForceSelectSchedule(SchedulePageModel schedule)
+        public void ForceSelectSchedule(PatientPageModel schedule)
         {
-            SelectedSchedule = schedule;
+            SelectedPatient = schedule;
         }
 
         /*
          * Update the list of schedules and the selected schedule.
          */
-        public async Task UpdateSchedules(Schedule selectedSchedule)
+        public async Task UpdateSchedules(Patient selectedPatient)
         {
-            IEnumerable<Schedule> schedulesData = await App.Repo.GetAllSchedules();
-            Schedules = [];
+            IEnumerable<Patient> patientsData = await App.Repo.GetAllPatients();
+            Patients = [];
 
-            foreach (Schedule schedule in schedulesData)
+            foreach (Patient patient in patientsData)
             {
-                Schedules.Add(new SchedulePageModel(schedule));
+                Patients.Add(new PatientPageModel(patient));
             }
 
-            foreach (SchedulePageModel schedule in Schedules)
+            foreach (PatientPageModel patient in Patients)
             {
-                if (schedule.Id == selectedSchedule.Id)
+                if (patient.Id == selectedPatient.Id)
                 {
-                    ForceSelectSchedule(schedule);
-                    System.Diagnostics.Debug.WriteLine($"Selected {SelectedSchedule.PatientName} {SelectedSchedule.ClientName} (ScheduleListPageModel)");
+                    ForceSelectSchedule(patient);
+                    System.Diagnostics.Debug.WriteLine($"Selected {SelectedPatient.PatientName} {SelectedPatient.ClientName} (PatientListPageModel)");
                     break;
                 }
             }
 
-            if (SelectedSchedule != null)
+            if (SelectedPatient != null)
             {
-                await SelectedSchedule.CalculateSchedule();
+                await SelectedPatient.CalculatePatient();
             }
         }
 
@@ -97,7 +97,7 @@ namespace TubeFeeding.PageModels
                 if (food.Id == selectedFood.Id)
                 {
                     ForceSelectFood(food);
-                    System.Diagnostics.Debug.WriteLine($"Selected {SelectedFood.Name} (ScheduleListPageModel)");
+                    System.Diagnostics.Debug.WriteLine($"Selected {SelectedFood.Name} (PatientListPageModel)");
                     break;
                 }
             }
@@ -106,17 +106,17 @@ namespace TubeFeeding.PageModels
         /*
          * Refresh the visible list of schedules when data is changed.
          */
-        public async Task RefreshSchedules()
+        public async Task RefreshPatients()
         {
-            IEnumerable<Schedule> schedulesData = await App.Repo.GetAllSchedules();
-            Schedules.Clear();
+            IEnumerable<Patient> patientData = await App.Repo.GetAllPatients();
+            Patients.Clear();
 
-            foreach (Schedule schedule in schedulesData)
+            foreach (Patient patient in patientData)
             {
-                Schedules.Add(new SchedulePageModel(schedule));
+                Patients.Add(new PatientPageModel(patient));
             }
 
-            System.Diagnostics.Debug.WriteLine("Schedule list refreshed (ScheduleListPageModel)");
+            System.Diagnostics.Debug.WriteLine("Patient list refreshed (PatientListPageModel)");
         }
 
         /*
@@ -132,7 +132,7 @@ namespace TubeFeeding.PageModels
                 Foods.Add(new FoodPageModel(food));
             }
 
-            System.Diagnostics.Debug.WriteLine("Food list refreshed (ScheduleListPageModel)");
+            System.Diagnostics.Debug.WriteLine("Food list refreshed (PatientListPageModel)");
         }
     }
 }

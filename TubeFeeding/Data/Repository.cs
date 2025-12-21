@@ -1,9 +1,9 @@
 ﻿using TubeFeeding.Models;
-using TubeFeeding.PageModels;
 using QuestPDF.Fluent;
 using SQLite;
+using TubeFeeding.Pages.Controls;
 
-namespace TubeFeeding.Clients
+namespace TubeFeeding.Data
 {
     /*
      * Class for managing SQLite database interactions.
@@ -28,7 +28,7 @@ namespace TubeFeeding.Clients
             // otherwise
             conn = new SQLiteAsyncConnection(_dbPath); // connect to the database via the specified filepath
             await conn.CreateTableAsync<Food>();
-            await conn.CreateTableAsync<Schedule>();
+            await conn.CreateTableAsync<Patient>();
         }
 
         /*
@@ -47,29 +47,30 @@ namespace TubeFeeding.Clients
             try
             {
                 Food food = await conn.FindAsync<Food>(App.SchedulePages?.SelectedFood.Id);
-                Schedule schedule = await conn.FindAsync<Schedule>(App.SchedulePages?.SelectedSchedule.Id);
+                Patient patient = await conn.FindAsync<Patient>(App.SchedulePages?.SelectedPatient.Id);
 
-                int scheduleId = schedule.Id;
+                int scheduleId = patient.Id;
 
-                FeedingSchedule feedingSchedule = new FeedingSchedule
+                FeedingSchedule feedingSchedule = new FeedingSchedule(App.SchedulePages?.SelectedPatient.FeedingTimes)
                 {
                     Food = food,
-                    Schedule = schedule
+                    Patient = patient
                 };
 
                 ExportDoc output = new ExportDoc(feedingSchedule);
-                string pdf = Globals.GetLocalPath($"{schedule.PatientName}_{schedule.ClientName}_{food.Name}.pdf");
+                string pdf = Globals.GetLocalPath($"{patient.PatientName}_{patient.ClientName}_{food.Name}.pdf");
                 output.GeneratePdf(pdf);
 
                 await Share.RequestAsync(new ShareFileRequest
                 {
-                    Title = $"{schedule.PatientName} {schedule.ClientName} - Tube Feeding Schedule",
+                    Title = $"{patient.PatientName} {patient.ClientName} - Tube Feeding Patient",
                     File = new ShareFile(pdf)
                 });
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine("Could not drop table. Error: {1}", ex.Message);
+                StatusMessage = string.Format("Could not drop table. Error: {1}", ex.Message);
             }
         }
 
@@ -79,16 +80,19 @@ namespace TubeFeeding.Clients
         public async Task DropFoodTable()
         {
             System.Diagnostics.Debug.WriteLine("Attempting to drop Food table");
+            StatusMessage = string.Format("Attempting to drop Food table");
 
             try
             {
                 await conn.DropTableAsync<Food>();
                 System.Diagnostics.Debug.WriteLine("Dropping Food table");
+                StatusMessage = string.Format("Dropping Food table");
                 await conn.CreateTableAsync<Food>(); // create a table for storing Food data
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine("Could not drop table. Error: {1}", ex.Message);
+                StatusMessage = string.Format("Could not drop table. Error: {1}", ex.Message);
             }
 
             await DropScheduleTable();
@@ -99,17 +103,20 @@ namespace TubeFeeding.Clients
          */
         public async Task DropScheduleTable()
         {
-            System.Diagnostics.Debug.WriteLine("Attempting to drop Schedule table");
+            System.Diagnostics.Debug.WriteLine("Attempting to drop Patient table");
+            StatusMessage = string.Format("Attempting to drop Patient table");
 
             try
             {
-                await conn.DropTableAsync<Schedule>();
-                System.Diagnostics.Debug.WriteLine("Dropping Schedule table");
-                await conn.CreateTableAsync<Schedule>();
+                await conn.DropTableAsync<Patient>();
+                System.Diagnostics.Debug.WriteLine("Dropping Patient table");
+                StatusMessage = string.Format("Dropping Patient table");
+                await conn.CreateTableAsync<Patient>();
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine("Could not drop table. Error: {1}", ex.Message);
+                StatusMessage = string.Format("Could not drop table. Error: {1}", ex.Message);
             }
         }
 
@@ -126,6 +133,7 @@ namespace TubeFeeding.Clients
             )
         {
             System.Diagnostics.Debug.WriteLine("Attempting to add Food");
+            StatusMessage = string.Format("Attempting to add Food");
 
             Food food = new()
             {
@@ -178,8 +186,9 @@ namespace TubeFeeding.Clients
             )
         {
             System.Diagnostics.Debug.WriteLine("Attempting to add chart");
+            StatusMessage = string.Format("Attempting to add chart");
 
-            Schedule schedule = new()
+            Patient schedule = new()
             {
                 FoodIdPKey = foodIdPKey,
                 FoodName = foodName,
@@ -204,15 +213,13 @@ namespace TubeFeeding.Clients
 
                 result = await conn.InsertAsync(schedule);
 
-                StatusMessage = string.Format("{0} schedule added (record ID: {1})", result, schedule.Id);
-
-                System.Diagnostics.Debug.WriteLine("{0} schedule added (record ID: {1})", result, schedule.Id);
+                StatusMessage = string.Format("{0} patient added (record ID: {1})", result, schedule.Id);
+                System.Diagnostics.Debug.WriteLine("{0} patient added (record ID: {1})", result, schedule.Id);
             }
             catch (Exception ex)
             {
-                StatusMessage = string.Format("Could not add schedule record ID {0}. Error: {1}", schedule.Id, ex.Message);
-
-                System.Diagnostics.Debug.WriteLine("Could not add schedule record ID {0}. Error: {1}", schedule.Id, ex.Message);
+                StatusMessage = string.Format("Could not add patient record ID {0}. Error: {1}", schedule.Id, ex.Message);
+                System.Diagnostics.Debug.WriteLine("Could not add patient record ID {0}. Error: {1}", schedule.Id, ex.Message);
             }
 
             await App.SchedulePages?.UpdateSchedules(schedule);
@@ -246,11 +253,11 @@ namespace TubeFeeding.Clients
                 await Init();
 
                 System.Diagnostics.Debug.WriteLine("Attempting to update Food details");
+                StatusMessage = string.Format("Attempting to update Food details");
 
                 result = await conn.UpdateAsync(food);
 
                 StatusMessage = string.Format("{0} Food updated (name: {1})", result, name);
-
                 System.Diagnostics.Debug.WriteLine("{0} Food updated (name: {1})", result, name);
 
                 await App.SchedulePages?.UpdateFoods(food);
@@ -258,7 +265,6 @@ namespace TubeFeeding.Clients
             catch (Exception ex)
             {
                 StatusMessage = string.Format("Could not update Food {0}. Error: {1}", name, ex.Message);
-
                 System.Diagnostics.Debug.WriteLine("Could not update Food {0}. Error: {1}", name, ex.Message);
             }
         }
@@ -283,7 +289,7 @@ namespace TubeFeeding.Clients
             int mealsPerDay
             )
         {
-            Schedule schedule = new()
+            Patient schedule = new()
             {
                 FoodIdPKey = foodIdPKey,
                 FoodName = foodName,
@@ -329,12 +335,12 @@ namespace TubeFeeding.Clients
         /*
          * Get a list of all schedules.
          */
-        public async Task<List<Schedule>> GetAllSchedules()
+        public async Task<List<Patient>> GetAllPatients()
         {
             try
             {
                 await Init();
-                return await conn.Table<Schedule>().ToListAsync();
+                return await conn.Table<Patient>().ToListAsync();
             }
             catch (Exception ex)
             {
@@ -342,19 +348,19 @@ namespace TubeFeeding.Clients
                 System.Diagnostics.Debug.WriteLine("Data retrieval failed. {0}", ex.Message);
             }
 
-            return new List<Schedule>();
+            return new List<Patient>();
         }
 
         /*
          * Return a list of the schedules associated with a specific food.
          */
-        public async Task<List<Schedule>> GetChartsForPatient(FoodPageModel food)
+        public async Task<List<Patient>> GetChartsForPatient(FoodPageModel food)
         {
             try
             {
                 await Init();
                 System.Diagnostics.Debug.WriteLine("Retrieving schedules for Food with ID: {0}", food.Id);
-                return await conn.Table<Schedule>().Where(i => i.FoodIdPKey == food.Id).ToListAsync();
+                return await conn.Table<Patient>().Where(i => i.FoodIdPKey == food.Id).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -362,7 +368,7 @@ namespace TubeFeeding.Clients
                 System.Diagnostics.Debug.WriteLine("Data retrieval failed. {0}", ex.Message);
             }
 
-            return new List<Schedule>();
+            return new List<Patient>();
         }
 
         /*
@@ -390,15 +396,15 @@ namespace TubeFeeding.Clients
         /*
          * Get Schedule by ID.
          */
-        public async Task<Schedule> GetProcedureDetails(int id)
+        public async Task<Patient> GetProcedureDetails(int id)
         {
-            Schedule schedule = new();
+            Patient schedule = new();
 
             try
             {
                 await Init();
 
-                schedule = await conn.FindAsync<Schedule>(id);
+                schedule = await conn.FindAsync<Patient>(id);
             }
             catch (Exception ex)
             {
@@ -423,9 +429,9 @@ namespace TubeFeeding.Clients
 
                 Food food = await conn.Table<Food>().Where(i => i.Id == foodPageModel.Id).FirstOrDefaultAsync();
                 string name = food.Name;
-                await App.SchedulePages?.RefreshSchedules();
+                await App.SchedulePages?.RefreshPatients();
 
-                foreach (SchedulePageModel schedule in App.SchedulePages?.Schedules)
+                foreach (PatientPageModel schedule in App.SchedulePages?.Patients)
                 {
                     await DeleteChart(schedule);
                 }
@@ -447,7 +453,7 @@ namespace TubeFeeding.Clients
         /*
          * Delete a schedule.
          */
-        public async Task DeleteChart(SchedulePageModel schedulePageModel)
+        public async Task DeleteChart(PatientPageModel schedulePageModel)
         {
             string name = schedulePageModel.PatientName + " " + schedulePageModel.ClientName;
 
@@ -458,21 +464,21 @@ namespace TubeFeeding.Clients
 
                 App.SchedulePages?.ForceSelectSchedule(schedulePageModel);
 
-                Schedule thisSchedule = await conn.Table<Schedule>().Where(i => i.Id == schedulePageModel.Id).FirstOrDefaultAsync();
+                Patient thisSchedule = await conn.Table<Patient>().Where(i => i.Id == schedulePageModel.Id).FirstOrDefaultAsync();
 
-                App.SchedulePages?.Schedules.Remove(schedulePageModel);
+                App.SchedulePages?.Patients.Remove(schedulePageModel);
                 result = await conn.DeleteAsync(thisSchedule);
 
-                StatusMessage = string.Format("{0} schedule(s) deleted (schedule: {1})", result, name);
-                System.Diagnostics.Debug.WriteLine("{0} schedule(s) deleted (schedule: {1})", result, name);
+                StatusMessage = string.Format("{0} patient(s) deleted (patient: {1})", result, name);
+                System.Diagnostics.Debug.WriteLine("{0} patient(s) deleted (patient: {1})", result, name);
             }
             catch (Exception ex)
             {
-                StatusMessage = string.Format("Could not delete schedule {0}. Error: {1}", schedulePageModel.Id, ex.Message);
-                System.Diagnostics.Debug.WriteLine("Could not delete schedule {0}. Error: {1}", schedulePageModel.Id, ex.Message);
+                StatusMessage = string.Format("Could not delete patient {0}. Error: {1}", schedulePageModel.Id, ex.Message);
+                System.Diagnostics.Debug.WriteLine("Could not delete patient {0}. Error: {1}", schedulePageModel.Id, ex.Message);
             }
 
-            await App.SchedulePages?.RefreshSchedules();
+            await App.SchedulePages?.RefreshPatients();
         }
     }
 }

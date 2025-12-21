@@ -2,9 +2,9 @@
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 
-namespace TubeFeeding
+namespace TubeFeeding.Pages.Controls
 {
-    class ExportDoc : IDocument
+    public class ExportDoc : IDocument
     {
         private readonly FeedingSchedule _schedule;
 
@@ -24,7 +24,7 @@ namespace TubeFeeding
                 page.Content().Column(col =>
                 {
                     // Title
-                    col.Item().Text($"Tube Feeding Schedule").FontSize(20).Bold();
+                    col.Item().Text($"Tube Feeding Patient").FontSize(20).Bold();
 
                     col.Item().Text(" "); // Empty line
 
@@ -32,7 +32,7 @@ namespace TubeFeeding
 
                     col.Item().Text(" ");
 
-                    col.Item().Text($"Patient: {_schedule.Schedule.PatientName}          Client: {_schedule.Schedule.ClientName}");
+                    col.Item().Text($"Patient: {_schedule.Patient.PatientName}          Client: {_schedule.Patient.ClientName}");
                 });
             });
         }

@@ -1,4 +1,4 @@
-﻿namespace TubeFeeding
+﻿namespace TubeFeeding.Data
 {
     public static class Globals
     {
@@ -182,7 +182,7 @@
          */
         public static async void RefreshSchedules()
         {
-            await App.SchedulePages?.RefreshSchedules();
+            await App.SchedulePages?.RefreshPatients();
         }
 
         /*
