@@ -75,7 +75,7 @@ namespace TubeFeeding.PageModels
 
             if (SelectedPatient != null)
             {
-                await SelectedPatient.CalculatePatient();
+                await SelectedPatient.ComposeSchedule();
             }
         }
 

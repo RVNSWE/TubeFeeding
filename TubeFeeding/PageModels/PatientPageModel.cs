@@ -142,7 +142,7 @@ namespace TubeFeeding.PageModels
             FeedingTimes = [];
         }
 
-        public async Task CalculatePatient()
+        public async Task ComposeSchedule()
         {
             double totalVolumePerMeal = FoodPerMeal + WaterPerMeal;
             double totalVolumePerDay = FoodPerDay + WaterPerDay;
@@ -163,23 +163,23 @@ namespace TubeFeeding.PageModels
 
             if (totalVolumePerMeal > MaxTotalVolumePerMeal)
             {
-                int timeIncrement = minMealsPerDay + timeOffset;
-
-                for (int i = 0; i < minMealsPerDay; i++)
-                {
-                    FeedingTimes[i] = hour;
-                    hour += timeIncrement;
-                }
+                CalculateFeedingTimes(minMealsPerDay, hour);
             }
             else
             {
-                int timeIncrement = MealsPerDay + timeOffset;
+                CalculateFeedingTimes(MealsPerDay, hour);
+            }
+        }
 
-                for (int i = 0; i < MealsPerDay; i++)
-                {
-                    FeedingTimes[i] = hour;
-                    hour += timeIncrement;
-                }
+        public void CalculateFeedingTimes(int mealsPerDay, int startingHour)
+        {
+            int timeIncrement = 12 / mealsPerDay;
+            int hour = startingHour;
+
+            for (int i = 0; i < mealsPerDay; i++)
+            {
+                FeedingTimes[i] = hour;
+                hour += timeIncrement;
             }
         }
     }
