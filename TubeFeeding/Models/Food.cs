@@ -7,9 +7,8 @@ namespace TubeFeeding.Models
     {
         [PrimaryKey, AutoIncrement, Column("id"), Unique, NotNull]
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
         public double Kcal { get; set; }
-        public double Grams { get; set; }
         public double KcalPerGram { get; set; }
         public double NetWeight { get; set; }
         public double DryWeight { get; set; }

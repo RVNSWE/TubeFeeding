@@ -7,8 +7,11 @@ namespace TubeFeeding.PageModels
     {
         private int _id;
         private int _foodIdPKey;
+        private string _foodName;
         private string _patientName;
         private string _clientName;
+        private string _species;
+        // private bool _paediatric;
         private double _bodyWeight; // kg
         private double _rER;
         private double _fluidsPerDayTotal;
@@ -18,6 +21,8 @@ namespace TubeFeeding.PageModels
         private double _waterPerDay;
         private double _waterPerMeal;
         private int _mealsPerDay;
+
+        public int[] FeedingTimes { get; set; }
 
         public int Id
         {
@@ -31,6 +36,12 @@ namespace TubeFeeding.PageModels
             set => SetProperty(ref _foodIdPKey, value);
         }
 
+        public string FoodName
+        {
+            get => _foodName;
+            set => SetProperty(ref _foodName, value);
+        }
+
         public string PatientName
         {
             get => _patientName;
@@ -42,6 +53,18 @@ namespace TubeFeeding.PageModels
             get => _clientName;
             set => SetProperty(ref _clientName, value);
         }
+
+        public string Species
+        {
+            get => _species;
+            set => SetProperty(ref _species, value);
+        }
+
+        /*public bool Paediatric
+        {
+            get => _paediatric;
+            set => SetProperty(ref _paediatric, value);
+        }*/
 
         public double BodyWeight
         {
@@ -101,6 +124,11 @@ namespace TubeFeeding.PageModels
         {
             _id = model.Id;
             _foodIdPKey = model.FoodIdPKey;
+            _foodName = model.FoodName;
+            _patientName = model.PatientName;
+            _clientName = model.ClientName;
+            _species = model.Species;
+            // _paediatric = model.Paediatric;
             _bodyWeight = model.BodyWeight;
             _rER = model.RER;
             _fluidsPerDayTotal = model.FluidsPerDayTotal;
@@ -110,6 +138,49 @@ namespace TubeFeeding.PageModels
             _waterPerDay = model.WaterPerDay;
             _waterPerMeal = model.WaterPerMeal;
             _mealsPerDay = model.MealsPerDay;
+
+            FeedingTimes = [];
+        }
+
+        public async Task CalculateSchedule()
+        {
+            double totalVolumePerMeal = FoodPerMeal + WaterPerMeal;
+            double totalVolumePerDay = FoodPerDay + WaterPerDay;
+            int minMealsPerDay = (int)totalVolumePerDay / (int)totalVolumePerMeal;
+
+            int hour;
+            int timeOffset;
+
+            if (MealsPerDay < minMealsPerDay)
+            {
+                timeOffset = minMealsPerDay / 2;
+            }
+            else
+            {
+                timeOffset = MealsPerDay / 2;
+            }
+            hour = 12 - timeOffset;
+
+            if (totalVolumePerMeal > MaxTotalVolumePerMeal)
+            {
+                int timeIncrement = minMealsPerDay + timeOffset;
+
+                for (int i = 0; i < minMealsPerDay; i++)
+                {
+                    FeedingTimes[i] = hour;
+                    hour += timeIncrement;
+                }
+            }
+            else
+            {
+                int timeIncrement = MealsPerDay + timeOffset;
+
+                for (int i = 0; i < MealsPerDay; i++)
+                {
+                    FeedingTimes[i] = hour;
+                    hour += timeIncrement;
+                }
+            }
         }
     }
 }

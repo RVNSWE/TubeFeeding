@@ -49,7 +49,7 @@
          * TO DO: For usability, should be able to enter whitespace between numbers and exclude this from both the
          * character limit and validity checking.
          */
-        public static bool ValidatePhoneNumber(string phoneNumber)
+        /*public static bool ValidatePhoneNumber(string phoneNumber)
         {
             foreach (char character in phoneNumber)
             {
@@ -61,12 +61,12 @@
                 return false;
 
             return true;
-        }
+        }*/
 
         /*
          * Check whether a valid time has been entered.
          */
-        public static bool ValidateTime(string time)
+        /*public static bool ValidateTime(string time)
         {
             foreach (char character in time)
             {
@@ -78,22 +78,71 @@
                 return false;
 
             return true;
+        }*/
+
+        public static double CalculateKcalPerGram(double kcal, double netWeight)
+        {
+            double kcalPerGram = kcal / netWeight;
+
+            return kcalPerGram;
+        }
+
+        public static double CalculateWaterContent(double netWeight, double dryWeight)
+        {
+            double waterContent = netWeight - dryWeight;
+
+            return waterContent;
+        }
+
+        public static double CalculateMaxTotalVolumePerMeal(double bodyWeight, int MAX_ML_PER_KG)
+        {
+            double maxTotalVolumePerMeal = bodyWeight * MAX_ML_PER_KG;
+
+            return maxTotalVolumePerMeal;
+        }
+
+        public static double CalculateFoodPerDay(double rER, double kcalPerGram)
+        {
+            double foodPerDay = rER / kcalPerGram;
+
+            return foodPerDay;
+        }
+
+        public static double CalculateFoodPerMeal(double foodPerDay, int mealsPerDay)
+        {
+            double foodPerMeal = foodPerDay / mealsPerDay;
+
+            return foodPerMeal;
+        }
+
+        public static double CalculateWaterPerDay(double fluidsPerDayTotal, double waterContent)
+        {
+            double waterPerDay = fluidsPerDayTotal - waterContent;
+
+            return waterPerDay;
+        }
+
+        public static double CalculateWaterPerMeal(double waterPerDay, int mealsPerDay)
+        {
+            double waterPerMeal = waterPerDay / mealsPerDay;
+
+            return waterPerMeal;
         }
 
         /*
-         * Go back to the patient list.
+         * Go back to the schedule list.
          */
-        public static async void GoToPatient()
+        public static async void GoToSchedule()
         {
-            await Shell.Current.GoToAsync("//patient");
+            await Shell.Current.GoToAsync("//schedule");
         }
 
         /*
-         * Go back to the chart list.
+         * Go back to the food list.
          */
-        public static async void GoToChart()
+        public static async void GoToFood()
         {
-            await Shell.Current.GoToAsync("//chart");
+            await Shell.Current.GoToAsync("//food");
         }
 
         /*
@@ -131,9 +180,9 @@
         /*
          * Refresh the lists.
          */
-        public static async void RefreshPatients()
+        public static async void RefreshSchedules()
         {
-            await App.PatientViewModel?.RefreshPatients();
+            await App.SchedulePages?.RefreshSchedules();
         }
 
         /*

@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using TubeFeeding.Models;
 
-namespace TubeFeeding.ViewModels
+namespace TubeFeeding.PageModels
 {
     public partial class ScheduleListPageModel : ObservableObject
     {
@@ -71,6 +71,11 @@ namespace TubeFeeding.ViewModels
                     System.Diagnostics.Debug.WriteLine($"Selected {SelectedSchedule.PatientName} {SelectedSchedule.ClientName} (ScheduleListPageModel)");
                     break;
                 }
+            }
+
+            if (SelectedSchedule != null)
+            {
+                await SelectedSchedule.CalculateSchedule();
             }
         }
 

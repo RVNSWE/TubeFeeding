@@ -119,7 +119,6 @@ namespace TubeFeeding.Clients
         public async Task AddNewFood(
             string name,
             double kcal,
-            double grams,
             double kcalPerGram,
             double netWeight,
             double dryWeight,
@@ -132,14 +131,13 @@ namespace TubeFeeding.Clients
             {
                 Name = name,
                 Kcal = kcal,
-                Grams = grams,
                 KcalPerGram = kcalPerGram,
                 NetWeight = netWeight,
                 DryWeight = dryWeight,
                 WaterContent = waterContent
             };
 
-            int result = 0;
+            int result;
 
             try
             {
@@ -164,8 +162,10 @@ namespace TubeFeeding.Clients
          */
         public async Task AddNewSchedule(
             int foodIdPKey,
+            string foodName,
             string patientName,
             string clientName,
+            string species,
             double bodyWeight,
             double rER,
             double fluidsPerDayTotal,
@@ -182,8 +182,10 @@ namespace TubeFeeding.Clients
             Schedule schedule = new()
             {
                 FoodIdPKey = foodIdPKey,
+                FoodName = foodName,
                 PatientName = patientName,
                 ClientName = clientName,
+                Species = species,
                 BodyWeight = bodyWeight,
                 RER = rER,
                 FluidsPerDayTotal = fluidsPerDayTotal,
@@ -222,7 +224,6 @@ namespace TubeFeeding.Clients
         public async Task UpdateFood(
             string name,
             double kcal,
-            double grams,
             double kcalPerGram,
             double netWeight,
             double dryWeight,
@@ -233,7 +234,6 @@ namespace TubeFeeding.Clients
             {
                 Name = name,
                 Kcal = kcal,
-                Grams = grams,
                 KcalPerGram = kcalPerGram,
                 NetWeight = netWeight,
                 DryWeight = dryWeight,
@@ -268,8 +268,10 @@ namespace TubeFeeding.Clients
          */
         public async Task UpdateSchedule(
             int foodIdPKey,
+            string foodName,
             string patientName,
             string clientName,
+            string species,
             double bodyWeight,
             double rER,
             double fluidsPerDayTotal,
@@ -284,8 +286,10 @@ namespace TubeFeeding.Clients
             Schedule schedule = new()
             {
                 FoodIdPKey = foodIdPKey,
+                FoodName = foodName,
                 PatientName = patientName,
                 ClientName = clientName,
+                Species = species,
                 BodyWeight = bodyWeight,
                 RER = rER,
                 FluidsPerDayTotal = fluidsPerDayTotal,

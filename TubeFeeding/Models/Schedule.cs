@@ -8,8 +8,11 @@ namespace TubeFeeding.Models
         [PrimaryKey, AutoIncrement, Column("id"), Unique, NotNull]
         public int Id { get; set; }
         public int FoodIdPKey { get; set; }
-        public string PatientName { get; set; }
-        public string ClientName { get; set; }
+        public string FoodName { get; set; } = string.Empty;
+        public string PatientName { get; set; } = string.Empty;
+        public string ClientName { get; set; } = string.Empty;
+        public string Species { get; set; } = string.Empty; // Switch to bool - true = cat, false = dog
+        // public bool Paediatric { get; set; }
         public double BodyWeight { get; set; }
         public double RER { get; set; }
         public double FluidsPerDayTotal { get; set; }

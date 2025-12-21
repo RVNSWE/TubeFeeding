@@ -8,7 +8,6 @@ namespace TubeFeeding.PageModels
         private int _id;
         private string _name;
         private double _kcal;
-        private double _grams;
         private double _kcalPerGram;
         private double _netWeight;
         private double _dryWeight;
@@ -30,12 +29,6 @@ namespace TubeFeeding.PageModels
         {
             get => _kcal;
             set => SetProperty(ref _kcal, value);
-        }
-
-        public double Grams
-        {
-            get => _grams;
-            set => SetProperty(ref _grams, value);
         }
 
         public double KcalPerGram
@@ -65,8 +58,8 @@ namespace TubeFeeding.PageModels
         public FoodPageModel(Food model)
         {
             _id = model.Id;
+            _name = model.Name;
             _kcal = model.Kcal;
-            _grams = model.Grams;
             _kcalPerGram = model.KcalPerGram;
             _netWeight = model.NetWeight;
             _dryWeight = model.DryWeight;

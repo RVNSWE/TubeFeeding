@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:TubeFeeding.PageModels"
+             x:DataType="vm:ScheduleListPageModel"
+             x:Class="TubeFeeding.Pages.ScheduleListPage"
+             Title="Patient Feeding Schedules">
+    
+    <Grid Padding="5"
+      RowSpacing="10"
+      ColumnSpacing="20"
+      RowDefinitions="Auto,Auto,Auto,Auto,Auto,*">
+
+        <Button x:Name="btnCreateSchedule"
+        Text="Create new schedule" />
+
+        <CollectionView ItemsSource="{Binding Schedules}"
+                    SelectionMode="Single"
+                    SelectedItem="{Binding SelectedSchedule, Mode=OneWayToSource}"
+                    SelectionChanged="OnCollectionViewSelectionChanged"
+                    Margin="10"
+                    Grid.Row="1" >
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="vm:SchedulePageModel">
+                    <HorizontalStackLayout>
+                        <Label Text="{Binding PatientName}" Margin="5" />
+                        <Label Text="{Binding ClientName}" Margin="5" Grid.Column="1" />
+                        <Label Text="{Binding BodyWeight}" Margin="5" Grid.Column="2" />
+                        <Label Text="{Binding FoodName}" Margin="5" Grid.Column="3" />
+                    </HorizontalStackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+    </Grid>
+
+</ContentPage>

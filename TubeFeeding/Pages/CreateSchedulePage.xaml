@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:TubeFeeding.PageModels"
+             xmlns:local="clr-namespace:TubeFeeding"
+             x:Class="TubeFeeding.Pages.CreateSchedulePage"
+             x:DataType="vm:SchedulePageModel"
+             Title="Create New Schedule">
+
+    <ScrollView Margin="10">
+
+        <VerticalStackLayout>
+
+            <HorizontalStackLayout>
+                <Grid ColumnDefinitions="140,125" Margin="5">
+                    <Label Text="Patient name: "
+                           Margin="10"
+                           HorizontalTextAlignment="End" />
+                    <Entry x:Name="newPatientName"
+                           IsTextPredictionEnabled="false"
+                           IsSpellCheckEnabled="false"
+                           MaxLength="30"
+                           Grid.Column="1" />
+                </Grid>
+
+                <Grid ColumnDefinitions="140,125" Margin="5">
+                    <Label Text="Client surname: "
+                           Margin="10"
+                           HorizontalTextAlignment="End" />
+                    <Entry x:Name="newClientName"
+                           IsTextPredictionEnabled="false"
+                           IsSpellCheckEnabled="false"
+                           MaxLength="30"
+                           Grid.Column="1" />
+                </Grid>
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout>
+                <Grid ColumnDefinitions="140,125" Margin="5">
+                    <Label Text="Species: "
+                           Margin="10"
+                           HorizontalTextAlignment="End" />
+                    <Entry x:Name="newSpecies"
+                           IsTextPredictionEnabled="false"
+                           IsSpellCheckEnabled="false"
+                           MaxLength="6"
+                           Grid.Column="1" />
+                </Grid>
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout>
+                <Grid ColumnDefinitions="140,125" Margin="5">
+                    <Label Text="Patient body weight (kg): "
+                           Margin="10"
+                           HorizontalTextAlignment="End" />
+                    <Entry x:Name="newBodyWeight"
+                           IsTextPredictionEnabled="false"
+                           IsSpellCheckEnabled="false"
+                           Keyboard="Numeric"
+                           MaxLength="6"
+                           Grid.Column="1" />
+                </Grid>
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout>
+                <Grid ColumnDefinitions="140,125" Margin="5">
+                    <Label Text="Food name: "
+                           Margin="10"
+                           HorizontalTextAlignment="End" />
+                    <Entry x:Name="newFoodName"
+                           IsTextPredictionEnabled="false"
+                           IsSpellCheckEnabled="false"
+                           MaxLength="40"
+                           Grid.Column="1" />
+                </Grid>
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout>
+                <Grid ColumnDefinitions="140,125" Margin="5">
+                    <Label Text="Total Kcal per container: "
+                           Margin="10"
+                           HorizontalTextAlignment="End" />
+                    <Entry x:Name="newKcal"
+                           IsTextPredictionEnabled="false"
+                           IsSpellCheckEnabled="false"
+                           Keyboard="Numeric"
+                           MaxLength="6"
+                           Grid.Column="1" />
+                </Grid>
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout>
+                <Grid ColumnDefinitions="140,125" Margin="5">
+                    <Label Text="Net weight (g) or volume (ml) of food per container: "
+                           Margin="10"
+                           HorizontalTextAlignment="End" />
+                    <Entry x:Name="newNetWeight"
+                           IsTextPredictionEnabled="false"
+                           IsSpellCheckEnabled="false"
+                           Keyboard="Numeric"
+                           MaxLength="6"
+                           Grid.Column="1" />
+                </Grid>
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout>
+                <Grid ColumnDefinitions="140,125" Margin="5">
+                    <Label Text="Dry (dehydrated) weight (g) or volume (ml) of food per container: "
+                           Margin="10"
+                           HorizontalTextAlignment="End" />
+                    <Entry x:Name="newDryWeight"
+                           IsTextPredictionEnabled="false"
+                           IsSpellCheckEnabled="false"
+                           Keyboard="Numeric"
+                           MaxLength="6"
+                           Grid.Column="1" />
+                </Grid>
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout>
+                <Grid ColumnDefinitions="140,125" Margin="5">
+                    <Label Text="Number of meals per day: "
+                           Margin="10"
+                           HorizontalTextAlignment="End" />
+                    <Entry x:Name="newMealsPerDay"
+                           IsTextPredictionEnabled="false"
+                           IsSpellCheckEnabled="false"
+                           Keyboard="Numeric"
+                           MaxLength="2"
+                           Grid.Column="1" />
+                </Grid>
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout>
+                <Button x:Name="btnSave"
+                        Text="Save"
+                        Margin="30" />
+
+                <Button x:Name="btnCancel"
+                        Text="Cancel"
+                        Margin="30"
+                        BackgroundColor="PaleVioletRed"/>
+            </HorizontalStackLayout>
+
+        </VerticalStackLayout>
+
+    </ScrollView>
+
+</ContentPage>
