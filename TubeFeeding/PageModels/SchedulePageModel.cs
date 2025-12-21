@@ -3,9 +3,12 @@ using TubeFeeding.Models;
 
 namespace TubeFeeding.PageModels
 {
-    public partial class ScheduleDetailsPageModel : ObservableObject
+    public partial class SchedulePageModel : ObservableObject
     {
         private int _id;
+        private int _foodIdPKey;
+        private string _patientName;
+        private string _clientName;
         private double _bodyWeight; // kg
         private double _rER;
         private double _fluidsPerDayTotal;
@@ -20,6 +23,24 @@ namespace TubeFeeding.PageModels
         {
             get => _id;
             set => SetProperty(ref _id, value);
+        }
+
+        public int FoodIdPKey
+        {
+            get => _foodIdPKey;
+            set => SetProperty(ref _foodIdPKey, value);
+        }
+
+        public string PatientName
+        {
+            get => _patientName;
+            set => SetProperty(ref _patientName, value);
+        }
+
+        public string ClientName
+        {
+            get => _clientName;
+            set => SetProperty(ref _clientName, value);
         }
 
         public double BodyWeight
@@ -76,9 +97,10 @@ namespace TubeFeeding.PageModels
             set => SetProperty(ref _mealsPerDay, value);
         }
 
-        public ScheduleDetailsPageModel(Schedule model)
+        public SchedulePageModel(Schedule model)
         {
             _id = model.Id;
+            _foodIdPKey = model.FoodIdPKey;
             _bodyWeight = model.BodyWeight;
             _rER = model.RER;
             _fluidsPerDayTotal = model.FluidsPerDayTotal;

@@ -7,6 +7,9 @@ namespace TubeFeeding.Models
     {
         [PrimaryKey, AutoIncrement, Column("id"), Unique, NotNull]
         public int Id { get; set; }
+        public int FoodIdPKey { get; set; }
+        public string PatientName { get; set; }
+        public string ClientName { get; set; }
         public double BodyWeight { get; set; }
         public double RER { get; set; }
         public double FluidsPerDayTotal { get; set; }

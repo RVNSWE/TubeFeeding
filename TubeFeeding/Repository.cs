@@ -44,46 +44,33 @@ namespace TubeFeeding.Clients
          */
         public async Task OutputChart()
         {
-            /*try
+            try
             {
-                Food food = await conn.FindAsync<Food>(App.FoodPageModel?.SelectedPatient.Id);
-                Chart chart = await conn.FindAsync<Chart>(App.PatientViewModel?.LastPatientSelected.SelectedChart.Id);
+                Food food = await conn.FindAsync<Food>(App.SchedulePages?.SelectedFood.Id);
+                Schedule schedule = await conn.FindAsync<Schedule>(App.SchedulePages?.SelectedSchedule.Id);
 
-                int recordId = chart.Id;
+                int scheduleId = schedule.Id;
 
-                PreAnaes preAnaesthesia = await conn.Table<PreAnaes>().FirstOrDefaultAsync(c => c.RecordIdPKey == recordId);
-                IntraAnaes intraAnaesthesia = await conn.Table<IntraAnaes>().FirstOrDefaultAsync(c => c.RecordIdPKey == recordId);
-                PostAnaes postAnaesthesia = await conn.Table<PostAnaes>().FirstOrDefaultAsync(c => c.RecordIdPKey == recordId);
-                Drug drug = await conn.Table<Drug>().FirstOrDefaultAsync(c => c.RecordIdPKey == recordId);
-                Fluid fluid = await conn.Table<Fluid>().FirstOrDefaultAsync(c => c.RecordIdPKey == recordId);
-                List<MonitorParams> parameters = await conn.Table<MonitorParams>().Where(c => c.RecordIdPKey == recordId).ToListAsync();
-
-                AnaesRecord anaesthesiaRecord = new AnaesRecord
+                FeedingSchedule feedingSchedule = new FeedingSchedule
                 {
-                    Patient = patient,
-                    Chart = chart,
-                    PreAnaes = preAnaesthesia,
-                    IntraAnaes = intraAnaesthesia,
-                    PostAnaes = postAnaesthesia,
-                    Drug = drug,
-                    Fluid = fluid,
-                    MonitorParams = parameters
+                    Food = food,
+                    Schedule = schedule
                 };
 
-                ExportDoc output = new ExportDoc(anaesthesiaRecord);
-                string pdf = Globals.GetLocalPath($"{patient.PatientName}_{patient.ClientName}_{chart.Procedure}_{chart.Id}.pdf");
+                ExportDoc output = new ExportDoc(feedingSchedule);
+                string pdf = Globals.GetLocalPath($"{schedule.PatientName}_{schedule.ClientName}_{food.Name}.pdf");
                 output.GeneratePdf(pdf);
 
                 await Share.RequestAsync(new ShareFileRequest
                 {
-                    Title = $"{patient.PatientName} {patient.ClientName} {chart.Procedure} Anaesthesia Record",
+                    Title = $"{schedule.PatientName} {schedule.ClientName} - Tube Feeding Schedule",
                     File = new ShareFile(pdf)
                 });
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine("Could not drop table. Error: {1}", ex.Message);
-            }*/
+            }
         }
 
         /*
@@ -163,7 +150,7 @@ namespace TubeFeeding.Clients
                 StatusMessage = string.Format("{0} Food added (name: {1})", result, name);
                 System.Diagnostics.Debug.WriteLine("{0} Food added (name: {1})", result, name);
 
-                await App.FoodPageModel?.UpdateFood(food);
+                await App.SchedulePages?.UpdateFoods(food);
             }
             catch (Exception ex)
             {
@@ -176,6 +163,9 @@ namespace TubeFeeding.Clients
          * Add a new schedule to the Schedule table.
          */
         public async Task AddNewSchedule(
+            int foodIdPKey,
+            string patientName,
+            string clientName,
             double bodyWeight,
             double rER,
             double fluidsPerDayTotal,
@@ -191,6 +181,9 @@ namespace TubeFeeding.Clients
 
             Schedule schedule = new()
             {
+                FoodIdPKey = foodIdPKey,
+                PatientName = patientName,
+                ClientName = clientName,
                 BodyWeight = bodyWeight,
                 RER = rER,
                 FluidsPerDayTotal = fluidsPerDayTotal,
@@ -202,388 +195,162 @@ namespace TubeFeeding.Clients
                 MealsPerDay = mealsPerDay
             };
 
-            int result = 0;
+            int result;
             try
             {
                 await Init();
 
                 result = await conn.InsertAsync(schedule);
 
-                StatusMessage = string.Format("{0} procedure details added (record ID: {1})", result, schedule.Id);
+                StatusMessage = string.Format("{0} schedule added (record ID: {1})", result, schedule.Id);
 
-                System.Diagnostics.Debug.WriteLine("{0} procedure details added (record ID: {1})", result, schedule.Id);
+                System.Diagnostics.Debug.WriteLine("{0} schedule added (record ID: {1})", result, schedule.Id);
             }
             catch (Exception ex)
             {
-                StatusMessage = string.Format("Could not add procedure details record ID {0}. Error: {1}", schedule.Id, ex.Message);
+                StatusMessage = string.Format("Could not add schedule record ID {0}. Error: {1}", schedule.Id, ex.Message);
 
-                System.Diagnostics.Debug.WriteLine("Could not add procedure details record ID {0}. Error: {1}", schedule.Id, ex.Message);
+                System.Diagnostics.Debug.WriteLine("Could not add schedule record ID {0}. Error: {1}", schedule.Id, ex.Message);
             }
 
-            await App.SchedulePageModel?.UpdateSchedule(schedule);
+            await App.SchedulePages?.UpdateSchedules(schedule);
         }
 
         /*
-         * Update a chart.
+         * Update a Food.
          */
-        public async Task UpdateChart(
-            int patientIdPKey,
-            string date,
-            string anaesthetist,
-            string clinician,
-            string procedure
+        public async Task UpdateFood(
+            string name,
+            double kcal,
+            double grams,
+            double kcalPerGram,
+            double netWeight,
+            double dryWeight,
+            double waterContent
             )
         {
-            Chart chart = await conn.FindAsync<Chart>(patientIdPKey);
-            //PreAnaesthesia chart = await conn.Table<PreAnaesthesia>().Where(i => i.RecordIdPKey == recordIdPKey).FirstOrDefaultAsync();
-
-            chart.Date = date;
-            chart.Anaesthetist = anaesthetist;
-            chart.Clinician = clinician;
-            chart.Procedure = procedure;
-
-            int result = 0;
-            try
+            Food food = new()
             {
-                await Init();
-
-                System.Diagnostics.Debug.WriteLine("Attempting to update pre-anaesthesia details");
-
-                result = await conn.UpdateAsync(chart);
-
-                StatusMessage = string.Format("{0} pre-an updated (record ID: {1})", result, patientIdPKey);
-
-                System.Diagnostics.Debug.WriteLine("{0} pre-an updated (record ID: {1})", result, patientIdPKey);
-
-                await App.PatientViewModel?.UpdateCharts(chart);
-            }
-            catch (Exception ex)
-            {
-                StatusMessage = string.Format("Could not update pre-an {0}. Error: {1}", patientIdPKey, ex.Message);
-
-                System.Diagnostics.Debug.WriteLine("Could not update pre-an {0}. Error: {1}", patientIdPKey, ex.Message);
-            }
-        }
-
-        /*
-         * Update a chart.
-         */
-        /*public async Task UpdateIntraAnaesthesia(
-            int recordIdPKey,
-            string anaesStartHours,
-            string anaesStartMinutes,
-            string anaesEndHours,
-            string anaesEndMinutes,
-            string procStartHours,
-            string procStartMinutes,
-            string procEndHours,
-            string procEndMinutes,
-            string position,
-            string warming,
-            string throatPackIn,
-            string throatPackOut,
-            string swabsIn,
-            string swabsOut,
-            string sharpsIn,
-            string sharpsOut,
-            string notes
-            )
-        {
-            ProcedureDetails procedure = await conn.FindAsync<ProcedureDetails>(recordIdPKey);
-            IntraAnaesthesia chart = await conn.Table<IntraAnaesthesia>().Where(i => i.RecordIdPKey == recordIdPKey).FirstOrDefaultAsync();
-
-            chart.AnaesStartHours = anaesStartHours;
-            chart.AnaesStartMinutes = anaesStartMinutes;
-            chart.AnaesEndHours = anaesEndHours;
-            chart.AnaesEndMinutes = anaesEndMinutes;
-            chart.ProcedureStartHours = procStartHours;
-            chart.ProcedureStartMinutes = procStartMinutes;
-            chart.ProcedureEndHours = procEndHours;
-            chart.ProcedureEndMinutes = procEndMinutes;
-            chart.PatientPosition = position;
-            chart.Warming = warming;
-            chart.ThroatPackIn = throatPackIn;
-            chart.ThroatPackOut = throatPackOut;
-            chart.SwabsIn = swabsIn;
-            chart.SwabsOut = swabsOut;
-            chart.SharpsIn = sharpsIn;
-            chart.SharpsOut = sharpsOut;
-            chart.Notes = notes;
-
-            int result = 0;
-            try
-            {
-                await Init();
-
-                System.Diagnostics.Debug.WriteLine("Attempting to update intra-anaesthesia details");
-
-                result = await conn.UpdateAsync(chart);
-
-                StatusMessage = string.Format("{0} intra-an updated (record ID: {1})", result, recordIdPKey);
-
-                System.Diagnostics.Debug.WriteLine("{0} intra-an updated (record ID: {1})", result, recordIdPKey);
-
-                await App.PatientViewModel?.UpdateCharts(procedure);
-            }
-            catch (Exception ex)
-            {
-                StatusMessage = string.Format("Could not update intra-an {0}. Error: {1}", recordIdPKey, ex.Message);
-
-                System.Diagnostics.Debug.WriteLine("Could not update intra-an {0}. Error: {1}", recordIdPKey, ex.Message);
-            }
-        }*/
-
-        /*
-         * Update a chart.
-         */
-        /*public async Task UpdatePostAnaesthesia(
-            int recordIdPKey,
-            string timeExtubatedHours,
-            string timeExtubatedMinutes,
-            string ivCathRemoved,
-            string ivCathFlushed,
-            string recoverInstruct,
-            string painPlan,
-            string medsTGH
-            )
-        {
-            ProcedureDetails procedure = await conn.FindAsync<ProcedureDetails>(recordIdPKey);
-            PostAnaesthesia chart = await conn.Table<PostAnaesthesia>().Where(i => i.RecordIdPKey == recordIdPKey).FirstOrDefaultAsync();
-
-            chart.TimeExtubatedHours = timeExtubatedHours;
-            chart.TimeExtubatedMinutes = timeExtubatedMinutes;
-            chart.IvCathRemoved = ivCathRemoved;
-            chart.IvCathFlushed = ivCathFlushed;
-            chart.RecoverInstruct = recoverInstruct;
-            chart.PainPlan = painPlan;
-            chart.MedsTGH = medsTGH;
-
-            int result = 0;
-            try
-            {
-                await Init();
-
-                System.Diagnostics.Debug.WriteLine("Attempting to update post-anaesthesia details");
-
-                result = await conn.UpdateAsync(chart);
-
-                StatusMessage = string.Format("{0} post-an updated (record ID: {1})", result, recordIdPKey);
-
-                System.Diagnostics.Debug.WriteLine("{0} post-an updated (record ID: {1})", result, recordIdPKey);
-
-                await App.PatientViewModel?.UpdateCharts(procedure);
-            }
-            catch (Exception ex)
-            {
-                StatusMessage = string.Format("Could not update post-an {0}. Error: {1}", recordIdPKey, ex.Message);
-
-                System.Diagnostics.Debug.WriteLine("Could not update post-an {0}. Error: {1}", recordIdPKey, ex.Message);
-            }
-        }*/
-
-        /*
-         * Update a chart.
-         */
-        /*public async Task UpdateDrugsFluids(
-            int recordIdPKey,
-            int drugId,
-            int fluidId,
-            int inhalant,
-            int flowRate
-            )
-        {
-            ProcedureDetails procedure = await conn.FindAsync<ProcedureDetails>(recordIdPKey);
-            DrugsFluids chart = await conn.Table<DrugsFluids>().Where(i => i.RecordIdPKey == recordIdPKey).FirstOrDefaultAsync();
-
-            chart.DrugId = drugId;
-            chart.FluidId = fluidId;
-            chart.Inhalant = inhalant;
-            chart.FlowRate = flowRate;
-
-            int result = 0;
-            try
-            {
-                await Init();
-
-                System.Diagnostics.Debug.WriteLine("Attempting to update DrugsFluids details");
-
-                result = await conn.UpdateAsync(chart);
-
-                StatusMessage = string.Format("{0} DrugsFluids updated (record ID: {1})", result, recordIdPKey);
-
-                System.Diagnostics.Debug.WriteLine("{0} DrugsFluids updated (record ID: {1})", result, recordIdPKey);
-
-                await App.PatientViewModel?.UpdateCharts(procedure);
-            }
-            catch (Exception ex)
-            {
-                StatusMessage = string.Format("Could not update DrugsFluids {0}. Error: {1}", recordIdPKey, ex.Message);
-
-                System.Diagnostics.Debug.WriteLine("Could not update DrugsFluids {0}. Error: {1}", recordIdPKey, ex.Message);
-            }
-        }*/
-
-        /*
-         * Update a chart.
-         */
-        /*public async Task UpdateParameters(
-            int recordIdPKey,
-            int temp,
-            int weight,
-            int heartRate,
-            int respRate,
-            string mucousMems,
-            string capRefillTime,
-            int painScore,
-            string pulseQual,
-            string comments,
-            int spO2,
-            int eTCO2,
-            string jawTone,
-            string palpebral,
-            string eyePos,
-            int systolicBP,
-            int diastolicBP,
-            int meanBP,
-            int dopplerBP,
-            string eyesLubed
-            )
-        {
-            ProcedureDetails procedure = await conn.FindAsync<ProcedureDetails>(recordIdPKey);
-            Parameters chart = await conn.Table<Parameters>().Where(i => i.RecordIdPKey == recordIdPKey).FirstOrDefaultAsync();
-
-            chart.Temp = temp;
-            chart.Weight = weight;
-            chart.HeartRate = heartRate;
-            chart.RespRate = respRate;
-            chart.MucousMems = mucousMems;
-            chart.CapRefilTime = capRefillTime;
-            chart.PainScore = painScore;
-            chart.PulseQual = pulseQual;
-            chart.Comments = comments;
-            chart.SpO2 = spO2;
-            chart.ETCO2 = eTCO2;
-            chart.JawTone = jawTone;
-            chart.Palpebral = palpebral;
-            chart.EyePos = eyePos;
-            chart.SystolicBP = systolicBP;
-            chart.DiastolicBP = diastolicBP;
-            chart.MeanBP = meanBP;
-            chart.DopplerBP = dopplerBP;
-            chart.EyesLubed = eyesLubed;
-
-            int result = 0;
-            try
-            {
-                await Init();
-
-                System.Diagnostics.Debug.WriteLine("Attempting to update SelectedParams details");
-
-                result = await conn.UpdateAsync(chart);
-
-                StatusMessage = string.Format("{0} SelectedParams updated (record ID: {1})", result, recordIdPKey);
-
-                System.Diagnostics.Debug.WriteLine("{0} SelectedParams updated (record ID: {1})", result, recordIdPKey);
-
-                await App.PatientViewModel?.UpdateCharts(procedure);
-            }
-            catch (Exception ex)
-            {
-                StatusMessage = string.Format("Could not update SelectedParams {0}. Error: {1}", recordIdPKey, ex.Message);
-
-                System.Diagnostics.Debug.WriteLine("Could not update SelectedParams {0}. Error: {1}", recordIdPKey, ex.Message);
-            }
-        }*/
-
-        /*
-         * Update the currently selected Patient.
-         */
-        public async Task UpdatePatient(
-            int id,
-            string clientId,
-            string clientName,
-            string phoneNumber,
-            string patientId,
-            string patientName,
-            string species,
-            string age,
-            string sex,
-            string breed,
-            string neuteredStatus,
-            string temperament,
-            double weight
-            )
-        {
-            Patient thisPatient = new()
-            {
-                Id = id,
-                ClientId = clientId,
-                ClientName = clientName,
-                PhoneNumber = phoneNumber,
-                PatientId = patientId,
-                PatientName = patientName,
-                Species = species,
-                Age = age,
-                Sex = sex,
-                Breed = breed,
-                NeuteredStatus = neuteredStatus,
-                Temperament = temperament,
-                Weight = weight
+                Name = name,
+                Kcal = kcal,
+                Grams = grams,
+                KcalPerGram = kcalPerGram,
+                NetWeight = netWeight,
+                DryWeight = dryWeight,
+                WaterContent = waterContent
             };
 
-            await conn.UpdateAsync(thisPatient);
+            int result;
+            try
+            {
+                await Init();
 
-            await App.PatientViewModel?.UpdatePatients(thisPatient);
+                System.Diagnostics.Debug.WriteLine("Attempting to update Food details");
+
+                result = await conn.UpdateAsync(food);
+
+                StatusMessage = string.Format("{0} Food updated (name: {1})", result, name);
+
+                System.Diagnostics.Debug.WriteLine("{0} Food updated (name: {1})", result, name);
+
+                await App.SchedulePages?.UpdateFoods(food);
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = string.Format("Could not update Food {0}. Error: {1}", name, ex.Message);
+
+                System.Diagnostics.Debug.WriteLine("Could not update Food {0}. Error: {1}", name, ex.Message);
+            }
         }
 
         /*
-         * Get a list of all patients in the Patient table.
+         * Update the currently selected Schedule.
          */
-        public async Task<List<Patient>> GetAllPatients()
+        public async Task UpdateSchedule(
+            int foodIdPKey,
+            string patientName,
+            string clientName,
+            double bodyWeight,
+            double rER,
+            double fluidsPerDayTotal,
+            double maxTotalVolumePerMeal,
+            double foodPerDay,
+            double foodPerMeal,
+            double waterPerDay,
+            double waterPerMeal,
+            int mealsPerDay
+            )
+        {
+            Schedule schedule = new()
+            {
+                FoodIdPKey = foodIdPKey,
+                PatientName = patientName,
+                ClientName = clientName,
+                BodyWeight = bodyWeight,
+                RER = rER,
+                FluidsPerDayTotal = fluidsPerDayTotal,
+                MaxTotalVolumePerMeal = maxTotalVolumePerMeal,
+                FoodPerDay = foodPerDay,
+                FoodPerMeal = foodPerMeal,
+                WaterPerDay = waterPerDay,
+                WaterPerMeal = waterPerMeal,
+                MealsPerDay = mealsPerDay
+            };
+
+            await conn.UpdateAsync(schedule);
+
+            await App.SchedulePages?.UpdateSchedules(schedule);
+        }
+
+        /*
+         * Get a list of all foods.
+         */
+        public async Task<List<Food>> GetAllFoods()
         {
             try
             {
                 await Init(); // verify database initialisation
-                return await conn.Table<Patient>().ToListAsync(); // create a list of all patients in the Patient table
+                return await conn.Table<Food>().ToListAsync(); // create a list of all foods in the Food table
             }
             catch (Exception ex) // if something goes wrong
             {
                 // alert the user if it didn't work and display an error message.
                 StatusMessage = string.Format("Data retrieval failed. {0}", ex.Message);
+                System.Diagnostics.Debug.WriteLine("Data retrieval failed. {0}", ex.Message);
             }
 
-            return new List<Patient>(); // return the list of patients
+            return new List<Food>(); // return the list of foods
         }
 
         /*
-         * Get a list of all charts in the Chart table.
+         * Get a list of all schedules.
          */
-        public async Task<List<Chart>> GetAllCharts()
+        public async Task<List<Schedule>> GetAllSchedules()
         {
             try
             {
-                await Init(); // verify database initialisation
-                return await conn.Table<Chart>().ToListAsync(); // create a list of all charts in the Chart table
+                await Init();
+                return await conn.Table<Schedule>().ToListAsync();
             }
-            catch (Exception ex) // if something goes wrong
+            catch (Exception ex)
             {
-                // alert the user if it didn't work and display an error message.
                 StatusMessage = string.Format("Data retrieval failed. {0}", ex.Message);
+                System.Diagnostics.Debug.WriteLine("Data retrieval failed. {0}", ex.Message);
             }
 
-            return new List<Chart>(); // return the list of charts
+            return new List<Schedule>();
         }
 
         /*
-         * Return a list of the anaesthesia charts belonging to a specific patient by chart ID.
+         * Return a list of the schedules associated with a specific food.
          */
-        public async Task<List<Chart>> GetChartsForPatient(PatientVM patient)
+        public async Task<List<Schedule>> GetChartsForPatient(FoodPageModel food)
         {
             try
             {
                 await Init();
-                System.Diagnostics.Debug.WriteLine("Retrieving charts for Patient with ID: {0}", patient.Id);
-                return await conn.Table<Chart>().Where(i => i.PatientIdPKey == patient.Id).ToListAsync();
+                System.Diagnostics.Debug.WriteLine("Retrieving schedules for Food with ID: {0}", food.Id);
+                return await conn.Table<Schedule>().Where(i => i.FoodIdPKey == food.Id).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -591,19 +358,21 @@ namespace TubeFeeding.Clients
                 System.Diagnostics.Debug.WriteLine("Data retrieval failed. {0}", ex.Message);
             }
 
-            return new List<Chart>();
+            return new List<Schedule>();
         }
 
         /*
-         * Return a list of the DrugsFluids sections belonging to a specific chart by chart ID.
+         * Get a specific Food by ID.
          */
-        /*public async Task<List<DrugsFluids>> GetDrugsFluidsForChart(ProcedureDetailsVM chart)
+        public async Task<Food> GetPatient(int id)
         {
+            Food food = new();
+
             try
             {
                 await Init();
-                System.Diagnostics.Debug.WriteLine("Retrieving DrugsFluids for Procedure with ID: {0}", chart.Id);
-                return await conn.Table<DrugsFluids>().Where(i => i.RecordIdPKey == chart.Id).ToListAsync();
+
+                food = await conn.FindAsync<Food>(id);
             }
             catch (Exception ex)
             {
@@ -611,63 +380,21 @@ namespace TubeFeeding.Clients
                 System.Diagnostics.Debug.WriteLine("Data retrieval failed. {0}", ex.Message);
             }
 
-            return new List<DrugsFluids>();
-        }*/
-
-        /*
-         * Return a list of the SelectedParams sections belonging to a specific chart by chart ID.
-         */
-        /*public async Task<List<Parameters>> GetParametersForChart(ProcedureDetailsVM chart)
-        {
-            try
-            {
-                await Init();
-                System.Diagnostics.Debug.WriteLine("Retrieving SelectedParams for Procedure with ID: {0}", chart.Id);
-                return await conn.Table<Parameters>().Where(i => i.RecordIdPKey == chart.Id).ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                StatusMessage = string.Format("Data retrieval failed. {0}", ex.Message);
-                System.Diagnostics.Debug.WriteLine("Data retrieval failed. {0}", ex.Message);
-            }
-
-            return new List<Parameters>();
-        }*/
-
-        /*
-         * Get a specific Patient by ID.
-         */
-        public async Task<Patient> GetPatient(int id)
-        {
-            Patient patient = new();
-
-            try
-            {
-                await Init();
-
-                patient = await conn.FindAsync<Patient>(id);
-            }
-            catch (Exception ex)
-            {
-                StatusMessage = string.Format("Data retrieval failed. {0}", ex.Message);
-                System.Diagnostics.Debug.WriteLine("Data retrieval failed. {0}", ex.Message);
-            }
-
-            return patient;
+            return food;
         }
 
         /*
-         * Get Chart by ID.
+         * Get Schedule by ID.
          */
-        public async Task<Chart> GetProcedureDetails(int id)
+        public async Task<Schedule> GetProcedureDetails(int id)
         {
-            Chart chart = new();
+            Schedule schedule = new();
 
             try
             {
                 await Init();
 
-                chart = await conn.FindAsync<Chart>(id);
+                schedule = await conn.FindAsync<Schedule>(id);
             }
             catch (Exception ex)
             {
@@ -675,202 +402,73 @@ namespace TubeFeeding.Clients
                 System.Diagnostics.Debug.WriteLine("Data retrieval failed. {0}", ex.Message);
             }
 
-            return chart;
+            return schedule;
         }
 
         /*
-         * Get PreAnaesthesia by ID.
+         * Delete a Food.
          */
-        /*public async Task<PreAnaesthesia> GetPreAnaesthesia(int id)
-        {
-            PreAnaesthesia preAnaesthesia = new();
-
-            try
-            {
-                await Init();
-
-                preAnaesthesia = await conn.FindAsync<PreAnaesthesia>(id);
-            }
-            catch (Exception ex)
-            {
-                StatusMessage = string.Format("Data retrieval failed. {0}", ex.Message);
-                System.Diagnostics.Debug.WriteLine("Data retrieval failed. {0}", ex.Message);
-            }
-
-            return preAnaesthesia;
-        }*/
-
-        /*
-         * Get IntraAnaesthesia by ID.
-         */
-        /*public async Task<IntraAnaesthesia> GetIntraAnaesthesia(int id)
-        {
-            IntraAnaesthesia intraAnaesthesia = new();
-
-            try
-            {
-                await Init();
-
-                intraAnaesthesia = await conn.FindAsync<IntraAnaesthesia>(id);
-            }
-            catch (Exception ex)
-            {
-                StatusMessage = string.Format("Data retrieval failed. {0}", ex.Message);
-                System.Diagnostics.Debug.WriteLine("Data retrieval failed. {0}", ex.Message);
-            }
-
-            return intraAnaesthesia;
-        }*/
-
-        /*
-         * Get PostAnaesthesia by ID.
-         */
-        /*public async Task<PostAnaesthesia> GetPostAnaesthesia(int id)
-        {
-            PostAnaesthesia postAnaesthesia = new();
-
-            try
-            {
-                await Init();
-
-                postAnaesthesia = await conn.FindAsync<PostAnaesthesia>(id);
-            }
-            catch (Exception ex)
-            {
-                StatusMessage = string.Format("Data retrieval failed. {0}", ex.Message);
-                System.Diagnostics.Debug.WriteLine("Data retrieval failed. {0}", ex.Message);
-            }
-
-            return postAnaesthesia;
-        }*/
-
-        /*
-         * Get SelectedParams by ID.
-         */
-        /*public async Task<Parameters> GetParameters(int id)
-        {
-            Parameters parameters = new();
-
-            try
-            {
-                await Init();
-
-                parameters = await conn.FindAsync<Parameters>(id);
-            }
-            catch (Exception ex)
-            {
-                StatusMessage = string.Format("Data retrieval failed. {0}", ex.Message);
-                System.Diagnostics.Debug.WriteLine("Data retrieval failed. {0}", ex.Message);
-            }
-
-            return parameters;
-        }*/
-
-        /*
-         * Get the PreAnaesthesia VM by RecordIdPKey.
-         */
-        /*public async Task<PreAnaesthesiaVM> GetPreAnaesthesiaVM(int id)
-        {
-            await Init();
-
-            PreAnaesthesia chart = await conn.Table<PreAnaesthesia>().FirstOrDefaultAsync(c => c.RecordIdPKey == id);
-            PreAnaesthesiaVM vM = new(chart);
-
-            return vM;
-        }*/
-
-        /*
-         * Get the IntraAnaesthesia VM by RecordIdPKey.
-         */
-        /*public async Task<IntraAnaesthesiaVM> GetIntraAnaesthesiaVM(int id)
-        {
-            await Init();
-
-            IntraAnaesthesia chart = await conn.Table<IntraAnaesthesia>().FirstOrDefaultAsync(c => c.RecordIdPKey == id);
-            IntraAnaesthesiaVM vM = new(chart);
-
-            return vM;
-        }*/
-
-        /*
-         * Get the PostAnaesthesia VM by RecordIdPKey.
-         */
-        /*public async Task<PostAnaesthesiaVM> GetPostAnaesthesiaVM(int id)
-        {
-            await Init();
-
-            PostAnaesthesia chart = await conn.Table<PostAnaesthesia>().FirstOrDefaultAsync(c => c.RecordIdPKey == id);
-            PostAnaesthesiaVM vM = new(chart);
-
-            return vM;
-        }*/
-
-        /*
-         * Delete a Patient.
-         */
-        public async Task DeletePatient(PatientVM patientVM)
+        public async Task DeleteFood(FoodPageModel foodPageModel)
         {
             int result = 0;
             try
             {
                 await Init();
 
-                App.PatientViewModel?.ForceSelectPatient(patientVM);
+                App.SchedulePages?.ForceSelectFood(foodPageModel);
 
-                Patient patient = await conn.Table<Patient>().Where(i => i.Id == patientVM.Id).FirstOrDefaultAsync();
-                string name = patient.PatientName;
-                await App.PatientViewModel?.RefreshCharts();
+                Food food = await conn.Table<Food>().Where(i => i.Id == foodPageModel.Id).FirstOrDefaultAsync();
+                string name = food.Name;
+                await App.SchedulePages?.RefreshSchedules();
 
-                foreach (ChartVM chart in App.PatientViewModel?.LastPatientSelected.Charts)
+                foreach (SchedulePageModel schedule in App.SchedulePages?.Schedules)
                 {
-                    await DeleteChart(chart);
+                    await DeleteChart(schedule);
                 }
 
-                App.PatientViewModel?.Patients.Remove(patientVM);
-                result = await conn.DeleteAsync(patient);
-                await App.PatientViewModel?.RefreshPatients();
+                App.SchedulePages?.Foods.Remove(foodPageModel);
+                result = await conn.DeleteAsync(food);
+                await App.SchedulePages?.RefreshFoods();
 
                 StatusMessage = string.Format("{0} Patient(s) deleted (name: {1})", result, name);
                 System.Diagnostics.Debug.WriteLine("{0} Patient(s) deleted (Patient name: {1})", result, name);
             }
             catch (Exception ex)
             {
-                StatusMessage = string.Format("Could not delete {0}. Error: {1}", patientVM.Id, ex.Message);
-                System.Diagnostics.Debug.WriteLine("Could not delete {0}. Error: {1}", patientVM.Id, ex.Message);
+                StatusMessage = string.Format("Could not delete {0}. Error: {1}", foodPageModel.Id, ex.Message);
+                System.Diagnostics.Debug.WriteLine("Could not delete {0}. Error: {1}", foodPageModel.Id, ex.Message);
             }
-
-            //await App.ClientViewModel?.RefreshPatients();
         }
 
         /*
-         * Delete an anaesthesia chart.
+         * Delete a schedule.
          */
-        public async Task DeleteChart(ChartVM chartVM)
+        public async Task DeleteChart(SchedulePageModel schedulePageModel)
         {
-            string procedure = chartVM.Procedure;
+            string name = schedulePageModel.PatientName + " " + schedulePageModel.ClientName;
 
             int result = 0;
             try
             {
                 await Init();
 
-                App.PatientViewModel?.ForceSelectChart(chartVM);
+                App.SchedulePages?.ForceSelectSchedule(schedulePageModel);
 
-                Chart thisChart = await conn.Table<Chart>().Where(i => i.Id == chartVM.Id).FirstOrDefaultAsync();
+                Schedule thisSchedule = await conn.Table<Schedule>().Where(i => i.Id == schedulePageModel.Id).FirstOrDefaultAsync();
 
-                App.PatientViewModel?.LastPatientSelected.Charts.Remove(chartVM);
-                result = await conn.DeleteAsync(thisChart);
+                App.SchedulePages?.Schedules.Remove(schedulePageModel);
+                result = await conn.DeleteAsync(thisSchedule);
 
-                StatusMessage = string.Format("{0} procedure(s) deleted (_procedure: {1})", result, procedure);
-                System.Diagnostics.Debug.WriteLine("{0} procedure(s) deleted (procedure: {1})", result, procedure);
+                StatusMessage = string.Format("{0} schedule(s) deleted (schedule: {1})", result, name);
+                System.Diagnostics.Debug.WriteLine("{0} schedule(s) deleted (schedule: {1})", result, name);
             }
             catch (Exception ex)
             {
-                StatusMessage = string.Format("Could not delete procedure {0}. Error: {1}", chartVM.Id, ex.Message);
-                System.Diagnostics.Debug.WriteLine("Could not delete procedure {0}. Error: {1}", chartVM.Id, ex.Message);
+                StatusMessage = string.Format("Could not delete schedule {0}. Error: {1}", schedulePageModel.Id, ex.Message);
+                System.Diagnostics.Debug.WriteLine("Could not delete schedule {0}. Error: {1}", schedulePageModel.Id, ex.Message);
             }
 
-            await App.PatientViewModel?.RefreshCharts();
+            await App.SchedulePages?.RefreshSchedules();
         }
     }
 }
