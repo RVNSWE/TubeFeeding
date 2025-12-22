@@ -77,7 +77,7 @@
 
             <HorizontalStackLayout>
                 <Grid ColumnDefinitions="140,125" Margin="5">
-                    <Label Text="Total Kcal per container: "
+                    <Label Text="Kcal per kg of food: "
                            Margin="10"
                            HorizontalTextAlignment="End" />
                     <Entry x:Name="newKcal"
@@ -105,10 +105,10 @@
 
             <HorizontalStackLayout>
                 <Grid ColumnDefinitions="140,125" Margin="5">
-                    <Label Text="Dry (dehydrated) weight (g) or volume (ml) of food per container: "
+                    <Label Text="Percentage water content of food: "
                            Margin="10"
                            HorizontalTextAlignment="End" />
-                    <Entry x:Name="newDryWeight"
+                    <Entry x:Name="newWaterPercentage"
                            IsTextPredictionEnabled="false"
                            IsSpellCheckEnabled="false"
                            Keyboard="Numeric"

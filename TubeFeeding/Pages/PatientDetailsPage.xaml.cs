@@ -43,9 +43,17 @@ public partial class PatientDetailsPage : ContentPage
      */
     public static async Task DeletePatient()
     {
-        PatientPageModel patientPageModel = App.SchedulePages?.SelectedPatient;
+        PatientPageModel lastPatientSelected = App.SchedulePages?.LastPatientSelected;
+        PatientPageModel selectedPatient = App.SchedulePages?.SelectedPatient;
 
-        await App.Repo.DeletePatient(patientPageModel);
+        if (selectedPatient == null && lastPatientSelected != null)
+        {
+            await App.Repo.DeletePatient(lastPatientSelected);
+        }
+        else
+        {
+            await App.Repo.DeletePatient(selectedPatient);
+        }
 
         Globals.GoToList();
     }

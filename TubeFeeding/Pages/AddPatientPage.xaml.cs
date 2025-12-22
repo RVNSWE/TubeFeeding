@@ -18,7 +18,7 @@ public partial class AddPatientPage : ContentPage
             newFoodName.Text,
             newKcal.Text,
             newNetWeight.Text,
-            newDryWeight.Text,
+            newWaterPercentage.Text,
             newMealsPerDay.Text
             );
 
@@ -33,14 +33,14 @@ public partial class AddPatientPage : ContentPage
         string foodName,
         string rawKcal,
         string rawNetWeight,
-        string rawDryWeight,
+        string rawWaterPercentage,
         string rawMealsPerDay
         )
     {
         double bodyWeight = 0;
         double kcal = 0;
         double netWeight = 0;
-        double dryWeight = 0;
+        double waterPercentage = 0;
         int mealsPerDay = 0;
 
         patientName = Globals.FormatString(patientName);
@@ -50,7 +50,7 @@ public partial class AddPatientPage : ContentPage
         foodName = Globals.FormatString(foodName);
         rawKcal = Globals.FormatString(rawKcal);
         rawNetWeight = Globals.FormatString(rawNetWeight);
-        rawDryWeight = Globals.FormatString(rawDryWeight);
+        rawWaterPercentage = Globals.FormatString(rawWaterPercentage);
         rawMealsPerDay = Globals.FormatString(rawMealsPerDay);
 
         if (Globals.IsStringEmpty(patientName))
@@ -81,7 +81,7 @@ public partial class AddPatientPage : ContentPage
         {
             await DisplayAlertAsync("Invalid net weight", "Please enter the net (total) weight (g) or volume (ml) of food per container as either a whole number or decimal.", "OK");
         }
-        else if (rawDryWeight.Length > 0 && !double.TryParse(rawDryWeight, out dryWeight))
+        else if (rawWaterPercentage.Length > 0 && !double.TryParse(rawWaterPercentage, out waterPercentage))
         {
             await DisplayAlertAsync("Invalid dry weight", "Please enter the dry (dehydrated) weight (g) or volume (ml) of food per container as either a whole number or decimal.", "OK");
         }
@@ -94,32 +94,21 @@ public partial class AddPatientPage : ContentPage
             Globals.GoToList();
 
             double kcalPerGram = Globals.CalculateKcalPerGram(kcal, netWeight);
-            double waterContent = Globals.CalculateWaterContent(netWeight, dryWeight);
+            double waterContent = Globals.CalculateWaterContent(netWeight, waterPercentage);
 
             await App.Repo.AddNewFood(
                 foodName,
                 kcal,
                 kcalPerGram,
                 netWeight,
-                dryWeight,
+                waterPercentage,
                 waterContent
                 );
              
             int foodIdPKey = App.SchedulePages.SelectedFood.Id;
-            double rER;
-            double fluidsPerDayTotal;
 
-            if (species == "Cat")
-            {
-                rER = bodyWeight * 30 + 70;
-                fluidsPerDayTotal = 40 * bodyWeight;
-            }
-            else
-            {
-                rER = 70 * Math.Pow(bodyWeight, 0.75);
-                fluidsPerDayTotal = 60 * bodyWeight;
-            }
-
+            double rER = Globals.CalculateRER(bodyWeight, species);
+            double fluidsPerDayTotal = Globals.CalculateFluidsPerDay(bodyWeight);
             double maxTotalVolumePerMeal = Globals.CalculateMaxTotalVolumePerMeal(bodyWeight, MAX_ML_PER_KG);
             double foodPerDay = Globals.CalculateFoodPerDay(rER, kcalPerGram);
             double foodPerMeal = Globals.CalculateFoodPerMeal(foodPerDay, mealsPerDay);

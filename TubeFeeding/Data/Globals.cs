@@ -80,16 +80,40 @@
             return true;
         }*/
 
+        public static double CalculateRER(double bodyWeight, string species)
+        {
+            double rER;
+
+            if (species == "Cat")
+            {
+                rER = bodyWeight * 30 + 70;
+            }
+            else
+            {
+                rER = 70 * Math.Pow(bodyWeight, 0.75);
+            }
+
+            return rER;
+        }
+
+        public static double CalculateFluidsPerDay(double bodyWeight)
+        {
+            double fluidsPerDay = 2 * bodyWeight * 24;
+
+            return fluidsPerDay;
+        }
+
         public static double CalculateKcalPerGram(double kcal, double netWeight)
         {
-            double kcalPerGram = kcal / netWeight;
+            double kcalPerGram = kcal * 0.001;
 
             return kcalPerGram;
         }
 
-        public static double CalculateWaterContent(double netWeight, double dryWeight)
+        public static double CalculateWaterContent(double netWeight, double waterPercentage)
         {
-            double waterContent = netWeight - dryWeight;
+            double waterDecimal = waterPercentage / 100;
+            double waterContent = netWeight * waterDecimal;
 
             return waterContent;
         }
@@ -127,6 +151,30 @@
             double waterPerMeal = waterPerDay / mealsPerDay;
 
             return waterPerMeal;
+        }
+
+        public static void CalculateFeedingPlan(double foodPerDay, double waterPerDay, double maxVolumePerMeal)
+        {
+            double totalVolumePerDay = foodPerDay + waterPerDay;
+            double mealsPerDay = totalVolumePerDay / maxVolumePerMeal;
+            mealsPerDay = Math.Round(mealsPerDay, 0, MidpointRounding.ToPositiveInfinity);
+
+            if (mealsPerDay < 14)
+            {
+                int hours = 14;
+                int startTime = 8;
+                int increment = 0;
+                double interval = hours / mealsPerDay;
+                interval = Math.Round(interval, 0, MidpointRounding.ToZero);
+                int[] feedingTimes = [];
+
+                for (int i = 0; i < mealsPerDay; i++)
+                {
+                    int time = startTime + increment;
+                    feedingTimes[i] = time;
+                    increment += (int)interval;
+                }
+            }
         }
 
         /*

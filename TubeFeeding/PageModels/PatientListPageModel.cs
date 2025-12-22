@@ -43,11 +43,12 @@ namespace TubeFeeding.PageModels
         }
 
         /*
-         * Force chart selection.
+         * Force patient selection.
          */
-        public void ForceSelectPatient(PatientPageModel schedule)
+        public void ForceSelectPatient(PatientPageModel patient)
         {
-            SelectedPatient = schedule;
+            SelectedPatient = patient;
+            LastPatientSelected = patient;
         }
 
         /*
