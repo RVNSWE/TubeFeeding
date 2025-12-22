@@ -455,30 +455,32 @@ namespace TubeFeeding.Data
          */
         public async Task DeletePatient(PatientPageModel patientPageModel)
         {
-            string name = patientPageModel.PatientName + " " + patientPageModel.ClientName;
+            //string name = patientPageModel.PatientName + " " + patientPageModel.ClientName;
 
             int result = 0;
             try
             {
                 await Init();
 
-                App.SchedulePages?.ForceSelectSchedule(patientPageModel);
+                App.SchedulePages?.ForceSelectPatient(patientPageModel);
 
                 Patient thisPatient = await conn.Table<Patient>().Where(i => i.Id == patientPageModel.Id).FirstOrDefaultAsync();
+                string name = thisPatient.PatientName;
 
                 App.SchedulePages?.Patients.Remove(patientPageModel);
                 result = await conn.DeleteAsync(thisPatient);
+                await App.SchedulePages?.RefreshPatients();
 
                 StatusMessage = string.Format("{0} patient(s) deleted (patient: {1})", result, name);
                 System.Diagnostics.Debug.WriteLine("{0} patient(s) deleted (patient: {1})", result, name);
             }
             catch (Exception ex)
             {
-                StatusMessage = string.Format("Could not delete patient {0}. Error: {1}", patientPageModel.Id, ex.Message);
-                System.Diagnostics.Debug.WriteLine("Could not delete patient {0}. Error: {1}", patientPageModel.Id, ex.Message);
+                StatusMessage = string.Format("Could not delete patient. Error: {1}", ex.Message);
+                System.Diagnostics.Debug.WriteLine("Could not delete patient. Error: {1}", ex.Message);
             }
 
-            await App.SchedulePages?.RefreshPatients();
+            //await App.SchedulePages?.RefreshPatients();
         }
     }
 }

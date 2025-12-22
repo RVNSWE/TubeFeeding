@@ -29,7 +29,7 @@ namespace TubeFeeding
             string dbPath = Globals.GetLocalPath(Globals.DatabaseName);
             builder.Services.AddSingleton<Repository>(s => ActivatorUtilities.CreateInstance<Repository>(s, dbPath));
 
-            builder.Services.AddSingleton<ModalErrorHandler>();
+            //builder.Services.AddSingleton<ModalErrorHandler>();
 
             return builder.Build();
         }

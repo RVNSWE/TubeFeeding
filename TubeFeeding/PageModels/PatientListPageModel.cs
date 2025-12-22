@@ -45,7 +45,7 @@ namespace TubeFeeding.PageModels
         /*
          * Force chart selection.
          */
-        public void ForceSelectSchedule(PatientPageModel schedule)
+        public void ForceSelectPatient(PatientPageModel schedule)
         {
             SelectedPatient = schedule;
         }
@@ -67,7 +67,7 @@ namespace TubeFeeding.PageModels
             {
                 if (patient.Id == selectedPatient.Id)
                 {
-                    ForceSelectSchedule(patient);
+                    ForceSelectPatient(patient);
                     System.Diagnostics.Debug.WriteLine($"Selected {SelectedPatient.PatientName} {SelectedPatient.ClientName} (PatientListPageModel)");
                     break;
                 }

@@ -1,10 +1,10 @@
 namespace TubeFeeding.Pages;
 
-public partial class CreateSchedulePage : ContentPage
+public partial class AddPatientPage : ContentPage
 {
     private const int MAX_ML_PER_KG = 10;
 
-	public CreateSchedulePage()
+	public AddPatientPage()
     {
         BindingContext = App.SchedulePages?.SelectedPatient;
 

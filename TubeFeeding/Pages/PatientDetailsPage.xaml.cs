@@ -1,8 +1,8 @@
 namespace TubeFeeding.Pages;
 
-public partial class ScheduleDetailsPage : ContentPage
+public partial class PatientDetailsPage : ContentPage
 {
-	public ScheduleDetailsPage()
+	public PatientDetailsPage()
     {
         BindingContext = App.SchedulePages?.SelectedPatient;
 
@@ -21,16 +21,19 @@ public partial class ScheduleDetailsPage : ContentPage
         // If navigating back to patient page after selecting a chart, re-select patient.
         if (App.SchedulePages?.SelectedPatient == null && App.SchedulePages?.LastPatientSelected != null)
         {
-            App.SchedulePages?.ForceSelectSchedule(App.SchedulePages.LastPatientSelected);
+            App.SchedulePages?.ForceSelectPatient(App.SchedulePages.LastPatientSelected);
         }
         else
         {
             App.SchedulePages.LastPatientSelected = App.SchedulePages.SelectedPatient;
         }
 
-        System.Diagnostics.Debug.WriteLine(
-            $"Selected {App.SchedulePages?.SelectedPatient.PatientName} {App.SchedulePages.SelectedPatient.ClientName} (PatientDetailsPage)"
-            );
+        if (App.SchedulePages?.SelectedPatient != null)
+        {
+            System.Diagnostics.Debug.WriteLine(
+                $"Selected {App.SchedulePages?.SelectedPatient.PatientName} {App.SchedulePages.SelectedPatient.ClientName} (PatientDetailsPage)"
+                );
+        }
 
         Dispatcher.DispatchAsync(App.SchedulePages.RefreshPatients);
     }
@@ -40,9 +43,9 @@ public partial class ScheduleDetailsPage : ContentPage
      */
     public static async Task DeletePatient()
     {
-        PatientPageModel patientVM = App.SchedulePages?.SelectedPatient;
+        PatientPageModel patientPageModel = App.SchedulePages?.SelectedPatient;
 
-        await App.Repo.DeletePatient(patientVM);
+        await App.Repo.DeletePatient(patientPageModel);
 
         Globals.GoToList();
     }

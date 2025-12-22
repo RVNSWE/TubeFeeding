@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:TubeFeeding.PageModels"
+             xmlns:pages="clr-namespace:TubeFeeding.PageModels"
              xmlns:local="clr-namespace:TubeFeeding"
-             x:Class="TubeFeeding.Pages.CreateSchedulePage"
-             x:DataType="vm:PatientPageModel"
-             Title="Create New Schedule">
+             x:Class="TubeFeeding.Pages.AddPatientPage"
+             x:DataType="pages:PatientPageModel"
+             Title="Create New Tube Feeding Schedule">
 
     <ScrollView Margin="10">
 
