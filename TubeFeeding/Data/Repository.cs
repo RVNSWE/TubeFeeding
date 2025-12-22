@@ -431,9 +431,9 @@ namespace TubeFeeding.Data
                 string name = food.Name;
                 await App.SchedulePages?.RefreshPatients();
 
-                foreach (PatientPageModel schedule in App.SchedulePages?.Patients)
+                foreach (PatientPageModel patient in App.SchedulePages?.Patients)
                 {
-                    await DeleteChart(schedule);
+                    await DeletePatient(patient);
                 }
 
                 App.SchedulePages?.Foods.Remove(foodPageModel);
@@ -451,31 +451,31 @@ namespace TubeFeeding.Data
         }
 
         /*
-         * Delete a schedule.
+         * Delete a patient.
          */
-        public async Task DeleteChart(PatientPageModel schedulePageModel)
+        public async Task DeletePatient(PatientPageModel patientPageModel)
         {
-            string name = schedulePageModel.PatientName + " " + schedulePageModel.ClientName;
+            string name = patientPageModel.PatientName + " " + patientPageModel.ClientName;
 
             int result = 0;
             try
             {
                 await Init();
 
-                App.SchedulePages?.ForceSelectSchedule(schedulePageModel);
+                App.SchedulePages?.ForceSelectSchedule(patientPageModel);
 
-                Patient thisSchedule = await conn.Table<Patient>().Where(i => i.Id == schedulePageModel.Id).FirstOrDefaultAsync();
+                Patient thisPatient = await conn.Table<Patient>().Where(i => i.Id == patientPageModel.Id).FirstOrDefaultAsync();
 
-                App.SchedulePages?.Patients.Remove(schedulePageModel);
-                result = await conn.DeleteAsync(thisSchedule);
+                App.SchedulePages?.Patients.Remove(patientPageModel);
+                result = await conn.DeleteAsync(thisPatient);
 
                 StatusMessage = string.Format("{0} patient(s) deleted (patient: {1})", result, name);
                 System.Diagnostics.Debug.WriteLine("{0} patient(s) deleted (patient: {1})", result, name);
             }
             catch (Exception ex)
             {
-                StatusMessage = string.Format("Could not delete patient {0}. Error: {1}", schedulePageModel.Id, ex.Message);
-                System.Diagnostics.Debug.WriteLine("Could not delete patient {0}. Error: {1}", schedulePageModel.Id, ex.Message);
+                StatusMessage = string.Format("Could not delete patient {0}. Error: {1}", patientPageModel.Id, ex.Message);
+                System.Diagnostics.Debug.WriteLine("Could not delete patient {0}. Error: {1}", patientPageModel.Id, ex.Message);
             }
 
             await App.SchedulePages?.RefreshPatients();

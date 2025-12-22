@@ -6,7 +6,7 @@ public partial class CreateSchedulePage : ContentPage
 
 	public CreateSchedulePage()
     {
-        BindingContext = App.SchedulePages.SelectedPatient;
+        BindingContext = App.SchedulePages?.SelectedPatient;
 
         InitializeComponent();
 

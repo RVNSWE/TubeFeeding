@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pageModels="clr-namespace:TubeFeeding.PageModels"
+             x:Class="TubeFeeding.Pages.ScheduleDetailsPage"
+             x:DataType="pageModels:PatientPageModel"
+             Title="Schedule Details">
+
+    <ScrollView Margin="10">
+
+        <VerticalStackLayout>
+
+            <HorizontalStackLayout>
+                <Grid ColumnDefinitions="125,125" Margin="5">
+                    <Label Text="Client name:" Margin="5" />
+                    <Label Text="{Binding ClientName}" Margin="5" Grid.Column="1" />
+                </Grid>
+                
+                <Grid ColumnDefinitions="125,125" Margin="5">
+                    <Label Text="Patient name:" Margin="5" />
+                    <Label Text="{Binding PatientName}" Margin="5" Grid.Column="1" />
+                </Grid>
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout>
+                <Grid ColumnDefinitions="125,125" Margin="5">
+                    <Label Text="Species:" Margin="5" />
+                    <Label Text="{Binding Species}" Margin="5" Grid.Column="1" />
+                </Grid>
+
+                <Grid ColumnDefinitions="125,auto,auto" Margin="5">
+                    <Label Text="Weight:" Margin="5" />
+                    <Label Text="{Binding BodyWeight}" Margin="5" Grid.Column="1" />
+                    <Label Text="kg" Margin="5" Grid.Column="2" />
+                </Grid>
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout>
+                <Grid ColumnDefinitions="125,125" Margin="5">
+                    <Label Text="Food to administer:" Margin="5" />
+                    <Label Text="{Binding FoodName}" Margin="5" Grid.Column="1" />
+                </Grid>
+
+                <Grid ColumnDefinitions="125,125" Margin="5">
+                    <Label Text="Number of meals per day:" Margin="5" />
+                    <Label Text="{Binding MealsPerDay}" Margin="5" Grid.Column="1" />
+                </Grid>
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout>
+                <Grid ColumnDefinitions="125,auto,auto" Margin="5">
+                    <Label Text="Food per meal:" Margin="5" />
+                    <Label Text="{Binding FoodPerMeal}" Margin="5" Grid.Column="1" />
+                    <Label Text="g" Margin="5" Grid.Column="2" />
+                </Grid>
+
+                <Grid ColumnDefinitions="125,auto,auto" Margin="5">
+                    <Label Text="Water per meal:" Margin="5" />
+                    <Label Text="{Binding WaterPerMeal}" Margin="5" Grid.Column="1" />
+                    <Label Text="ml" Margin="5" Grid.Column="2" />
+                </Grid>
+            </HorizontalStackLayout>
+
+            <Button x:Name="btnDeleteSchedule"
+                Text="Delete schedule"
+                Grid.Row="13"
+                Grid.Column="0"
+                Margin="10"
+                BackgroundColor="PaleVioletRed" />
+
+        </VerticalStackLayout>
+
+    </ScrollView>
+    
+</ContentPage>

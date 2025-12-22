@@ -9,6 +9,13 @@ namespace TubeFeeding
         public AppShell()
         {
             InitializeComponent();
+
+            Routing.RegisterRoute("patient", typeof(LandingPage));
+            Routing.RegisterRoute("patient/list", typeof(MainPage));
+            Routing.RegisterRoute("patient/view", typeof(ScheduleDetailsPage));
+            Routing.RegisterRoute("patient/add", typeof(CreateSchedulePage));
+
+
             var currentTheme = Application.Current!.RequestedTheme;
             ThemeSegmentedControl.SelectedIndex = currentTheme == AppTheme.Light ? 0 : 1;
         }

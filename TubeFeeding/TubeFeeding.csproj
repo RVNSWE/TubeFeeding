@@ -71,13 +71,19 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Pages\ScheduleDetailsPageDetailsPage.xaml.cs">
+	    <DependentUpon>ScheduleDetailsPageDetailsPage.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
 	  <MauiXaml Update="Pages\CreateSchedulePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\LandingPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\ScheduleListPage.xaml">
+	  <MauiXaml Update="Pages\ScheduleDetailsPageDetailsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
