@@ -153,28 +153,51 @@
             return waterPerMeal;
         }
 
-        public static void CalculateFeedingPlan(double foodPerDay, double waterPerDay, double maxVolumePerMeal)
+        public static int[] CalculateFeedingPlan(double foodPerDay, double waterPerDay, double maxTotalVolumePerMeal)
         {
             double totalVolumePerDay = foodPerDay + waterPerDay;
-            double mealsPerDay = totalVolumePerDay / maxVolumePerMeal;
+            double mealsPerDay = totalVolumePerDay / maxTotalVolumePerMeal;
             mealsPerDay = Math.Round(mealsPerDay, 0, MidpointRounding.ToPositiveInfinity);
+            int[] feedingTimes = [];
+            int hours = 14;
+            int startTime = 8;
+            int increment = 0;
+            double interval = hours / mealsPerDay;
+            interval = Math.Round(interval, 0, MidpointRounding.ToZero);
+            int time = 0;
 
             if (mealsPerDay < 14)
             {
-                int hours = 14;
-                int startTime = 8;
-                int increment = 0;
-                double interval = hours / mealsPerDay;
-                interval = Math.Round(interval, 0, MidpointRounding.ToZero);
-                int[] feedingTimes = [];
-
                 for (int i = 0; i < mealsPerDay; i++)
                 {
-                    int time = startTime + increment;
+                    time = startTime + increment;
                     feedingTimes[i] = time;
                     increment += (int)interval;
                 }
             }
+            if (mealsPerDay > 24)
+            {
+                for (int i = 0; i < 24; i++)
+                {
+                    feedingTimes[i] = time;
+                    time++;
+                }
+            }
+            else
+            {
+                int midPoint = 15;
+                double mealHalfTime = mealsPerDay / 2;
+                mealHalfTime = Math.Round(mealHalfTime, 0, MidpointRounding.ToPositiveInfinity);
+                time = midPoint - (int)mealHalfTime;
+
+                for (int i = 0; i < mealsPerDay; i++)
+                {
+                    feedingTimes[i] = time;
+                    time++;
+                }
+            }
+
+                return feedingTimes;
         }
 
         /*

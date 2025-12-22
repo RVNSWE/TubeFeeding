@@ -4,18 +4,18 @@ namespace TubeFeeding.Data
 {
     public class FeedingSchedule
     {
-        public Food Food { get; set; }
-        public Patient Patient { get; set; }
+        public FoodPageModel Food { get; set; }
+        public PatientPageModel Patient { get; set; }
         public List<string> Times { get; set; }
         public int[] FeedingTimes { get; set; }
 
-        public FeedingSchedule(int[] feedingTimes)
+        public FeedingSchedule()
         {
-            Food = new();
-            Patient = new();
+            Food = App.SchedulePages?.SelectedFood;
+            Patient = App.SchedulePages?.SelectedPatient;
 
             Times = [];
-            FeedingTimes = feedingTimes;
+            FeedingTimes = Globals.CalculateFeedingPlan(Patient.FoodPerDay, Patient.WaterPerDay, Patient.MaxTotalVolumePerMeal);
         }
 
         public void PopulateTimes()
