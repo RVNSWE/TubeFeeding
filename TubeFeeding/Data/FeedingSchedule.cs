@@ -1,6 +1,4 @@
-﻿using TubeFeeding.Models;
-
-namespace TubeFeeding.Data
+﻿namespace TubeFeeding.Data
 {
     public class FeedingSchedule
     {
@@ -16,6 +14,8 @@ namespace TubeFeeding.Data
 
             Times = [];
             FeedingTimes = Globals.CalculateFeedingPlan(Patient.FoodPerDay, Patient.WaterPerDay, Patient.MaxTotalVolumePerMeal);
+
+            PopulateTimes();
         }
 
         public void PopulateTimes()

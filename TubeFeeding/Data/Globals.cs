@@ -160,10 +160,19 @@
             mealsPerDay = Math.Round(mealsPerDay, 0, MidpointRounding.ToPositiveInfinity);
             int[] feedingTimes = [];
             int hours = 14;
-            int startTime = 8;
-            int increment = 0;
             double interval = hours / mealsPerDay;
             interval = Math.Round(interval, 0, MidpointRounding.ToZero);
+
+            if (interval < 1)
+            {
+                interval = 1;
+            }
+
+            double mealHalfTime = mealsPerDay * interval / 2;
+            mealHalfTime = Math.Round(mealHalfTime, 0, MidpointRounding.ToPositiveInfinity);
+            int midPoint = 15;
+            int startTime = midPoint - (int)mealHalfTime;
+            int increment = 0;
             int time = 0;
 
             if (mealsPerDay < 14)
@@ -175,7 +184,7 @@
                     increment += (int)interval;
                 }
             }
-            if (mealsPerDay > 24)
+            if (mealsPerDay > 23)
             {
                 for (int i = 0; i < 24; i++)
                 {
@@ -185,9 +194,6 @@
             }
             else
             {
-                int midPoint = 15;
-                double mealHalfTime = mealsPerDay / 2;
-                mealHalfTime = Math.Round(mealHalfTime, 0, MidpointRounding.ToPositiveInfinity);
                 time = midPoint - (int)mealHalfTime;
 
                 for (int i = 0; i < mealsPerDay; i++)
