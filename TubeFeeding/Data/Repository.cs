@@ -51,7 +51,7 @@ namespace TubeFeeding.Data
 
                 int scheduleId = patient.Id;
 
-                FeedingSchedule feedingSchedule = new FeedingSchedule(App.SchedulePages?.SelectedPatient.FeedingTimes)
+                FeedingSchedule feedingSchedule = new FeedingSchedule(food, patient)
                 {
                     Food = food,
                     Patient = patient

@@ -94,7 +94,7 @@ public partial class AddPatientPage : ContentPage
             Globals.GoToList();
 
             double kcalPerGram = Globals.CalculateKcalPerGram(kcal, netWeight);
-            double waterContent = Globals.CalculateWaterContent(netWeight, waterPercentage);
+            double waterContent = Globals.CalculateWaterContent(netWeight, waterPercentage); // TO DO: remove
 
             await App.Repo.AddNewFood(
                 foodName,
@@ -112,7 +112,7 @@ public partial class AddPatientPage : ContentPage
             double maxTotalVolumePerMeal = Globals.CalculateMaxTotalVolumePerMeal(bodyWeight, MAX_ML_PER_KG);
             double foodPerDay = Globals.CalculateFoodPerDay(rER, kcalPerGram);
             double foodPerMeal = Globals.CalculateFoodPerMeal(foodPerDay, mealsPerDay);
-            double waterPerDay = Globals.CalculateWaterPerDay(fluidsPerDayTotal, waterContent);
+            double waterPerDay = Globals.CalculateWaterPerDay(fluidsPerDayTotal, foodPerDay, waterPercentage);
             double waterPerMeal = Globals.CalculateWaterPerMeal(waterPerDay, mealsPerDay);
 
             await App.Repo.AddNewSchedule(

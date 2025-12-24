@@ -1,18 +1,20 @@
-﻿namespace TubeFeeding.Data
+﻿using TubeFeeding.Models;
+
+namespace TubeFeeding.Data
 {
     public class FeedingSchedule
     {
-        public FoodPageModel Food { get; set; }
-        public PatientPageModel Patient { get; set; }
+        public Food Food { get; set; }
+        public Patient Patient { get; set; }
         public List<string> FormattedListOfHours { get; set; }
         public List<string> FormattedFeedingTimes { get; set; }
         public int[] ListOfHours {  get; set; }
         public int[] FeedingTimes { get; set; }
 
-        public FeedingSchedule()
+        public FeedingSchedule(Food food, Patient patient)
         {
-            Food = App.SchedulePages?.SelectedFood;
-            Patient = App.SchedulePages?.SelectedPatient;
+            Food = food;
+            Patient = patient;
 
             FormattedListOfHours = [];
             FormattedFeedingTimes = [];

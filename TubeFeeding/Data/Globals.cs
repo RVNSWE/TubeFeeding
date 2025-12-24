@@ -139,8 +139,9 @@
             return foodPerMeal;
         }
 
-        public static double CalculateWaterPerDay(double fluidsPerDayTotal, double waterContent)
+        public static double CalculateWaterPerDay(double fluidsPerDayTotal, double foodPerDay, double waterPercentage)
         {
+            double waterContent = CalculateWaterContent(foodPerDay, waterPercentage);
             double waterPerDay = fluidsPerDayTotal - waterContent;
 
             return waterPerDay;
