@@ -42,12 +42,12 @@ namespace TubeFeeding.Data
         /*
          * Output a chart as a PDF.
          */
-        public async Task OutputChart()
+        public async Task OutputChart(int patientId)
         {
             try
             {
-                Food food = await conn.FindAsync<Food>(App.SchedulePages?.SelectedFood.Id);
-                Patient patient = await conn.FindAsync<Patient>(App.SchedulePages?.SelectedPatient.Id);
+                Patient patient = await GetPatient(patientId);
+                Food food = await GetFood(patient.FoodIdPKey);
 
                 int scheduleId = patient.Id;
 
@@ -69,8 +69,7 @@ namespace TubeFeeding.Data
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine("Could not drop table. Error: {1}", ex.Message);
-                StatusMessage = string.Format("Could not drop table. Error: {1}", ex.Message);
+                System.Diagnostics.Debug.WriteLine("Could not export PDF. Error: " + ex.Message);
             }
         }
 
@@ -354,7 +353,7 @@ namespace TubeFeeding.Data
         /*
          * Return a list of the schedules associated with a specific food.
          */
-        public async Task<List<Patient>> GetChartsForPatient(FoodPageModel food)
+        public async Task<List<Patient>> GetPatientsForFood(FoodPageModel food)
         {
             try
             {
@@ -372,9 +371,9 @@ namespace TubeFeeding.Data
         }
 
         /*
-         * Get a specific Food by ID.
+         * Get a specific food by ID.
          */
-        public async Task<Food> GetPatient(int id)
+        public async Task<Food> GetFood(int id)
         {
             Food food = new();
 
@@ -394,9 +393,9 @@ namespace TubeFeeding.Data
         }
 
         /*
-         * Get Schedule by ID.
+         * Get a specific patient by ID.
          */
-        public async Task<Patient> GetProcedureDetails(int id)
+        public async Task<Patient> GetPatient(int id)
         {
             Patient schedule = new();
 

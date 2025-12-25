@@ -181,7 +181,7 @@
                 for (int i = 0; i < mealsPerDay; i++)
                 {
                     time = startTime + increment;
-                    feedingTimes[i] = time;
+                    feedingTimes.Add(time);
                     increment += (int)interval;
                 }
             }
@@ -189,7 +189,7 @@
             {
                 for (int i = 0; i < 24; i++)
                 {
-                    feedingTimes[i] = time;
+                    feedingTimes.Add(time);
                     time++;
                 }
             }
@@ -199,7 +199,7 @@
 
                 for (int i = 0; i < mealsPerDay; i++)
                 {
-                    feedingTimes[i] = time;
+                    feedingTimes.Add(time);
                     time++;
                 }
             }

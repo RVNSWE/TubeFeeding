@@ -34,6 +34,10 @@ namespace TubeFeeding.Pages.Controls
                     col.Item().Text(" ");
 
                     col.Item().Text($"Food: {_schedule.Food.Name}          ");
+
+                    col.Item().Text(" ");
+
+                    col.Item().Text(PrintSchedule());
                 });
 
                 page.Footer().AlignCenter().Text(x =>
@@ -43,6 +47,36 @@ namespace TubeFeeding.Pages.Controls
                 });
             });
         }
+        public string PrintSchedule()
+        {
+            string listOfHours = "";
+
+            foreach (string item in _schedule.FormattedListOfHours)
+            {
+                listOfHours = listOfHours + item + "    ";
+            }
+
+            return listOfHours;
+        }
+
+        /*public string PrintSchedule()
+        {
+            string listOfHours = "";
+
+            foreach (string item in _schedule.FormattedListOfHours)
+            {
+                if (_schedule.FormattedFeedingTimes.Contains(item))
+                {
+                    listOfHours = listOfHours + "*" + item + "*" + "    ";
+                }
+                else
+                {
+                    listOfHours = listOfHours + item + "    ";
+                }
+            }
+
+            return listOfHours;
+        }*/
 
         private void ComposeBody(PageDescriptor page)
         {

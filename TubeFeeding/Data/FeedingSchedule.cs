@@ -32,7 +32,7 @@ namespace TubeFeeding.Data
 
             for (int i = 0; i < endTime; i++)
             {
-                ListOfHours[i] = time;
+                ListOfHours.Add(time);
                 time++;
             }
 

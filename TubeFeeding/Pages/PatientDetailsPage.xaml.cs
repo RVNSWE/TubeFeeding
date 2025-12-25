@@ -8,6 +8,8 @@ public partial class PatientDetailsPage : ContentPage
 
         InitializeComponent();
 
+        btnCreatePDF.Clicked += async (s, e) => await CreatePDF();
+
         btnDeleteSchedule.Clicked += async (s, e) => await DeletePatient();
     }
 
@@ -36,6 +38,27 @@ public partial class PatientDetailsPage : ContentPage
         }
 
         Dispatcher.DispatchAsync(App.SchedulePages.RefreshPatients);
+    }
+
+    /*
+     * Export this chart to PDF.
+     */
+    public async Task CreatePDF()
+    {
+        int patientId;
+
+        if (App.SchedulePages?.SelectedPatient == null)
+        {
+            patientId = App.SchedulePages.LastPatientSelected.Id;
+        }
+        else
+        {
+            patientId = App.SchedulePages.SelectedPatient.Id;
+        }
+
+        System.Diagnostics.Debug.WriteLine($"Creating PDF for patient ID {patientId}");
+
+        await App.Repo.OutputChart(patientId);
     }
 
     /*

@@ -20,9 +20,7 @@
                     <Label Text="Patient name:" Margin="5" />
                     <Label Text="{Binding PatientName}" Margin="5" Grid.Column="1" />
                 </Grid>
-            </HorizontalStackLayout>
-
-            <HorizontalStackLayout>
+                
                 <Grid ColumnDefinitions="125,125" Margin="5">
                     <Label Text="Species:" Margin="5" />
                     <Label Text="{Binding Species}" Margin="5" Grid.Column="1" />
@@ -37,6 +35,11 @@
 
             <HorizontalStackLayout>
                 <Grid ColumnDefinitions="125,125" Margin="5">
+                    <Label Text="RER:" Margin="5" />
+                    <Label Text="{Binding RER}" Margin="5" Grid.Column="1" />
+                </Grid>
+                
+                <Grid ColumnDefinitions="125,125" Margin="5">
                     <Label Text="Food to administer:" Margin="5" />
                     <Label Text="{Binding FoodName}" Margin="5" Grid.Column="1" />
                 </Grid>
@@ -44,6 +47,34 @@
                 <Grid ColumnDefinitions="125,125" Margin="5">
                     <Label Text="Number of meals per day:" Margin="5" />
                     <Label Text="{Binding MealsPerDay}" Margin="5" Grid.Column="1" />
+                </Grid>
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout>
+                <Grid ColumnDefinitions="125,auto,auto" Margin="5">
+                    <Label Text="Max food allowable per meal:" Margin="5" />
+                    <Label Text="{Binding MaxTotalVolumePerMeal}" Margin="5" Grid.Column="1" />
+                    <Label Text="g" Margin="5" Grid.Column="2" />
+                </Grid>
+                
+                <Grid ColumnDefinitions="125,auto,auto" Margin="5">
+                    <Label Text="Total max fluids per day:" Margin="5" />
+                    <Label Text="{Binding FluidsPerDayTotal}" Margin="5" Grid.Column="1" />
+                    <Label Text="g" Margin="5" Grid.Column="2" />
+                </Grid>
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout>
+                <Grid ColumnDefinitions="125,auto,auto" Margin="5">
+                    <Label Text="Food per day:" Margin="5" />
+                    <Label Text="{Binding FoodPerDay}" Margin="5" Grid.Column="1" />
+                    <Label Text="g" Margin="5" Grid.Column="2" />
+                </Grid>
+
+                <Grid ColumnDefinitions="125,auto,auto" Margin="5">
+                    <Label Text="Water per day:" Margin="5" />
+                    <Label Text="{Binding WaterPerDay}" Margin="5" Grid.Column="1" />
+                    <Label Text="ml" Margin="5" Grid.Column="2" />
                 </Grid>
             </HorizontalStackLayout>
 
@@ -61,11 +92,18 @@
                 </Grid>
             </HorizontalStackLayout>
 
+            <Button x:Name="btnCreatePDF"
+                Text="Export to PDF"
+                    Margin="5" />
+
+            <Label Text=" "
+                   Margin="10" />
+
             <Button x:Name="btnDeleteSchedule"
                 Text="Delete schedule"
                 Grid.Row="13"
                 Grid.Column="0"
-                Margin="10"
+                Margin="5"
                 BackgroundColor="PaleVioletRed" />
 
         </VerticalStackLayout>
