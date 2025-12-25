@@ -74,10 +74,10 @@ namespace TubeFeeding.PageModels
                 }
             }
 
-            if (SelectedPatient != null)
+            /*if (SelectedPatient != null)
             {
                 await SelectedPatient.ComposeSchedule();
-            }
+            }*/
         }
 
         /*

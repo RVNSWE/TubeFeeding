@@ -8,8 +8,8 @@ namespace TubeFeeding.Data
         public Patient Patient { get; set; }
         public List<string> FormattedListOfHours { get; set; }
         public List<string> FormattedFeedingTimes { get; set; }
-        public int[] ListOfHours {  get; set; }
-        public int[] FeedingTimes { get; set; }
+        public List<int> ListOfHours {  get; set; }
+        public List<int> FeedingTimes { get; set; }
 
         public FeedingSchedule(Food food, Patient patient)
         {
@@ -40,7 +40,7 @@ namespace TubeFeeding.Data
             CreateFormattedList(FeedingTimes, FormattedFeedingTimes);
         }
 
-        public void CreateFormattedList(int[] list, List<string> formattedList)
+        public void CreateFormattedList(List<int> list, List<string> formattedList)
         {
             foreach (int time in list)
             {

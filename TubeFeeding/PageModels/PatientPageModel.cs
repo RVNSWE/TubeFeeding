@@ -22,8 +22,6 @@ namespace TubeFeeding.PageModels
         private double _waterPerMeal;
         private int _mealsPerDay;
 
-        public int[] FeedingTimes { get; set; }
-
         public int Id
         {
             get => _id;
@@ -138,11 +136,9 @@ namespace TubeFeeding.PageModels
             _waterPerDay = model.WaterPerDay;
             _waterPerMeal = model.WaterPerMeal;
             _mealsPerDay = model.MealsPerDay;
-
-            FeedingTimes = [];
         }
 
-        public async Task ComposeSchedule()
+        /*public async Task ComposeSchedule()
         {
             double totalVolumePerMeal = FoodPerMeal + WaterPerMeal;
             double totalVolumePerDay = FoodPerDay + WaterPerDay;
@@ -181,6 +177,6 @@ namespace TubeFeeding.PageModels
                 FeedingTimes[i] = hour;
                 hour += timeIncrement;
             }
-        }
+        }*/
     }
 }

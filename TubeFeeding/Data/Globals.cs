@@ -154,12 +154,12 @@
             return waterPerMeal;
         }
 
-        public static int[] CalculateFeedingPlan(double foodPerDay, double waterPerDay, double maxTotalVolumePerMeal)
+        public static List<int> CalculateFeedingPlan(double foodPerDay, double waterPerDay, double maxTotalVolumePerMeal)
         {
             double totalVolumePerDay = foodPerDay + waterPerDay;
             double mealsPerDay = totalVolumePerDay / maxTotalVolumePerMeal;
             mealsPerDay = Math.Round(mealsPerDay, 0, MidpointRounding.ToPositiveInfinity);
-            int[] feedingTimes = [];
+            List<int> feedingTimes = [];
             int hours = 14;
             double interval = hours / mealsPerDay;
             interval = Math.Round(interval, 0, MidpointRounding.ToZero);

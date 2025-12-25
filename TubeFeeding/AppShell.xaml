@@ -12,10 +12,6 @@
                       ContentTemplate="{DataTemplate pages:MainPage}"
                       Icon="beast2.png"
                       Route="main" />
-        <ShellContent x:Name="ChartTab"
-                      Title="Chart"
-                      ContentTemplate="{DataTemplate pages:PatientDetailsPage}"
-                      Route="main" />
     </TabBar>
 
 </Shell>
