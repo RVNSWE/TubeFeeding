@@ -27,7 +27,7 @@ namespace TubeFeeding.Data
 
             // otherwise
             conn = new SQLiteAsyncConnection(_dbPath); // connect to the database via the specified filepath
-            await conn.CreateTableAsync<Food>();
+            //await conn.CreateTableAsync<Food>();
             await conn.CreateTableAsync<Patient>();
         }
 
@@ -47,18 +47,18 @@ namespace TubeFeeding.Data
             try
             {
                 Patient patient = await GetPatient(patientId);
-                Food food = await GetFood(patient.FoodIdPKey);
+                //Food food = await GetFood(patient.FoodIdPKey);
 
                 int scheduleId = patient.Id;
 
-                FeedingSchedule feedingSchedule = new FeedingSchedule(food, patient)
+                FeedingSchedule feedingSchedule = new FeedingSchedule(patient)
                 {
-                    Food = food,
+                    //Food = food,
                     Patient = patient
                 };
 
                 ExportDoc output = new ExportDoc(feedingSchedule);
-                string pdf = Globals.GetLocalPath($"{patient.PatientName}_{patient.ClientName}_{food.Name}.pdf");
+                string pdf = Globals.GetLocalPath($"{patient.PatientName}_{patient.ClientName}_{patient.FoodName}.pdf");
                 output.GeneratePdf(pdf);
 
                 await Share.RequestAsync(new ShareFileRequest
@@ -76,7 +76,7 @@ namespace TubeFeeding.Data
         /*
          * FOR DEBUGGING ONLY - Drop the current Food table.
          */
-        public async Task DropFoodTable()
+        /*public async Task DropFoodTable()
         {
             System.Diagnostics.Debug.WriteLine("Attempting to drop Food table");
             StatusMessage = string.Format("Attempting to drop Food table");
@@ -95,12 +95,12 @@ namespace TubeFeeding.Data
             }
 
             await DropScheduleTable();
-        }
+        }*/
 
         /*
-         * FOR DEBUGGING ONLY - Drop the current Schedule table.
+         * FOR DEBUGGING ONLY - Drop the current Patient table.
          */
-        public async Task DropScheduleTable()
+        public async Task DropPatientTable()
         {
             System.Diagnostics.Debug.WriteLine("Attempting to drop Patient table");
             StatusMessage = string.Format("Attempting to drop Patient table");
@@ -122,7 +122,7 @@ namespace TubeFeeding.Data
         /*
          * Add a new Food to the Food table.
          */
-        public async Task AddNewFood(
+        /*public async Task AddNewFood(
             string name,
             double kcal,
             double kcalPerGram,
@@ -162,14 +162,18 @@ namespace TubeFeeding.Data
                 StatusMessage = string.Format("Could not add Food {0}. Error: {1}", name, ex.Message);
                 System.Diagnostics.Debug.WriteLine("Could not add Food {0}. Error: {1}", name, ex.Message);
             }
-        }
+        }*/
 
         /*
          * Add a new schedule to the Schedule table.
          */
         public async Task AddNewSchedule(
-            int foodIdPKey,
             string foodName,
+            double kcal,
+            double kcalPerGram,
+            double netWeight,
+            double dryWeight,
+            double waterContent,
             string patientName,
             string clientName,
             string species,
@@ -181,16 +185,21 @@ namespace TubeFeeding.Data
             double foodPerMeal,
             double waterPerDay,
             double waterPerMeal,
-            int mealsPerDay
+            int mealsPerDay,
+            int cansPerDay
             )
         {
-            System.Diagnostics.Debug.WriteLine("Attempting to add chart");
-            StatusMessage = string.Format("Attempting to add chart");
+            System.Diagnostics.Debug.WriteLine("Attempting to add schedule");
+            StatusMessage = string.Format("Attempting to add schedule");
 
             Patient schedule = new()
             {
-                FoodIdPKey = foodIdPKey,
                 FoodName = foodName,
+                Kcal = kcal,
+                KcalPerGram = kcalPerGram,
+                NetWeight = netWeight,
+                DryWeight = dryWeight,
+                WaterContent = waterContent,
                 PatientName = patientName,
                 ClientName = clientName,
                 Species = species,
@@ -202,7 +211,8 @@ namespace TubeFeeding.Data
                 FoodPerMeal = foodPerMeal,
                 WaterPerDay = waterPerDay,
                 WaterPerMeal = waterPerMeal,
-                MealsPerDay = mealsPerDay
+                MealsPerDay = mealsPerDay,
+                CansPerDay = cansPerDay
             };
 
             int result;
@@ -212,13 +222,13 @@ namespace TubeFeeding.Data
 
                 result = await conn.InsertAsync(schedule);
 
-                StatusMessage = string.Format("{0} patient added (record ID: {1})", result, schedule.Id);
-                System.Diagnostics.Debug.WriteLine("{0} patient added (record ID: {1})", result, schedule.Id);
+                StatusMessage = string.Format("{0} schedule added (record ID: {1})", result, schedule.Id);
+                System.Diagnostics.Debug.WriteLine("{0} schedule added (record ID: {1})", result, schedule.Id);
             }
             catch (Exception ex)
             {
-                StatusMessage = string.Format("Could not add patient record ID {0}. Error: {1}", schedule.Id, ex.Message);
-                System.Diagnostics.Debug.WriteLine("Could not add patient record ID {0}. Error: {1}", schedule.Id, ex.Message);
+                StatusMessage = string.Format("Could not add schedule record ID {0}. Error: {1}", schedule.Id, ex.Message);
+                System.Diagnostics.Debug.WriteLine("Could not add schedule record ID {0}. Error: {1}", schedule.Id, ex.Message);
             }
 
             await App.SchedulePages?.UpdateSchedules(schedule);
@@ -227,7 +237,7 @@ namespace TubeFeeding.Data
         /*
          * Update a Food.
          */
-        public async Task UpdateFood(
+        /*public async Task UpdateFood(
             string name,
             double kcal,
             double kcalPerGram,
@@ -266,14 +276,18 @@ namespace TubeFeeding.Data
                 StatusMessage = string.Format("Could not update Food {0}. Error: {1}", name, ex.Message);
                 System.Diagnostics.Debug.WriteLine("Could not update Food {0}. Error: {1}", name, ex.Message);
             }
-        }
+        }*/
 
         /*
          * Update the currently selected Schedule.
          */
         public async Task UpdateSchedule(
-            int foodIdPKey,
             string foodName,
+            double kcal,
+            double kcalPerGram,
+            double netWeight,
+            double dryWeight,
+            double waterContent,
             string patientName,
             string clientName,
             string species,
@@ -285,13 +299,18 @@ namespace TubeFeeding.Data
             double foodPerMeal,
             double waterPerDay,
             double waterPerMeal,
-            int mealsPerDay
+            int mealsPerDay,
+            int cansPerDay
             )
         {
             Patient schedule = new()
             {
-                FoodIdPKey = foodIdPKey,
                 FoodName = foodName,
+                Kcal = kcal,
+                KcalPerGram = kcalPerGram,
+                NetWeight = netWeight,
+                DryWeight = dryWeight,
+                WaterContent = waterContent,
                 PatientName = patientName,
                 ClientName = clientName,
                 Species = species,
@@ -303,7 +322,8 @@ namespace TubeFeeding.Data
                 FoodPerMeal = foodPerMeal,
                 WaterPerDay = waterPerDay,
                 WaterPerMeal = waterPerMeal,
-                MealsPerDay = mealsPerDay
+                MealsPerDay = mealsPerDay,
+                CansPerDay = cansPerDay
             };
 
             await conn.UpdateAsync(schedule);
@@ -314,7 +334,7 @@ namespace TubeFeeding.Data
         /*
          * Get a list of all foods.
          */
-        public async Task<List<Food>> GetAllFoods()
+        /*public async Task<List<Food>> GetAllFoods()
         {
             try
             {
@@ -329,10 +349,10 @@ namespace TubeFeeding.Data
             }
 
             return new List<Food>(); // return the list of foods
-        }
+        }*/
 
         /*
-         * Get a list of all schedules.
+         * Get a list of all patients.
          */
         public async Task<List<Patient>> GetAllPatients()
         {
@@ -351,9 +371,9 @@ namespace TubeFeeding.Data
         }
 
         /*
-         * Return a list of the schedules associated with a specific food.
+         * Return a list of the patients associated with a specific food.
          */
-        public async Task<List<Patient>> GetPatientsForFood(FoodPageModel food)
+        /*public async Task<List<Patient>> GetPatientsForFood(FoodPageModel food)
         {
             try
             {
@@ -368,12 +388,12 @@ namespace TubeFeeding.Data
             }
 
             return new List<Patient>();
-        }
+        }*/
 
         /*
          * Get a specific food by ID.
          */
-        public async Task<Food> GetFood(int id)
+        /*public async Task<Food> GetFood(int id)
         {
             Food food = new();
 
@@ -390,7 +410,7 @@ namespace TubeFeeding.Data
             }
 
             return food;
-        }
+        }*/
 
         /*
          * Get a specific patient by ID.
@@ -417,7 +437,7 @@ namespace TubeFeeding.Data
         /*
          * Delete a Food.
          */
-        public async Task DeleteFood(FoodPageModel foodPageModel)
+        /*public async Task DeleteFood(FoodPageModel foodPageModel)
         {
             int result = 0;
             try
@@ -447,7 +467,7 @@ namespace TubeFeeding.Data
                 StatusMessage = string.Format("Could not delete {0}. Error: {1}", foodPageModel.Id, ex.Message);
                 System.Diagnostics.Debug.WriteLine("Could not delete {0}. Error: {1}", foodPageModel.Id, ex.Message);
             }
-        }
+        }*/
 
         /*
          * Delete a patient.

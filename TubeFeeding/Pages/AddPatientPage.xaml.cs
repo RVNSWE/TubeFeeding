@@ -95,17 +95,8 @@ public partial class AddPatientPage : ContentPage
 
             double kcalPerGram = Globals.CalculateKcalPerGram(kcal, netWeight);
             double waterContent = Globals.CalculateWaterContent(netWeight, waterPercentage); // TO DO: remove
-
-            await App.Repo.AddNewFood(
-                foodName,
-                kcal,
-                kcalPerGram,
-                netWeight,
-                waterPercentage,
-                waterContent
-                );
              
-            int foodIdPKey = App.SchedulePages.SelectedFood.Id;
+            //int foodIdPKey = App.SchedulePages.SelectedFood.Id;
 
             double rER = Globals.CalculateRER(bodyWeight, species);
             double fluidsPerDayTotal = Globals.CalculateFluidsPerDay(bodyWeight);
@@ -114,10 +105,15 @@ public partial class AddPatientPage : ContentPage
             double foodPerMeal = Globals.CalculateFoodPerMeal(foodPerDay, mealsPerDay);
             double waterPerDay = Globals.CalculateWaterPerDay(fluidsPerDayTotal, foodPerDay, waterPercentage);
             double waterPerMeal = Globals.CalculateWaterPerMeal(waterPerDay, mealsPerDay);
+            double cansPerDay = Math.Round(netWeight / foodPerDay, 0, MidpointRounding.ToPositiveInfinity);
 
             await App.Repo.AddNewSchedule(
-                foodIdPKey,
                 foodName,
+                kcal,
+                kcalPerGram,
+                netWeight,
+                waterPercentage,
+                waterContent,
                 patientName,
                 clientName,
                 species,
@@ -129,7 +125,8 @@ public partial class AddPatientPage : ContentPage
                 foodPerMeal,
                 waterPerDay,
                 waterPerMeal,
-                mealsPerDay
+                mealsPerDay,
+                (int)cansPerDay
                 );
 
             Globals.GoToView();

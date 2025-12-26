@@ -2,7 +2,7 @@
 {
     public static class Globals
     {
-        public const string DatabaseName = "DAR.db3";
+        public const string DatabaseName = "TF.db3";
 
         public const SQLite.SQLiteOpenFlags Flags = SQLite.SQLiteOpenFlags.ProtectionComplete;
 

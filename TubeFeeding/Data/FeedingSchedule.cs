@@ -4,16 +4,16 @@ namespace TubeFeeding.Data
 {
     public class FeedingSchedule
     {
-        public Food Food { get; set; }
+        //public Food Food { get; set; }
         public Patient Patient { get; set; }
         public List<string> FormattedListOfHours { get; set; }
         public List<string> FormattedFeedingTimes { get; set; }
         public List<int> ListOfHours {  get; set; }
         public List<int> FeedingTimes { get; set; }
 
-        public FeedingSchedule(Food food, Patient patient)
+        public FeedingSchedule(Patient patient)
         {
-            Food = food;
+            //Food = food;
             Patient = patient;
 
             FormattedListOfHours = [];

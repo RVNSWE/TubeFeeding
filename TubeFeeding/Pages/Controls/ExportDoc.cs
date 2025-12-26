@@ -33,7 +33,7 @@ namespace TubeFeeding.Pages.Controls
 
                     col.Item().Text(" ");
 
-                    col.Item().Text($"Food: {_schedule.Food.Name}          ");
+                    col.Item().Text($"Food: {_schedule.Patient.FoodName}          ");
 
                     col.Item().Text(" ");
 
@@ -51,7 +51,7 @@ namespace TubeFeeding.Pages.Controls
         {
             string listOfHours = "";
 
-            foreach (string item in _schedule.FormattedListOfHours)
+            foreach (string item in _schedule.FormattedFeedingTimes)
             {
                 listOfHours = listOfHours + item + "    ";
             }

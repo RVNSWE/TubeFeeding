@@ -6,8 +6,12 @@ namespace TubeFeeding.PageModels
     public partial class PatientPageModel : ObservableObject
     {
         private int _id;
-        private int _foodIdPKey;
         private string _foodName;
+        private double _kcal;
+        private double _kcalPerGram;
+        private double _netWeight;
+        private double _dryWeight;
+        private double _waterContent;
         private string _patientName;
         private string _clientName;
         private string _species;
@@ -21,6 +25,7 @@ namespace TubeFeeding.PageModels
         private double _waterPerDay;
         private double _waterPerMeal;
         private int _mealsPerDay;
+        private int _cansPerDay;
 
         public int Id
         {
@@ -28,16 +33,40 @@ namespace TubeFeeding.PageModels
             set => SetProperty(ref _id, value);
         }
 
-        public int FoodIdPKey
-        {
-            get => _foodIdPKey;
-            set => SetProperty(ref _foodIdPKey, value);
-        }
-
         public string FoodName
         {
             get => _foodName;
             set => SetProperty(ref _foodName, value);
+        }
+
+        public double Kcal
+        {
+            get => _kcal;
+            set => SetProperty(ref _kcal, value);
+        }
+
+        public double KcalPerGram
+        {
+            get => _kcalPerGram;
+            set => SetProperty(ref _kcalPerGram, value);
+        }
+
+        public double NetWeight
+        {
+            get => _netWeight;
+            set => SetProperty(ref _netWeight, value);
+        }
+
+        public double DryWeight
+        {
+            get => _dryWeight;
+            set => SetProperty(ref _dryWeight, value);
+        }
+
+        public double WaterContent
+        {
+            get => _waterContent;
+            set => SetProperty(ref _waterContent, value);
         }
 
         public string PatientName
@@ -118,11 +147,21 @@ namespace TubeFeeding.PageModels
             set => SetProperty(ref _mealsPerDay, value);
         }
 
+        public int CansPerDay
+        {
+            get => _cansPerDay;
+            set => SetProperty(ref _cansPerDay, value);
+        }
+
         public PatientPageModel(Patient model)
         {
             _id = model.Id;
-            _foodIdPKey = model.FoodIdPKey;
             _foodName = model.FoodName;
+            _kcal = model.Kcal;
+            _kcalPerGram = model.KcalPerGram;
+            _netWeight = model.NetWeight;
+            _dryWeight = model.DryWeight;
+            _waterContent = model.WaterContent;
             _patientName = model.PatientName;
             _clientName = model.ClientName;
             _species = model.Species;
@@ -136,6 +175,7 @@ namespace TubeFeeding.PageModels
             _waterPerDay = model.WaterPerDay;
             _waterPerMeal = model.WaterPerMeal;
             _mealsPerDay = model.MealsPerDay;
+            _cansPerDay = model.CansPerDay;
         }
 
         /*public async Task ComposeSchedule()

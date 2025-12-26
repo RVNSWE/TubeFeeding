@@ -11,7 +11,7 @@ public partial class LandingPage : ContentPage
     {
         base.OnAppearing();
         Dispatcher.DispatchAsync(App.SchedulePages.RefreshPatients);
-        Dispatcher.DispatchAsync(App.SchedulePages.RefreshFoods);
+        //Dispatcher.DispatchAsync(App.SchedulePages.RefreshFoods);
         Globals.GoToList();
     }
 }

@@ -2,7 +2,7 @@ namespace TubeFeeding.Pages;
 
 public partial class PatientDetailsPage : ContentPage
 {
-	public PatientDetailsPage()
+    public PatientDetailsPage()
     {
         BindingContext = App.SchedulePages?.SelectedPatient;
 
