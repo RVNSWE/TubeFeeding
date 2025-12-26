@@ -7,25 +7,19 @@ namespace TubeFeeding.PageModels
     {
         private int _id;
         private string _foodName;
-        private double _kcal;
-        private double _kcalPerGram;
-        private double _netWeight;
-        private double _dryWeight;
+        private double _kcalPerMl;
         private double _waterContent;
         private string _patientName;
         private string _clientName;
         private string _species;
         // private bool _paediatric;
         private double _bodyWeight; // kg
-        private double _rER;
-        private double _fluidsPerDayTotal;
         private double _maxTotalVolumePerMeal;
-        private double _foodPerDay;
         private double _foodPerMeal;
-        private double _waterPerDay;
-        private double _waterPerMeal;
+        private double _flushPerMeal;
+        private double _waterToAddPerMeal;
         private int _mealsPerDay;
-        private int _cansPerDay;
+        private double _cansPerDay;
 
         public int Id
         {
@@ -39,28 +33,10 @@ namespace TubeFeeding.PageModels
             set => SetProperty(ref _foodName, value);
         }
 
-        public double Kcal
+        public double KcalPerMl
         {
-            get => _kcal;
-            set => SetProperty(ref _kcal, value);
-        }
-
-        public double KcalPerGram
-        {
-            get => _kcalPerGram;
-            set => SetProperty(ref _kcalPerGram, value);
-        }
-
-        public double NetWeight
-        {
-            get => _netWeight;
-            set => SetProperty(ref _netWeight, value);
-        }
-
-        public double DryWeight
-        {
-            get => _dryWeight;
-            set => SetProperty(ref _dryWeight, value);
+            get => _kcalPerMl;
+            set => SetProperty(ref _kcalPerMl, value);
         }
 
         public double WaterContent
@@ -99,28 +75,10 @@ namespace TubeFeeding.PageModels
             set => SetProperty(ref _bodyWeight, value);
         }
 
-        public double RER
-        {
-            get => _rER;
-            set => SetProperty(ref _rER, value);
-        }
-
-        public double FluidsPerDayTotal
-        {
-            get => _fluidsPerDayTotal;
-            set => SetProperty(ref _fluidsPerDayTotal, value);
-        }
-
         public double MaxTotalVolumePerMeal
         {
             get => _maxTotalVolumePerMeal;
             set => SetProperty(ref _maxTotalVolumePerMeal, value);
-        }
-
-        public double FoodPerDay
-        {
-            get => _foodPerDay;
-            set => SetProperty(ref _foodPerDay, value);
         }
 
         public double FoodPerMeal
@@ -129,16 +87,16 @@ namespace TubeFeeding.PageModels
             set => SetProperty(ref _foodPerMeal, value);
         }
 
-        public double WaterPerDay
+        public double FlushPerMeal
         {
-            get => _waterPerDay;
-            set => SetProperty(ref _waterPerDay, value);
+            get => _flushPerMeal;
+            set => SetProperty(ref _flushPerMeal, value);
         }
 
-        public double WaterPerMeal
+        public double WaterToAddPerMeal
         {
-            get => _waterPerMeal;
-            set => SetProperty(ref _waterPerMeal, value);
+            get => _waterToAddPerMeal;
+            set => SetProperty(ref _waterToAddPerMeal, value);
         }
 
         public int MealsPerDay
@@ -147,7 +105,7 @@ namespace TubeFeeding.PageModels
             set => SetProperty(ref _mealsPerDay, value);
         }
 
-        public int CansPerDay
+        public double CansPerDay
         {
             get => _cansPerDay;
             set => SetProperty(ref _cansPerDay, value);
@@ -157,23 +115,17 @@ namespace TubeFeeding.PageModels
         {
             _id = model.Id;
             _foodName = model.FoodName;
-            _kcal = model.Kcal;
-            _kcalPerGram = model.KcalPerGram;
-            _netWeight = model.NetWeight;
-            _dryWeight = model.DryWeight;
+            _kcalPerMl = model.KcalPerMl;
             _waterContent = model.WaterContent;
             _patientName = model.PatientName;
             _clientName = model.ClientName;
             _species = model.Species;
             // _paediatric = model.Paediatric;
             _bodyWeight = model.BodyWeight;
-            _rER = model.RER;
-            _fluidsPerDayTotal = model.FluidsPerDayTotal;
             _maxTotalVolumePerMeal = model.MaxTotalVolumePerMeal;
-            _foodPerDay = model.FoodPerDay;
             _foodPerMeal = model.FoodPerMeal;
-            _waterPerDay = model.WaterPerDay;
-            _waterPerMeal = model.WaterPerMeal;
+            _flushPerMeal = model.FlushPerMeal;
+            _waterToAddPerMeal = model.WaterToAddPerMeal;
             _mealsPerDay = model.MealsPerDay;
             _cansPerDay = model.CansPerDay;
         }

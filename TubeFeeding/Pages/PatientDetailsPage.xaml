@@ -4,7 +4,7 @@
              xmlns:pageModels="clr-namespace:TubeFeeding.PageModels"
              x:Class="TubeFeeding.Pages.PatientDetailsPage"
              x:DataType="pageModels:PatientPageModel"
-             Title="{Binding PatientName}'s Tube Feeding Schedule">
+             Title="Tube Feeding Schedule">
 
     <ScrollView Margin="10">
 
@@ -35,59 +35,49 @@
 
             <HorizontalStackLayout>
                 <Grid ColumnDefinitions="125,125" Margin="5">
-                    <Label Text="RER:" Margin="5" />
-                    <Label Text="{Binding RER}" Margin="5" Grid.Column="1" />
+                    <Label Text="Food to administer:" Margin="5" />
+                    <Label Text="{Binding FoodName}" Margin="5" Grid.Column="1" />
                 </Grid>
                 
                 <Grid ColumnDefinitions="125,125" Margin="5">
-                    <Label Text="Food to administer:" Margin="5" />
-                    <Label Text="{Binding FoodName}" Margin="5" Grid.Column="1" />
+                    <Label Text="Food kcal per ml:" Margin="5" />
+                    <Label Text="{Binding KcalPerMl}" Margin="5" Grid.Column="1" />
                 </Grid>
 
                 <Grid ColumnDefinitions="125,125" Margin="5">
                     <Label Text="Number of meals per day:" Margin="5" />
                     <Label Text="{Binding MealsPerDay}" Margin="5" Grid.Column="1" />
                 </Grid>
+
+                <Grid ColumnDefinitions="125,125" Margin="5">
+                    <Label Text="Cans of food used per day:" Margin="5" />
+                    <Label Text="{Binding CansPerDay}" Margin="5" Grid.Column="1" />
+                </Grid>
             </HorizontalStackLayout>
 
             <HorizontalStackLayout>
+
                 <Grid ColumnDefinitions="125,auto,auto" Margin="5">
                     <Label Text="Max food allowable per meal:" Margin="5" />
                     <Label Text="{Binding MaxTotalVolumePerMeal}" Margin="5" Grid.Column="1" />
-                    <Label Text="g" Margin="5" Grid.Column="2" />
+                    <Label Text="ml" Margin="5" Grid.Column="2" />
                 </Grid>
                 
                 <Grid ColumnDefinitions="125,auto,auto" Margin="5">
-                    <Label Text="Total max fluids per day:" Margin="5" />
-                    <Label Text="{Binding FluidsPerDayTotal}" Margin="5" Grid.Column="1" />
-                    <Label Text="g" Margin="5" Grid.Column="2" />
-                </Grid>
-            </HorizontalStackLayout>
-
-            <HorizontalStackLayout>
-                <Grid ColumnDefinitions="125,auto,auto" Margin="5">
-                    <Label Text="Food per day:" Margin="5" />
-                    <Label Text="{Binding FoodPerDay}" Margin="5" Grid.Column="1" />
-                    <Label Text="g" Margin="5" Grid.Column="2" />
-                </Grid>
-
-                <Grid ColumnDefinitions="125,auto,auto" Margin="5">
-                    <Label Text="Water per day:" Margin="5" />
-                    <Label Text="{Binding WaterPerDay}" Margin="5" Grid.Column="1" />
-                    <Label Text="ml" Margin="5" Grid.Column="2" />
-                </Grid>
-            </HorizontalStackLayout>
-
-            <HorizontalStackLayout>
-                <Grid ColumnDefinitions="125,auto,auto" Margin="5">
                     <Label Text="Food per meal:" Margin="5" />
                     <Label Text="{Binding FoodPerMeal}" Margin="5" Grid.Column="1" />
-                    <Label Text="g" Margin="5" Grid.Column="2" />
+                    <Label Text="ml" Margin="5" Grid.Column="2" />
+                </Grid>
+                
+                <Grid ColumnDefinitions="125,auto,auto" Margin="5">
+                    <Label Text="Volume of flush before and after each meal:" Margin="5" />
+                    <Label Text="{Binding FlushPerMeal}" Margin="5" Grid.Column="1" />
+                    <Label Text="ml" Margin="5" Grid.Column="2" />
                 </Grid>
 
                 <Grid ColumnDefinitions="125,auto,auto" Margin="5">
-                    <Label Text="Water per meal:" Margin="5" />
-                    <Label Text="{Binding WaterPerMeal}" Margin="5" Grid.Column="1" />
+                    <Label Text="Water to add to each meal:" Margin="5" />
+                    <Label Text="{Binding WaterToAddPerMeal}" Margin="5" Grid.Column="1" />
                     <Label Text="ml" Margin="5" Grid.Column="2" />
                 </Grid>
             </HorizontalStackLayout>

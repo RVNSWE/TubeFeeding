@@ -18,7 +18,7 @@ namespace TubeFeeding.Data
             FormattedListOfHours = [];
             FormattedFeedingTimes = [];
             ListOfHours = [];
-            FeedingTimes = Globals.CalculateFeedingPlan(Patient.FoodPerDay, Patient.WaterPerDay, Patient.MaxTotalVolumePerMeal);
+            FeedingTimes = Globals.CalculateFeedingPlan(Patient.MealsPerDay);
 
             PopulateTimes();
         }

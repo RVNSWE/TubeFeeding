@@ -80,21 +80,6 @@
             return true;
         }*/
 
-        public static double CalculateKcalPerMl(double kcal, double netWeight)
-        {
-            double kcalPerGram = kcal * 0.001;
-
-            return kcalPerGram;
-        }
-
-        public static double CalculateWaterContent(double netWeight, double waterPercentage)
-        {
-            double waterDecimal = waterPercentage / 100;
-            double waterContent = netWeight * waterDecimal;
-
-            return waterContent;
-        }
-
         public static double CalculateRER(double bodyWeight, string species)
         {
             double rER;
@@ -111,58 +96,12 @@
             return rER;
         }
 
-        public static double CalculateFluidsPerDay(double bodyWeight)
+        public static List<int> CalculateFeedingPlan(double mealsPerDay)
         {
-            double fluidsPerDay = 2 * bodyWeight * 24;
-
-            return fluidsPerDay;
-        }
-
-        public static double CalculateMaxTotalVolumePerMeal(double bodyWeight, int MAX_ML_PER_KG)
-        {
-            double maxTotalVolumePerMeal = bodyWeight * MAX_ML_PER_KG;
-
-            return maxTotalVolumePerMeal;
-        }
-
-        public static double CalculateFoodPerDay(double rER, double kcalPerGram)
-        {
-            double foodPerDay = rER / kcalPerGram;
-
-            return foodPerDay;
-        }
-
-        public static double CalculateFoodPerMeal(double foodPerDay, int mealsPerDay)
-        {
-            double foodPerMeal = foodPerDay / mealsPerDay;
-
-            return foodPerMeal;
-        }
-
-        public static double CalculateWaterPerDay(double fluidsPerDayTotal, double foodPerDay, double waterPercentage)
-        {
-            double waterContent = CalculateWaterContent(foodPerDay, waterPercentage);
-            double waterPerDay = fluidsPerDayTotal - waterContent;
-
-            return waterPerDay;
-        }
-
-        public static double CalculateWaterPerMeal(double waterPerDay, int mealsPerDay)
-        {
-            double waterPerMeal = waterPerDay / mealsPerDay;
-
-            return waterPerMeal;
-        }
-
-        public static List<int> CalculateFeedingPlan(double foodPerDay, double waterPerDay, double maxTotalVolumePerMeal)
-        {
-            double totalVolumePerDay = foodPerDay + waterPerDay;
-            double mealsPerDay = totalVolumePerDay / maxTotalVolumePerMeal;
-            mealsPerDay = Math.Round(mealsPerDay, 0, MidpointRounding.ToPositiveInfinity);
             List<int> feedingTimes = [];
-            int hours = 14;
+            int hours = 15;
             double interval = hours / mealsPerDay;
-            interval = Math.Round(interval, 0, MidpointRounding.ToZero);
+            interval = Math.Round(interval, 1);
 
             if (interval < 1)
             {
@@ -170,22 +109,22 @@
             }
 
             double mealHalfTime = mealsPerDay * interval / 2;
-            mealHalfTime = Math.Round(mealHalfTime, 0, MidpointRounding.ToPositiveInfinity);
+            mealHalfTime = Math.Round(mealHalfTime, 0);
             int midPoint = 15;
             int startTime = midPoint - (int)mealHalfTime;
             int increment = 0;
             int time = 0;
 
-            if (mealsPerDay < 14)
+            if (mealsPerDay < midPoint)
             {
                 for (int i = 0; i < mealsPerDay; i++)
                 {
                     time = startTime + increment;
                     feedingTimes.Add(time);
-                    increment += (int)interval;
+                    increment += (int)interval; // Change to double? Adjust rounding?
                 }
             }
-            if (mealsPerDay > 23)
+            else if (mealsPerDay > 23)
             {
                 for (int i = 0; i < 24; i++)
                 {

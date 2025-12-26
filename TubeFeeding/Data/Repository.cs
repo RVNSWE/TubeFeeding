@@ -88,24 +88,18 @@ namespace TubeFeeding.Data
          */
         public async Task AddNewPatient(
             string foodName,
-            double kcal,
-            double kcalPerGram,
-            double netWeight,
-            double dryWeight,
+            double kcalPerMl,
             double waterContent,
             string patientName,
             string clientName,
             string species,
             double bodyWeight,
-            double rER,
-            double fluidsPerDayTotal,
             double maxTotalVolumePerMeal,
-            double foodPerDay,
             double foodPerMeal,
-            double waterPerDay,
-            double waterPerMeal,
+            double flushPerMeal,
+            double waterToAddPerMeal,
             int mealsPerDay,
-            int cansPerDay
+            double cansPerDay
             )
         {
             System.Diagnostics.Debug.WriteLine("Attempting to add patient");
@@ -113,22 +107,16 @@ namespace TubeFeeding.Data
             Patient patient = new()
             {
                 FoodName = foodName,
-                Kcal = kcal,
-                KcalPerGram = kcalPerGram,
-                NetWeight = netWeight,
-                DryWeight = dryWeight,
+                KcalPerMl = kcalPerMl,
                 WaterContent = waterContent,
                 PatientName = patientName,
                 ClientName = clientName,
                 Species = species,
                 BodyWeight = bodyWeight,
-                RER = rER,
-                FluidsPerDayTotal = fluidsPerDayTotal,
                 MaxTotalVolumePerMeal = maxTotalVolumePerMeal,
-                FoodPerDay = foodPerDay,
                 FoodPerMeal = foodPerMeal,
-                WaterPerDay = waterPerDay,
-                WaterPerMeal = waterPerMeal,
+                FlushPerMeal = flushPerMeal,
+                WaterToAddPerMeal = waterToAddPerMeal,
                 MealsPerDay = mealsPerDay,
                 CansPerDay = cansPerDay
             };
@@ -154,46 +142,36 @@ namespace TubeFeeding.Data
          * Update the currently selected patient.
          */
         public async Task UpdatePatient(
+            int id,
             string foodName,
-            double kcal,
-            double kcalPerGram,
-            double netWeight,
-            double dryWeight,
+            double kcalPerMl,
             double waterContent,
             string patientName,
             string clientName,
             string species,
             double bodyWeight,
-            double rER,
-            double fluidsPerDayTotal,
             double maxTotalVolumePerMeal,
-            double foodPerDay,
             double foodPerMeal,
-            double waterPerDay,
-            double waterPerMeal,
+            double flushPerMeal,
+            double waterToAddPerMeal,
             int mealsPerDay,
-            int cansPerDay
+            double cansPerDay
             )
         {
             Patient patient = new()
             {
+                Id = id,
                 FoodName = foodName,
-                Kcal = kcal,
-                KcalPerGram = kcalPerGram,
-                NetWeight = netWeight,
-                DryWeight = dryWeight,
+                KcalPerMl = kcalPerMl,
                 WaterContent = waterContent,
                 PatientName = patientName,
                 ClientName = clientName,
                 Species = species,
                 BodyWeight = bodyWeight,
-                RER = rER,
-                FluidsPerDayTotal = fluidsPerDayTotal,
                 MaxTotalVolumePerMeal = maxTotalVolumePerMeal,
-                FoodPerDay = foodPerDay,
                 FoodPerMeal = foodPerMeal,
-                WaterPerDay = waterPerDay,
-                WaterPerMeal = waterPerMeal,
+                FlushPerMeal = flushPerMeal,
+                WaterToAddPerMeal = waterToAddPerMeal,
                 MealsPerDay = mealsPerDay,
                 CansPerDay = cansPerDay
             };

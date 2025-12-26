@@ -7,14 +7,11 @@ namespace TubeFeeding.PageModels
     public partial class PatientListPageModel : ObservableObject
     {
         public ObservableCollection<PatientPageModel> Patients { get; set; }
-        //public ObservableCollection<FoodPageModel> Foods { get; set; }
         public PatientPageModel LastPatientSelected { get; set; }
-        //public FoodPageModel LastFoodSelected { get; set; }
 
         public PatientListPageModel()
         {
             Patients = [];
-            //Foods = [];
         }
 
         private PatientPageModel? _selectedPatient;
@@ -23,23 +20,6 @@ namespace TubeFeeding.PageModels
         {
             get => _selectedPatient;
             set => SetProperty(ref _selectedPatient, value);
-        }
-
-        /*private FoodPageModel? _selectedFood;
-
-        public FoodPageModel? SelectedFood
-        {
-            get => _selectedFood;
-            set => SetProperty(ref _selectedFood, value);
-        }*/
-
-        /*
-         * Force Food selection.
-         */
-        public void ForceSelectFood(FoodPageModel food)
-        {
-            //SelectedFood = food;
-            //LastFoodSelected = food;
         }
 
         /*
@@ -81,30 +61,6 @@ namespace TubeFeeding.PageModels
         }
 
         /*
-         * Update the list of foods and the selected food.
-         */
-        /*public async Task UpdateFoods(Food selectedFood)
-        {
-            IEnumerable<Food> foodsData = await App.Repo.GetAllFoods();
-            Foods = [];
-
-            foreach (Food food in foodsData)
-            {
-                Foods.Add(new FoodPageModel(food));
-            }
-
-            foreach (FoodPageModel food in Foods)
-            {
-                if (food.Id == selectedFood.Id)
-                {
-                    ForceSelectFood(food);
-                    System.Diagnostics.Debug.WriteLine($"Selected {SelectedFood.Name} (PatientListPageModel)");
-                    break;
-                }
-            }
-        }*/
-
-        /*
          * Refresh the visible list of schedules when data is changed.
          */
         public async Task RefreshPatients()
@@ -119,21 +75,5 @@ namespace TubeFeeding.PageModels
 
             System.Diagnostics.Debug.WriteLine("Patient list refreshed (PatientListPageModel)");
         }
-
-        /*
-         * Refresh the visible list of foods when data is changed.
-         */
-        /*public async Task RefreshFoods()
-        {
-            IEnumerable<Food> foodsData = await App.Repo.GetAllFoods();
-            Foods.Clear();
-
-            foreach (Food food in foodsData)
-            {
-                Foods.Add(new FoodPageModel(food));
-            }
-
-            System.Diagnostics.Debug.WriteLine("Food list refreshed (PatientListPageModel)");
-        }*/
     }
 }

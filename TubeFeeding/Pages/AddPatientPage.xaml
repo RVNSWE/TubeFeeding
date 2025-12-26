@@ -118,20 +118,6 @@
             </HorizontalStackLayout>
 
             <HorizontalStackLayout>
-                <Grid ColumnDefinitions="140,125" Margin="5">
-                    <Label Text="Number of meals per day: "
-                           Margin="10"
-                           HorizontalTextAlignment="End" />
-                    <Entry x:Name="newMealsPerDay"
-                           IsTextPredictionEnabled="false"
-                           IsSpellCheckEnabled="false"
-                           Keyboard="Numeric"
-                           MaxLength="2"
-                           Grid.Column="1" />
-                </Grid>
-            </HorizontalStackLayout>
-
-            <HorizontalStackLayout>
                 <Button x:Name="btnSave"
                         Text="Save"
                         Margin="30" />

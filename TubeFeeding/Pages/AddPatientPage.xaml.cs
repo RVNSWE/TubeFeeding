@@ -5,7 +5,7 @@ public partial class AddPatientPage : ContentPage
     private const int MAX_ML_PER_KG = 10;
     double foodPerMeal;
     double waterPerMeal;
-    int flushPerMeal;
+    double flushPerMeal;
     double waterToAddPerMeal;
     double totalVolumePerMeal;
 
@@ -23,8 +23,7 @@ public partial class AddPatientPage : ContentPage
             newFoodName.Text,
             newKcal.Text,
             newNetWeight.Text,
-            newWaterPercentage.Text,
-            newMealsPerDay.Text
+            newWaterPercentage.Text
             );
 
         btnCancel.Clicked += (s, e) => Globals.GoToList();
@@ -38,15 +37,13 @@ public partial class AddPatientPage : ContentPage
         string foodName,
         string rawKcal,
         string rawNetWeight,
-        string rawWaterPercentage,
-        string rawMealsPerDay
+        string rawWaterPercentage
         )
     {
         double bodyWeight = 0;
         double kcal = 0;
         double netWeight = 0;
         double waterPercentage = 0;
-        int mealsPerDay = 0;
 
         patientName = Globals.FormatString(patientName);
         clientName = Globals.FormatString(clientName);
@@ -56,7 +53,6 @@ public partial class AddPatientPage : ContentPage
         rawKcal = Globals.FormatString(rawKcal);
         rawNetWeight = Globals.FormatString(rawNetWeight);
         rawWaterPercentage = Globals.FormatString(rawWaterPercentage);
-        rawMealsPerDay = Globals.FormatString(rawMealsPerDay);
 
         if (Globals.IsStringEmpty(patientName))
         {
@@ -90,89 +86,53 @@ public partial class AddPatientPage : ContentPage
         {
             await DisplayAlertAsync("Invalid dry weight", "Please enter the dry (dehydrated) weight (g) or volume (ml) of food per container as either a whole number or decimal.", "OK");
         }
-        else if (rawMealsPerDay.Length > 0 && !int.TryParse(rawMealsPerDay, out mealsPerDay))
-        {
-            await DisplayAlertAsync("Invalid dry weight", "Please enter the dry (dehydrated) weight (g) or volume (ml) of food per container as either a whole number or decimal.", "OK");
-        }
         else
         {
             Globals.GoToList();
 
-            double kcalPerMl = Globals.CalculateKcalPerMl(kcal, netWeight);
-            double waterDecimal = waterPercentage * 0.01;
-
-            // TO DO: Move feeding tube calcs here?
-             
-            //int foodIdPKey = App.SchedulePages.SelectedFood.Id;
-
+            double kcalPerMl = kcal * 0.001;
+            double waterContent = waterPercentage * 0.01;
             double rER = Globals.CalculateRER(bodyWeight, species);
-            double fluidsPerDayTotal = Globals.CalculateFluidsPerDay(bodyWeight);
-            double maxTotalVolumePerMeal = Globals.CalculateMaxTotalVolumePerMeal(bodyWeight, MAX_ML_PER_KG);
-            double foodPerDay = Globals.CalculateFoodPerDay(rER, kcalPerMl);
-            double foodPerMeal = Globals.CalculateFoodPerMeal(foodPerDay, mealsPerDay);
-            double waterPerDay = Globals.CalculateWaterPerDay(fluidsPerDayTotal, foodPerDay, waterPercentage);
-            double waterPerMeal = Globals.CalculateWaterPerMeal(waterPerDay, mealsPerDay);
-            double cansPerDay = Math.Round(netWeight / foodPerDay, 0, MidpointRounding.ToPositiveInfinity);
+            double totalFluidsPerDay = 2 * bodyWeight * 24;
+            double foodPerDay = rER / kcalPerMl;
+
+            double waterPerDay = totalFluidsPerDay - (foodPerDay * waterContent);
+            if (waterPerDay < 0)
+            {
+                waterPerDay = 0; // TO DO: CHECK ALTERNATIVE FLUID CALCS, POSS RECOMMEND DIFFERENT FOOD
+            }
+
+            int totalFoodAndWaterPerDay = (int)foodPerDay + (int)waterPerDay;
+            double maxTotalVolumePerMeal = Math.Round(bodyWeight * MAX_ML_PER_KG, 0, MidpointRounding.ToZero);
+            int mealsPerDay = totalFoodAndWaterPerDay / (int)maxTotalVolumePerMeal;
+
+            CalculateMeals(foodPerDay, mealsPerDay, waterPerDay, bodyWeight);
+
+            while (totalVolumePerMeal > maxTotalVolumePerMeal)
+            {
+                mealsPerDay += 1;
+                CalculateMeals(foodPerDay, mealsPerDay, waterPerDay, bodyWeight);
+            }
+
+            double cansPerDay = Math.Round(netWeight / foodPerDay, 1, MidpointRounding.ToPositiveInfinity);
 
             await App.Repo.AddNewPatient(
                 foodName,
-                kcal,
                 kcalPerMl,
-                netWeight,
-                waterPercentage,
                 waterContent,
                 patientName,
                 clientName,
                 species,
                 bodyWeight,
-                rER,
-                fluidsPerDayTotal,
                 maxTotalVolumePerMeal,
-                foodPerDay,
                 foodPerMeal,
-                waterPerDay,
-                waterPerMeal,
+                flushPerMeal / 2,
+                waterToAddPerMeal,
                 mealsPerDay,
-                (int)cansPerDay
+                cansPerDay
                 );
 
             Globals.GoToView();
-        }
-    }
-
-    public void CalculateTubeFeedingSchedule(double bodyWeight, double kcalPerMl, double waterPercentage, string species)
-    {
-        double waterDecimal = waterPercentage * 0.01;
-
-        double rER;
-        if (species == "Cat")
-        {
-            rER = bodyWeight * 30 + 70;
-        }
-        else
-        {
-            rER = 70 * Math.Pow(bodyWeight, 0.75);
-        }
-
-        double totalFluidsPerDay = 2 * bodyWeight * 24;
-        double foodPerDay = rER / kcalPerMl;
-
-        double waterPerDay = totalFluidsPerDay - (foodPerDay * waterDecimal);
-        if (waterPerDay < 0)
-        {
-            waterPerDay = 0; // TO DO: CHECK ALTERNATIVE FLUID CALCS, POSS RECOMMEND DIFFERENT FOOD
-        }
-
-        double totalFoodAndWaterPerDay = foodPerDay + waterPerDay;
-        double maxTotalVolumePerMeal = 10 * bodyWeight;
-        double mealsPerDay = totalFoodAndWaterPerDay / maxTotalVolumePerMeal;
-
-        CalculateMeals(foodPerDay, mealsPerDay, waterPerDay, bodyWeight);
-
-        while (totalVolumePerMeal > maxTotalVolumePerMeal)
-        {
-            mealsPerDay += 1;
-            CalculateMeals(foodPerDay, mealsPerDay, waterPerDay, bodyWeight);
         }
     }
 
