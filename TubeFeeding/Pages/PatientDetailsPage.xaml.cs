@@ -4,7 +4,7 @@ public partial class PatientDetailsPage : ContentPage
 {
     public PatientDetailsPage()
     {
-        BindingContext = App.SchedulePages?.SelectedPatient;
+        BindingContext = App.PatientPage?.SelectedPatient;
 
         InitializeComponent();
 
@@ -21,23 +21,23 @@ public partial class PatientDetailsPage : ContentPage
         base.OnAppearing();
 
         // If navigating back to patient page after selecting a chart, re-select patient.
-        if (App.SchedulePages?.SelectedPatient == null && App.SchedulePages?.LastPatientSelected != null)
+        if (App.PatientPage?.SelectedPatient == null && App.PatientPage?.LastPatientSelected != null)
         {
-            App.SchedulePages?.ForceSelectPatient(App.SchedulePages.LastPatientSelected);
+            App.PatientPage?.ForceSelectPatient(App.PatientPage.LastPatientSelected);
         }
         else
         {
-            App.SchedulePages.LastPatientSelected = App.SchedulePages.SelectedPatient;
+            App.PatientPage.LastPatientSelected = App.PatientPage.SelectedPatient;
         }
 
-        if (App.SchedulePages?.SelectedPatient != null)
+        if (App.PatientPage?.SelectedPatient != null)
         {
             System.Diagnostics.Debug.WriteLine(
-                $"Selected {App.SchedulePages?.SelectedPatient.PatientName} {App.SchedulePages.SelectedPatient.ClientName} (PatientDetailsPage)"
+                $"Selected {App.PatientPage?.SelectedPatient.PatientName} {App.PatientPage.SelectedPatient.ClientName} (PatientDetailsPage)"
                 );
         }
 
-        Dispatcher.DispatchAsync(App.SchedulePages.RefreshPatients);
+        Dispatcher.DispatchAsync(App.PatientPage.RefreshPatients);
     }
 
     /*
@@ -47,13 +47,13 @@ public partial class PatientDetailsPage : ContentPage
     {
         int patientId;
 
-        if (App.SchedulePages?.SelectedPatient == null)
+        if (App.PatientPage?.SelectedPatient == null)
         {
-            patientId = App.SchedulePages.LastPatientSelected.Id;
+            patientId = App.PatientPage.LastPatientSelected.Id;
         }
         else
         {
-            patientId = App.SchedulePages.SelectedPatient.Id;
+            patientId = App.PatientPage.SelectedPatient.Id;
         }
 
         System.Diagnostics.Debug.WriteLine($"Creating PDF for patient ID {patientId}");
@@ -66,8 +66,8 @@ public partial class PatientDetailsPage : ContentPage
      */
     public static async Task DeletePatient()
     {
-        PatientPageModel lastPatientSelected = App.SchedulePages?.LastPatientSelected;
-        PatientPageModel selectedPatient = App.SchedulePages?.SelectedPatient;
+        PatientPageModel lastPatientSelected = App.PatientPage?.LastPatientSelected;
+        PatientPageModel selectedPatient = App.PatientPage?.SelectedPatient;
 
         if (selectedPatient == null && lastPatientSelected != null)
         {

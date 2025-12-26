@@ -4,7 +4,7 @@
     {
         public MainPage()
         {
-            BindingContext = App.SchedulePages;
+            BindingContext = App.PatientPage;
 
             InitializeComponent();
 
@@ -17,7 +17,7 @@
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            Dispatcher.DispatchAsync(App.SchedulePages.RefreshPatients);
+            Dispatcher.DispatchAsync(App.PatientPage.RefreshPatients);
             //Dispatcher.DispatchAsync(App.SchedulePages.RefreshFoods);
         }
 
@@ -26,9 +26,9 @@
          */
         public void OnCollectionViewSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            App.SchedulePages.SelectedPatient = e.CurrentSelection.FirstOrDefault() as PatientPageModel;
+            App.PatientPage.SelectedPatient = e.CurrentSelection.FirstOrDefault() as PatientPageModel;
 
-            if (App.SchedulePages.SelectedPatient != null)
+            if (App.PatientPage.SelectedPatient != null)
             {
                 Globals.GoToView();
             }

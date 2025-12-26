@@ -54,7 +54,7 @@ namespace TubeFeeding.PageModels
         /*
          * Update the list of schedules and the selected schedule.
          */
-        public async Task UpdateSchedules(Patient selectedPatient)
+        public async Task UpdatePatients(Patient selectedPatient)
         {
             IEnumerable<Patient> patientsData = await App.Repo.GetAllPatients();
             Patients = [];

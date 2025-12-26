@@ -80,6 +80,21 @@
             return true;
         }*/
 
+        public static double CalculateKcalPerMl(double kcal, double netWeight)
+        {
+            double kcalPerGram = kcal * 0.001;
+
+            return kcalPerGram;
+        }
+
+        public static double CalculateWaterContent(double netWeight, double waterPercentage)
+        {
+            double waterDecimal = waterPercentage / 100;
+            double waterContent = netWeight * waterDecimal;
+
+            return waterContent;
+        }
+
         public static double CalculateRER(double bodyWeight, string species)
         {
             double rER;
@@ -101,21 +116,6 @@
             double fluidsPerDay = 2 * bodyWeight * 24;
 
             return fluidsPerDay;
-        }
-
-        public static double CalculateKcalPerGram(double kcal, double netWeight)
-        {
-            double kcalPerGram = kcal * 0.001;
-
-            return kcalPerGram;
-        }
-
-        public static double CalculateWaterContent(double netWeight, double waterPercentage)
-        {
-            double waterDecimal = waterPercentage / 100;
-            double waterContent = netWeight * waterDecimal;
-
-            return waterContent;
         }
 
         public static double CalculateMaxTotalVolumePerMeal(double bodyWeight, int MAX_ML_PER_KG)
@@ -260,7 +260,7 @@
          */
         public static async void RefreshSchedules()
         {
-            await App.SchedulePages?.RefreshPatients();
+            await App.PatientPage?.RefreshPatients();
         }
 
         /*

@@ -3,10 +3,15 @@ namespace TubeFeeding.Pages;
 public partial class AddPatientPage : ContentPage
 {
     private const int MAX_ML_PER_KG = 10;
+    double foodPerMeal;
+    double waterPerMeal;
+    int flushPerMeal;
+    double waterToAddPerMeal;
+    double totalVolumePerMeal;
 
-	public AddPatientPage()
+    public AddPatientPage()
     {
-        BindingContext = App.SchedulePages?.SelectedPatient;
+        BindingContext = App.PatientPage?.SelectedPatient;
 
         InitializeComponent();
 
@@ -93,24 +98,26 @@ public partial class AddPatientPage : ContentPage
         {
             Globals.GoToList();
 
-            double kcalPerGram = Globals.CalculateKcalPerGram(kcal, netWeight);
-            double waterContent = Globals.CalculateWaterContent(netWeight, waterPercentage); // TO DO: remove
+            double kcalPerMl = Globals.CalculateKcalPerMl(kcal, netWeight);
+            double waterDecimal = waterPercentage * 0.01;
+
+            // TO DO: Move feeding tube calcs here?
              
             //int foodIdPKey = App.SchedulePages.SelectedFood.Id;
 
             double rER = Globals.CalculateRER(bodyWeight, species);
             double fluidsPerDayTotal = Globals.CalculateFluidsPerDay(bodyWeight);
             double maxTotalVolumePerMeal = Globals.CalculateMaxTotalVolumePerMeal(bodyWeight, MAX_ML_PER_KG);
-            double foodPerDay = Globals.CalculateFoodPerDay(rER, kcalPerGram);
+            double foodPerDay = Globals.CalculateFoodPerDay(rER, kcalPerMl);
             double foodPerMeal = Globals.CalculateFoodPerMeal(foodPerDay, mealsPerDay);
             double waterPerDay = Globals.CalculateWaterPerDay(fluidsPerDayTotal, foodPerDay, waterPercentage);
             double waterPerMeal = Globals.CalculateWaterPerMeal(waterPerDay, mealsPerDay);
             double cansPerDay = Math.Round(netWeight / foodPerDay, 0, MidpointRounding.ToPositiveInfinity);
 
-            await App.Repo.AddNewSchedule(
+            await App.Repo.AddNewPatient(
                 foodName,
                 kcal,
-                kcalPerGram,
+                kcalPerMl,
                 netWeight,
                 waterPercentage,
                 waterContent,
@@ -131,5 +138,82 @@ public partial class AddPatientPage : ContentPage
 
             Globals.GoToView();
         }
+    }
+
+    public void CalculateTubeFeedingSchedule(double bodyWeight, double kcalPerMl, double waterPercentage, string species)
+    {
+        double waterDecimal = waterPercentage * 0.01;
+
+        double rER;
+        if (species == "Cat")
+        {
+            rER = bodyWeight * 30 + 70;
+        }
+        else
+        {
+            rER = 70 * Math.Pow(bodyWeight, 0.75);
+        }
+
+        double totalFluidsPerDay = 2 * bodyWeight * 24;
+        double foodPerDay = rER / kcalPerMl;
+
+        double waterPerDay = totalFluidsPerDay - (foodPerDay * waterDecimal);
+        if (waterPerDay < 0)
+        {
+            waterPerDay = 0; // TO DO: CHECK ALTERNATIVE FLUID CALCS, POSS RECOMMEND DIFFERENT FOOD
+        }
+
+        double totalFoodAndWaterPerDay = foodPerDay + waterPerDay;
+        double maxTotalVolumePerMeal = 10 * bodyWeight;
+        double mealsPerDay = totalFoodAndWaterPerDay / maxTotalVolumePerMeal;
+
+        CalculateMeals(foodPerDay, mealsPerDay, waterPerDay, bodyWeight);
+
+        while (totalVolumePerMeal > maxTotalVolumePerMeal)
+        {
+            mealsPerDay += 1;
+            CalculateMeals(foodPerDay, mealsPerDay, waterPerDay, bodyWeight);
+        }
+    }
+
+    private void CalculateMeals(double foodPerDay, double mealsPerDay, double waterPerDay, double bodyWeight)
+    {
+        foodPerMeal = foodPerDay / mealsPerDay;
+
+        waterPerMeal = waterPerDay / mealsPerDay;
+        if (waterPerMeal < 0)
+        {
+            waterPerMeal = 0;
+        }
+
+        switch (bodyWeight)
+        {
+            case < 1:
+                flushPerMeal = 2;
+                break;
+            case < 3:
+                flushPerMeal = 4;
+                break;
+            case < 4:
+                flushPerMeal = 5;
+                break;
+            case < 8:
+                flushPerMeal = 10;
+                break;
+            case < 20:
+                flushPerMeal = 12;
+                break;
+            default:
+                flushPerMeal = 20;
+                break;
+        }
+
+        waterToAddPerMeal = waterPerMeal - flushPerMeal;
+        if (waterToAddPerMeal < 0)
+        {
+            waterToAddPerMeal = 0;
+        }
+
+        totalVolumePerMeal = foodPerMeal + flushPerMeal + waterToAddPerMeal;
     }
 }

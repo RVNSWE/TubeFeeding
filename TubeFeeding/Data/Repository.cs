@@ -12,8 +12,6 @@ namespace TubeFeeding.Data
     {
         string _dbPath; // database pdf location
 
-        public string StatusMessage { get; set; } // feedback message for the user
-
         private SQLiteAsyncConnection conn;
 
         /*
@@ -27,7 +25,6 @@ namespace TubeFeeding.Data
 
             // otherwise
             conn = new SQLiteAsyncConnection(_dbPath); // connect to the database via the specified filepath
-            //await conn.CreateTableAsync<Food>();
             await conn.CreateTableAsync<Patient>();
         }
 
@@ -47,16 +44,10 @@ namespace TubeFeeding.Data
             try
             {
                 Patient patient = await GetPatient(patientId);
-                //Food food = await GetFood(patient.FoodIdPKey);
 
                 int scheduleId = patient.Id;
 
-                FeedingSchedule feedingSchedule = new FeedingSchedule(patient)
-                {
-                    //Food = food,
-                    Patient = patient
-                };
-
+                FeedingSchedule feedingSchedule = new FeedingSchedule(patient);
                 ExportDoc output = new ExportDoc(feedingSchedule);
                 string pdf = Globals.GetLocalPath($"{patient.PatientName}_{patient.ClientName}_{patient.FoodName}.pdf");
                 output.GeneratePdf(pdf);
@@ -74,100 +65,28 @@ namespace TubeFeeding.Data
         }
 
         /*
-         * FOR DEBUGGING ONLY - Drop the current Food table.
-         */
-        /*public async Task DropFoodTable()
-        {
-            System.Diagnostics.Debug.WriteLine("Attempting to drop Food table");
-            StatusMessage = string.Format("Attempting to drop Food table");
-
-            try
-            {
-                await conn.DropTableAsync<Food>();
-                System.Diagnostics.Debug.WriteLine("Dropping Food table");
-                StatusMessage = string.Format("Dropping Food table");
-                await conn.CreateTableAsync<Food>(); // create a table for storing Food data
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("Could not drop table. Error: {1}", ex.Message);
-                StatusMessage = string.Format("Could not drop table. Error: {1}", ex.Message);
-            }
-
-            await DropScheduleTable();
-        }*/
-
-        /*
-         * FOR DEBUGGING ONLY - Drop the current Patient table.
+         * FOR DEBUGGING - Drop the current Patient table.
          */
         public async Task DropPatientTable()
         {
-            System.Diagnostics.Debug.WriteLine("Attempting to drop Patient table");
-            StatusMessage = string.Format("Attempting to drop Patient table");
+            System.Diagnostics.Debug.WriteLine("Attempting to drop patient table");
 
             try
             {
                 await conn.DropTableAsync<Patient>();
-                System.Diagnostics.Debug.WriteLine("Dropping Patient table");
-                StatusMessage = string.Format("Dropping Patient table");
+                System.Diagnostics.Debug.WriteLine("Dropping patient table");
                 await conn.CreateTableAsync<Patient>();
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine("Could not drop table. Error: {1}", ex.Message);
-                StatusMessage = string.Format("Could not drop table. Error: {1}", ex.Message);
             }
         }
 
         /*
-         * Add a new Food to the Food table.
+         * Add a new patient.
          */
-        /*public async Task AddNewFood(
-            string name,
-            double kcal,
-            double kcalPerGram,
-            double netWeight,
-            double dryWeight,
-            double waterContent
-            )
-        {
-            System.Diagnostics.Debug.WriteLine("Attempting to add Food");
-            StatusMessage = string.Format("Attempting to add Food");
-
-            Food food = new()
-            {
-                Name = name,
-                Kcal = kcal,
-                KcalPerGram = kcalPerGram,
-                NetWeight = netWeight,
-                DryWeight = dryWeight,
-                WaterContent = waterContent
-            };
-
-            int result;
-
-            try
-            {
-                await Init();
-
-                result = await conn.InsertAsync(food);
-
-                StatusMessage = string.Format("{0} Food added (name: {1})", result, name);
-                System.Diagnostics.Debug.WriteLine("{0} Food added (name: {1})", result, name);
-
-                await App.SchedulePages?.UpdateFoods(food);
-            }
-            catch (Exception ex)
-            {
-                StatusMessage = string.Format("Could not add Food {0}. Error: {1}", name, ex.Message);
-                System.Diagnostics.Debug.WriteLine("Could not add Food {0}. Error: {1}", name, ex.Message);
-            }
-        }*/
-
-        /*
-         * Add a new schedule to the Schedule table.
-         */
-        public async Task AddNewSchedule(
+        public async Task AddNewPatient(
             string foodName,
             double kcal,
             double kcalPerGram,
@@ -189,10 +108,9 @@ namespace TubeFeeding.Data
             int cansPerDay
             )
         {
-            System.Diagnostics.Debug.WriteLine("Attempting to add schedule");
-            StatusMessage = string.Format("Attempting to add schedule");
+            System.Diagnostics.Debug.WriteLine("Attempting to add patient");
 
-            Patient schedule = new()
+            Patient patient = new()
             {
                 FoodName = foodName,
                 Kcal = kcal,
@@ -220,68 +138,22 @@ namespace TubeFeeding.Data
             {
                 await Init();
 
-                result = await conn.InsertAsync(schedule);
+                result = await conn.InsertAsync(patient);
 
-                StatusMessage = string.Format("{0} schedule added (record ID: {1})", result, schedule.Id);
-                System.Diagnostics.Debug.WriteLine("{0} schedule added (record ID: {1})", result, schedule.Id);
+                System.Diagnostics.Debug.WriteLine("{0} patient added (record ID: {1})", result, patient.Id);
             }
             catch (Exception ex)
             {
-                StatusMessage = string.Format("Could not add schedule record ID {0}. Error: {1}", schedule.Id, ex.Message);
-                System.Diagnostics.Debug.WriteLine("Could not add schedule record ID {0}. Error: {1}", schedule.Id, ex.Message);
+                System.Diagnostics.Debug.WriteLine("Could not add patient record ID {0}. Error: {1}", patient.Id, ex.Message);
             }
 
-            await App.SchedulePages?.UpdateSchedules(schedule);
+            await App.PatientPage?.UpdatePatients(patient);
         }
 
         /*
-         * Update a Food.
+         * Update the currently selected patient.
          */
-        /*public async Task UpdateFood(
-            string name,
-            double kcal,
-            double kcalPerGram,
-            double netWeight,
-            double dryWeight,
-            double waterContent
-            )
-        {
-            Food food = new()
-            {
-                Name = name,
-                Kcal = kcal,
-                KcalPerGram = kcalPerGram,
-                NetWeight = netWeight,
-                DryWeight = dryWeight,
-                WaterContent = waterContent
-            };
-
-            int result;
-            try
-            {
-                await Init();
-
-                System.Diagnostics.Debug.WriteLine("Attempting to update Food details");
-                StatusMessage = string.Format("Attempting to update Food details");
-
-                result = await conn.UpdateAsync(food);
-
-                StatusMessage = string.Format("{0} Food updated (name: {1})", result, name);
-                System.Diagnostics.Debug.WriteLine("{0} Food updated (name: {1})", result, name);
-
-                await App.SchedulePages?.UpdateFoods(food);
-            }
-            catch (Exception ex)
-            {
-                StatusMessage = string.Format("Could not update Food {0}. Error: {1}", name, ex.Message);
-                System.Diagnostics.Debug.WriteLine("Could not update Food {0}. Error: {1}", name, ex.Message);
-            }
-        }*/
-
-        /*
-         * Update the currently selected Schedule.
-         */
-        public async Task UpdateSchedule(
+        public async Task UpdatePatient(
             string foodName,
             double kcal,
             double kcalPerGram,
@@ -303,7 +175,7 @@ namespace TubeFeeding.Data
             int cansPerDay
             )
         {
-            Patient schedule = new()
+            Patient patient = new()
             {
                 FoodName = foodName,
                 Kcal = kcal,
@@ -326,30 +198,10 @@ namespace TubeFeeding.Data
                 CansPerDay = cansPerDay
             };
 
-            await conn.UpdateAsync(schedule);
+            await conn.UpdateAsync(patient);
 
-            await App.SchedulePages?.UpdateSchedules(schedule);
+            await App.PatientPage?.UpdatePatients(patient);
         }
-
-        /*
-         * Get a list of all foods.
-         */
-        /*public async Task<List<Food>> GetAllFoods()
-        {
-            try
-            {
-                await Init(); // verify database initialisation
-                return await conn.Table<Food>().ToListAsync(); // create a list of all foods in the Food table
-            }
-            catch (Exception ex) // if something goes wrong
-            {
-                // alert the user if it didn't work and display an error message.
-                StatusMessage = string.Format("Data retrieval failed. {0}", ex.Message);
-                System.Diagnostics.Debug.WriteLine("Data retrieval failed. {0}", ex.Message);
-            }
-
-            return new List<Food>(); // return the list of foods
-        }*/
 
         /*
          * Get a list of all patients.
@@ -363,54 +215,11 @@ namespace TubeFeeding.Data
             }
             catch (Exception ex)
             {
-                StatusMessage = string.Format("Data retrieval failed. {0}", ex.Message);
                 System.Diagnostics.Debug.WriteLine("Data retrieval failed. {0}", ex.Message);
             }
 
             return new List<Patient>();
         }
-
-        /*
-         * Return a list of the patients associated with a specific food.
-         */
-        /*public async Task<List<Patient>> GetPatientsForFood(FoodPageModel food)
-        {
-            try
-            {
-                await Init();
-                System.Diagnostics.Debug.WriteLine("Retrieving schedules for Food with ID: {0}", food.Id);
-                return await conn.Table<Patient>().Where(i => i.FoodIdPKey == food.Id).ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                StatusMessage = string.Format("Data retrieval failed. {0}", ex.Message);
-                System.Diagnostics.Debug.WriteLine("Data retrieval failed. {0}", ex.Message);
-            }
-
-            return new List<Patient>();
-        }*/
-
-        /*
-         * Get a specific food by ID.
-         */
-        /*public async Task<Food> GetFood(int id)
-        {
-            Food food = new();
-
-            try
-            {
-                await Init();
-
-                food = await conn.FindAsync<Food>(id);
-            }
-            catch (Exception ex)
-            {
-                StatusMessage = string.Format("Data retrieval failed. {0}", ex.Message);
-                System.Diagnostics.Debug.WriteLine("Data retrieval failed. {0}", ex.Message);
-            }
-
-            return food;
-        }*/
 
         /*
          * Get a specific patient by ID.
@@ -427,7 +236,6 @@ namespace TubeFeeding.Data
             }
             catch (Exception ex)
             {
-                StatusMessage = string.Format("Data retrieval failed. {0}", ex.Message);
                 System.Diagnostics.Debug.WriteLine("Data retrieval failed. {0}", ex.Message);
             }
 
@@ -435,71 +243,30 @@ namespace TubeFeeding.Data
         }
 
         /*
-         * Delete a Food.
-         */
-        /*public async Task DeleteFood(FoodPageModel foodPageModel)
-        {
-            int result = 0;
-            try
-            {
-                await Init();
-
-                App.SchedulePages?.ForceSelectFood(foodPageModel);
-
-                Food food = await conn.Table<Food>().Where(i => i.Id == foodPageModel.Id).FirstOrDefaultAsync();
-                string name = food.Name;
-                await App.SchedulePages?.RefreshPatients();
-
-                foreach (PatientPageModel patient in App.SchedulePages?.Patients)
-                {
-                    await DeletePatient(patient);
-                }
-
-                App.SchedulePages?.Foods.Remove(foodPageModel);
-                result = await conn.DeleteAsync(food);
-                await App.SchedulePages?.RefreshFoods();
-
-                StatusMessage = string.Format("{0} Patient(s) deleted (name: {1})", result, name);
-                System.Diagnostics.Debug.WriteLine("{0} Patient(s) deleted (Patient name: {1})", result, name);
-            }
-            catch (Exception ex)
-            {
-                StatusMessage = string.Format("Could not delete {0}. Error: {1}", foodPageModel.Id, ex.Message);
-                System.Diagnostics.Debug.WriteLine("Could not delete {0}. Error: {1}", foodPageModel.Id, ex.Message);
-            }
-        }*/
-
-        /*
          * Delete a patient.
          */
         public async Task DeletePatient(PatientPageModel patientPageModel)
         {
-            //string name = patientPageModel.PatientName + " " + patientPageModel.ClientName;
-
             int result = 0;
             try
             {
                 await Init();
 
-                App.SchedulePages?.ForceSelectPatient(patientPageModel);
+                App.PatientPage?.ForceSelectPatient(patientPageModel);
 
                 Patient thisPatient = await conn.Table<Patient>().Where(i => i.Id == patientPageModel.Id).FirstOrDefaultAsync();
                 string name = thisPatient.PatientName;
 
-                App.SchedulePages?.Patients.Remove(patientPageModel);
+                App.PatientPage?.Patients.Remove(patientPageModel);
                 result = await conn.DeleteAsync(thisPatient);
-                await App.SchedulePages?.RefreshPatients();
+                await App.PatientPage?.RefreshPatients();
 
-                StatusMessage = string.Format("{0} patient(s) deleted (patient: {1})", result, name);
                 System.Diagnostics.Debug.WriteLine("{0} patient(s) deleted (patient: {1})", result, name);
             }
             catch (Exception ex)
             {
-                StatusMessage = string.Format("Could not delete patient. Error: {1}", ex.Message);
                 System.Diagnostics.Debug.WriteLine("Could not delete patient. Error: {1}", ex.Message);
             }
-
-            //await App.SchedulePages?.RefreshPatients();
         }
     }
 }

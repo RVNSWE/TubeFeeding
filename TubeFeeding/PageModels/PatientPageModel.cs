@@ -177,46 +177,5 @@ namespace TubeFeeding.PageModels
             _mealsPerDay = model.MealsPerDay;
             _cansPerDay = model.CansPerDay;
         }
-
-        /*public async Task ComposeSchedule()
-        {
-            double totalVolumePerMeal = FoodPerMeal + WaterPerMeal;
-            double totalVolumePerDay = FoodPerDay + WaterPerDay;
-            int minMealsPerDay = (int)totalVolumePerDay / (int)totalVolumePerMeal;
-
-            int hour;
-            int timeOffset;
-
-            if (MealsPerDay < minMealsPerDay)
-            {
-                timeOffset = minMealsPerDay / 2;
-            }
-            else
-            {
-                timeOffset = MealsPerDay / 2;
-            }
-            hour = 12 - timeOffset;
-
-            if (totalVolumePerMeal > MaxTotalVolumePerMeal)
-            {
-                CalculateFeedingTimes(minMealsPerDay, hour);
-            }
-            else
-            {
-                CalculateFeedingTimes(MealsPerDay, hour);
-            }
-        }
-
-        public void CalculateFeedingTimes(int mealsPerDay, int startingHour)
-        {
-            int timeIncrement = 12 / mealsPerDay;
-            int hour = startingHour;
-
-            for (int i = 0; i < mealsPerDay; i++)
-            {
-                FeedingTimes[i] = hour;
-                hour += timeIncrement;
-            }
-        }*/
     }
 }

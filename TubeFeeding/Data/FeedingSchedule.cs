@@ -13,7 +13,6 @@ namespace TubeFeeding.Data
 
         public FeedingSchedule(Patient patient)
         {
-            //Food = food;
             Patient = patient;
 
             FormattedListOfHours = [];
