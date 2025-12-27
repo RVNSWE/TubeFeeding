@@ -25,15 +25,25 @@ namespace TubeFeeding.Pages.Controls
 
                 page.Content().Column(col =>
                 {
-                    col.Item().Text($"Patient: {_schedule.Patient.PatientName}          Client: {_schedule.Patient.ClientName}").Bold();
+                    col.Item().Text(" ");
+
+                    col.Item().Text($"Patient: {_schedule.Patient.PatientName}          Client: {_schedule.Patient.ClientName}          Species: {_schedule.Patient.Species}          Body weight: {_schedule.Patient.BodyWeight}kg").Bold();
 
                     col.Item().Text(" ");
 
-                    col.Item().Text($"Species: {_schedule.Patient.Species}          Body weight (kg): {_schedule.Patient.BodyWeight}").Bold();
+                    col.Item().Text($"Diet to feed: {_schedule.Patient.FoodName}").Bold();
 
                     col.Item().Text(" ");
 
-                    col.Item().Text($"Food: {_schedule.Patient.FoodName}          ");
+                    col.Item().Text($"Number of meals per day: {_schedule.Patient.MealsPerDay}          Estimated packs of food used per day: {_schedule.Patient.CansPerDay}");
+
+                    col.Item().Text(" ");
+
+                    col.Item().Text($"Food per meal: {_schedule.Patient.FoodPerMeal}ml          Water to add per meal: {WaterToAdd()}");
+
+                    col.Item().Text(" ");
+
+                    col.Item().Text($"Water per flush (before and after each meal): {_schedule.Patient.FlushPerMeal}ml");
 
                     col.Item().Text(" ");
 
@@ -50,6 +60,18 @@ namespace TubeFeeding.Pages.Controls
             });
         }
 
+        public string WaterToAdd()
+        {
+            string waterToAdd = "None";
+
+            if (_schedule.Patient.WaterToAddPerMeal > 0)
+            {
+                waterToAdd = _schedule.Patient.WaterToAddPerMeal.ToString() + "ml";
+            }
+
+            return waterToAdd;
+        }
+
         public string PrintSchedule(List<string> schedule)
         {
             string listOfHours = "";
@@ -61,25 +83,6 @@ namespace TubeFeeding.Pages.Controls
 
             return listOfHours;
         }
-
-        /*public string PrintSchedule()
-        {
-            string listOfHours = "";
-
-            foreach (string item in _schedule.FormattedListOfHours)
-            {
-                if (_schedule.FormattedFeedingTimes.Contains(item))
-                {
-                    listOfHours = listOfHours + "*" + item + "*" + "    ";
-                }
-                else
-                {
-                    listOfHours = listOfHours + item + "    ";
-                }
-            }
-
-            return listOfHours;
-        }*/
 
         private void ComposeBody(PageDescriptor page)
         {

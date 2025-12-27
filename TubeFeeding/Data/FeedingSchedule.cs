@@ -39,7 +39,7 @@ namespace TubeFeeding.Data
             }
 
             FormattedListOfHours = Globals.CreateFormattedListOfTimes(ListOfHours);
-            FormattedListOfHours = Globals.CreateFormattedListOfTimes(FeedingTimes);
+            FormattedFeedingTimes = Globals.CreateFormattedListOfTimes(FeedingTimes);
         }
     }
 }
