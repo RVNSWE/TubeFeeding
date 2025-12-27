@@ -47,8 +47,6 @@ namespace TubeFeeding.Pages.Controls
 
                     col.Item().Text(" ");
 
-                    col.Item().Text(PrintSchedule(_schedule.FormattedListOfHours));
-                    col.Item().Text(" ");
                     col.Item().Text(PrintSchedule(_schedule.FormattedFeedingTimes));
                 });
 
