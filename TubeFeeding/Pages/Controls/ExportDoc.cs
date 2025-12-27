@@ -37,7 +37,9 @@ namespace TubeFeeding.Pages.Controls
 
                     col.Item().Text(" ");
 
-                    col.Item().Text(PrintSchedule());
+                    col.Item().Text(PrintSchedule(_schedule.FormattedListOfHours));
+                    col.Item().Text(" ");
+                    col.Item().Text(PrintSchedule(_schedule.FormattedFeedingTimes));
                 });
 
                 page.Footer().AlignCenter().Text(x =>
@@ -47,11 +49,11 @@ namespace TubeFeeding.Pages.Controls
                 });
             });
         }
-        public string PrintSchedule()
+        public string PrintSchedule(List<string> schedule)
         {
             string listOfHours = "";
 
-            foreach (string item in _schedule.FormattedFeedingTimes)
+            foreach (string item in schedule)
             {
                 listOfHours = listOfHours + item + "    ";
             }

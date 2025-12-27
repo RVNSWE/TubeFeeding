@@ -1,4 +1,6 @@
-﻿namespace TubeFeeding.Data
+﻿using TubeFeeding.Models;
+
+namespace TubeFeeding.Data
 {
     public static class Globals
     {
@@ -99,19 +101,32 @@
         public static List<int> CalculateFeedingPlan(double mealsPerDay)
         {
             List<int> feedingTimes = [];
-            int hours = 15;
-            double interval = hours / mealsPerDay;
-            interval = Math.Round(interval, 1);
+            int midPoint = 15; // Corresponding to 15:00 or 3pm
+            int hours = 14; // Over a period of n hours
 
+            double preciseInterval = hours / mealsPerDay;
+            double interval = Math.Round(preciseInterval / 5, 1, MidpointRounding.AwayFromZero) * 5; // To the nearest 5 = to the nearest half hour
             if (interval < 1)
             {
-                interval = 1;
+                interval = 1; // Minimum feeding interval is 1 hour
             }
 
-            double mealHalfTime = mealsPerDay * interval / 2;
-            mealHalfTime = Math.Round(mealHalfTime, 0);
-            int midPoint = 15;
+            // TO DO: Do as with interval - get 30 min increments
+            double mealHalfTime = Math.Round(mealsPerDay / 2 * interval, 0, MidpointRounding.AwayFromZero); // Effectively hours / 2
             int startTime = midPoint - (int)mealHalfTime;
+            int endTime = midPoint + (int)mealHalfTime;
+            System.Diagnostics.Debug.WriteLine("startTime: " + startTime);
+            System.Diagnostics.Debug.WriteLine("endTime: " + endTime);
+
+            while (endTime > 23)
+            {
+                midPoint -= 1;
+                startTime = midPoint - (int)mealHalfTime;
+                endTime = midPoint + (int)mealHalfTime;
+                System.Diagnostics.Debug.WriteLine("startTime: " + startTime);
+                System.Diagnostics.Debug.WriteLine("endTime: " + endTime);
+            }
+
             int increment = 0;
             int time = 0;
 
@@ -121,7 +136,7 @@
                 {
                     time = startTime + increment;
                     feedingTimes.Add(time);
-                    increment += (int)interval; // Change to double? Adjust rounding?
+                    increment += (int)Math.Round(interval, 0, MidpointRounding.AwayFromZero);
                 }
             }
             else if (mealsPerDay > 23)
@@ -144,6 +159,21 @@
             }
 
                 return feedingTimes;
+        }
+
+        public static void CreateFormattedList(List<int> list, List<string> formattedList)
+        {
+            foreach (int time in list)
+            {
+                if (time < 10)
+                {
+                    formattedList.Add("0" + time.ToString() + ":00");
+                }
+                else
+                {
+                    formattedList.Add(time.ToString() + ":00");
+                }
+            }
         }
 
         /*

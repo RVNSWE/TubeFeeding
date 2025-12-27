@@ -35,23 +35,8 @@ namespace TubeFeeding.Data
                 time++;
             }
 
-            CreateFormattedList(ListOfHours, FormattedListOfHours);
-            CreateFormattedList(FeedingTimes, FormattedFeedingTimes);
-        }
-
-        public void CreateFormattedList(List<int> list, List<string> formattedList)
-        {
-            foreach (int time in list)
-            {
-                if (time < 10)
-                {
-                    formattedList.Add("0" + time.ToString() + ":00");
-                }
-                else
-                {
-                    formattedList.Add(time.ToString() + ":00");
-                }
-            }
+            Globals.CreateFormattedList(ListOfHours, FormattedListOfHours);
+            Globals.CreateFormattedList(FeedingTimes, FormattedFeedingTimes);
         }
     }
 }

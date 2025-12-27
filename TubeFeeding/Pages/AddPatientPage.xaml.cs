@@ -90,11 +90,13 @@ public partial class AddPatientPage : ContentPage
         {
             Globals.GoToList();
 
-            double kcalPerMl = kcal * 0.001;
+            double kcalPerMl = Math.Round(kcal * 0.001, 3, MidpointRounding.ToZero);
             double waterContent = waterPercentage * 0.01;
             double rER = Globals.CalculateRER(bodyWeight, species);
             double totalFluidsPerDay = 2 * bodyWeight * 24;
             double foodPerDay = rER / kcalPerMl;
+
+            System.Diagnostics.Debug.WriteLine("foodPerDay = " + foodPerDay);
 
             double waterPerDay = totalFluidsPerDay - (foodPerDay * waterContent);
             if (waterPerDay < 0)
@@ -102,9 +104,9 @@ public partial class AddPatientPage : ContentPage
                 waterPerDay = 0; // TO DO: CHECK ALTERNATIVE FLUID CALCS, POSS RECOMMEND DIFFERENT FOOD
             }
 
-            int totalFoodAndWaterPerDay = (int)foodPerDay + (int)waterPerDay;
-            double maxTotalVolumePerMeal = Math.Round(bodyWeight * MAX_ML_PER_KG, 0, MidpointRounding.ToZero);
-            int mealsPerDay = totalFoodAndWaterPerDay / (int)maxTotalVolumePerMeal;
+            double totalFoodAndWaterPerDay = foodPerDay + waterPerDay;
+            double maxTotalVolumePerMeal = bodyWeight * MAX_ML_PER_KG;
+            int mealsPerDay = (int)Math.Round(totalFoodAndWaterPerDay / maxTotalVolumePerMeal, 0, MidpointRounding.AwayFromZero);
 
             CalculateMeals(foodPerDay, mealsPerDay, waterPerDay, bodyWeight);
 
@@ -114,7 +116,7 @@ public partial class AddPatientPage : ContentPage
                 CalculateMeals(foodPerDay, mealsPerDay, waterPerDay, bodyWeight);
             }
 
-            double cansPerDay = Math.Round(netWeight / foodPerDay, 1, MidpointRounding.ToPositiveInfinity);
+            double cansPerDay = Math.Round(foodPerDay / netWeight, 1, MidpointRounding.AwayFromZero);
 
             await App.Repo.AddNewPatient(
                 foodName,
@@ -124,7 +126,7 @@ public partial class AddPatientPage : ContentPage
                 clientName,
                 species,
                 bodyWeight,
-                maxTotalVolumePerMeal,
+                Math.Round(maxTotalVolumePerMeal, 2, MidpointRounding.AwayFromZero),
                 foodPerMeal,
                 flushPerMeal / 2,
                 waterToAddPerMeal,
@@ -136,7 +138,7 @@ public partial class AddPatientPage : ContentPage
         }
     }
 
-    private void CalculateMeals(double foodPerDay, double mealsPerDay, double waterPerDay, double bodyWeight)
+    private void CalculateMeals(double foodPerDay, int mealsPerDay, double waterPerDay, double bodyWeight)
     {
         foodPerMeal = foodPerDay / mealsPerDay;
 
@@ -168,12 +170,15 @@ public partial class AddPatientPage : ContentPage
                 break;
         }
 
-        waterToAddPerMeal = waterPerMeal - flushPerMeal;
+        waterToAddPerMeal = Math.Round(waterPerMeal - flushPerMeal, 1, MidpointRounding.AwayFromZero);
         if (waterToAddPerMeal < 0)
         {
             waterToAddPerMeal = 0;
         }
 
-        totalVolumePerMeal = foodPerMeal + flushPerMeal + waterToAddPerMeal;
+        foodPerMeal = Math.Round(foodPerMeal, 1, MidpointRounding.AwayFromZero);
+        waterPerMeal = Math.Round(waterPerMeal, 1, MidpointRounding.AwayFromZero);
+
+        totalVolumePerMeal = Math.Round(foodPerMeal + flushPerMeal + waterToAddPerMeal, 1, MidpointRounding.AwayFromZero);
     }
 }
