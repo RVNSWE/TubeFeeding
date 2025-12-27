@@ -39,7 +39,7 @@ namespace TubeFeeding.Pages.Controls
 
                     col.Item().Text(" ");
 
-                    col.Item().Text($"Food per meal: {_schedule.Patient.FoodPerMeal}ml          Water to add per meal: {WaterToAdd()}");
+                    col.Item().Text($"Food per meal: {_schedule.Patient.FoodPerMeal}ml          Water to add to each meal: {WaterToAdd()}");
 
                     col.Item().Text(" ");
 
