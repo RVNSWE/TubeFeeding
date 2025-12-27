@@ -25,35 +25,21 @@ namespace TubeFeeding.Data
 
         public void PopulateTimes()
         {
-            double startTime = FeedingTimes.First();
-            double endTime = FeedingTimes.Last();
-            double time = startTime;
+            double time = FeedingTimes.First();
 
-            for (int i = 0; i < endTime; i++)
+            while (time <= FeedingTimes.Max())
             {
                 ListOfHours.Add(time);
                 time++;
-            }
 
-            FormattedListOfHours = CreateFormattedList(ListOfHours, FormattedListOfHours);
-            FormattedFeedingTimes = CreateFormattedList(FeedingTimes, FormattedFeedingTimes);
-        }
-
-        public List<string> CreateFormattedList(List<double> list, List<string> formattedList)
-        {
-            foreach (double time in list)
-            {
-                if (time < 10)
+                if (time > 23)
                 {
-                    formattedList.Add("0" + time.ToString() + ":00");
-                }
-                else
-                {
-                    formattedList.Add(time.ToString() + ":00");
+                    break;
                 }
             }
 
-            return formattedList;
+            FormattedListOfHours = Globals.CreateFormattedListOfTimes(ListOfHours);
+            FormattedListOfHours = Globals.CreateFormattedListOfTimes(FeedingTimes);
         }
     }
 }

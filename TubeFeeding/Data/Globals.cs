@@ -1,6 +1,4 @@
-﻿using TubeFeeding.Models;
-
-namespace TubeFeeding.Data
+﻿namespace TubeFeeding.Data
 {
     public static class Globals
     {
@@ -123,16 +121,16 @@ namespace TubeFeeding.Data
                 endTime = midPoint + (int)mealHalfTime;
             }
 
-            double increment = 0;
             double time = startTime;
 
             if (interval > 1)
             {
                 for (int i = 0; i < mealsPerDay; i++)
                 {
-                    time += increment;
+                    System.Diagnostics.Debug.WriteLine("time = " + time);
                     feedingTimes.Add(time);
-                    increment += interval;
+                    time += interval;
+                    System.Diagnostics.Debug.WriteLine("time: " + time + " += " + interval);
                 }
             }
             else if (mealsPerDay > 23)
@@ -141,6 +139,7 @@ namespace TubeFeeding.Data
                 for (int i = 0; i < 24; i++)
                 {
                     feedingTimes.Add(time);
+                    System.Diagnostics.Debug.WriteLine("time = " + time);
                     time++;
                 }
             }
@@ -149,6 +148,7 @@ namespace TubeFeeding.Data
                 for (int i = 0; i < mealsPerDay; i++)
                 {
                     feedingTimes.Add(time);
+                    System.Diagnostics.Debug.WriteLine("time = " + time);
                     time++;
                 }
             }
@@ -163,25 +163,35 @@ namespace TubeFeeding.Data
             foreach (double time in list)
             {
                 int roundedTime = (int)Math.Round(time, 0, MidpointRounding.AwayFromZero);
-                string formattedTime = "";
+                string formattedTime;
 
                 string hours = time.ToString();
                 string minutes = ":00";
-
-                if (time < 10)
-                {
-                    hours = "0" + time.ToString();
-                }
+                System.Diagnostics.Debug.WriteLine("hours = " + hours);
+                System.Diagnostics.Debug.WriteLine("minutes = " + minutes);
 
                 if (time < roundedTime)
                 {
+                    System.Diagnostics.Debug.WriteLine("(before) time = " + hours);
+                    hours = Math.Round(time, 0, MidpointRounding.ToZero).ToString();
+                    System.Diagnostics.Debug.WriteLine("(after) time = " + hours);
                     minutes = ":30";
+                    System.Diagnostics.Debug.WriteLine("minutes = " + minutes);
+                }
+
+                if (time < 10)
+                {
+                    hours = "0" + Math.Round(time, 0, MidpointRounding.ToZero).ToString();
+                    System.Diagnostics.Debug.WriteLine("hours = " + hours);
                 }
 
                 formattedTime = hours + minutes;
+                System.Diagnostics.Debug.WriteLine("Adding formattedTime = " + formattedTime);
+
                 formattedList.Add(formattedTime);
             }
 
+            System.Diagnostics.Debug.WriteLine("Formatted list = " + formattedList);
             return formattedList;
         }
 
