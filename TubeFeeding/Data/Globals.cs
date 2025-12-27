@@ -98,9 +98,9 @@ namespace TubeFeeding.Data
             return rER;
         }
 
-        public static List<int> CalculateFeedingPlan(double mealsPerDay)
+        public static List<double> CalculateFeedingPlan(double mealsPerDay)
         {
-            List<int> feedingTimes = [];
+            List<double> feedingTimes = [];
             int midPoint = 15; // Corresponding to 15:00 or 3pm
             int hours = 14; // Over a period of n hours
 
@@ -111,36 +111,33 @@ namespace TubeFeeding.Data
                 interval = 1; // Minimum feeding interval is 1 hour
             }
 
-            // TO DO: Do as with interval - get 30 min increments
-            double mealHalfTime = Math.Round(mealsPerDay / 2 * interval, 0, MidpointRounding.AwayFromZero); // Effectively hours / 2
+            double preciseMealHalfTime = (mealsPerDay / 2) * interval; // Effectively hours / 2
+            double mealHalfTime = Math.Round(preciseMealHalfTime / 5, 1, MidpointRounding.AwayFromZero) * 5;
             int startTime = midPoint - (int)mealHalfTime;
             int endTime = midPoint + (int)mealHalfTime;
-            System.Diagnostics.Debug.WriteLine("startTime: " + startTime);
-            System.Diagnostics.Debug.WriteLine("endTime: " + endTime);
 
             while (endTime > 23)
             {
                 midPoint -= 1;
                 startTime = midPoint - (int)mealHalfTime;
                 endTime = midPoint + (int)mealHalfTime;
-                System.Diagnostics.Debug.WriteLine("startTime: " + startTime);
-                System.Diagnostics.Debug.WriteLine("endTime: " + endTime);
             }
 
-            int increment = 0;
-            int time = 0;
+            double increment = 0;
+            double time = startTime;
 
-            if (mealsPerDay < midPoint)
+            if (interval > 1)
             {
                 for (int i = 0; i < mealsPerDay; i++)
                 {
-                    time = startTime + increment;
+                    time += increment;
                     feedingTimes.Add(time);
-                    increment += (int)Math.Round(interval, 0, MidpointRounding.AwayFromZero);
+                    increment += interval;
                 }
             }
             else if (mealsPerDay > 23)
             {
+                time = 0;
                 for (int i = 0; i < 24; i++)
                 {
                     feedingTimes.Add(time);
@@ -149,8 +146,6 @@ namespace TubeFeeding.Data
             }
             else
             {
-                time = midPoint - (int)mealHalfTime;
-
                 for (int i = 0; i < mealsPerDay; i++)
                 {
                     feedingTimes.Add(time);
@@ -161,19 +156,33 @@ namespace TubeFeeding.Data
                 return feedingTimes;
         }
 
-        public static void CreateFormattedList(List<int> list, List<string> formattedList)
+        public static List<string> CreateFormattedListOfTimes(List<double> list)
         {
-            foreach (int time in list)
+            List<string> formattedList = [];
+
+            foreach (double time in list)
             {
+                int roundedTime = (int)Math.Round(time, 0, MidpointRounding.AwayFromZero);
+                string formattedTime = "";
+
+                string hours = time.ToString();
+                string minutes = ":00";
+
                 if (time < 10)
                 {
-                    formattedList.Add("0" + time.ToString() + ":00");
+                    hours = "0" + time.ToString();
                 }
-                else
+
+                if (time < roundedTime)
                 {
-                    formattedList.Add(time.ToString() + ":00");
+                    minutes = ":30";
                 }
+
+                formattedTime = hours + minutes;
+                formattedList.Add(formattedTime);
             }
+
+            return formattedList;
         }
 
         /*
