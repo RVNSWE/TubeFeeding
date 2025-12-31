@@ -4,14 +4,17 @@ using QuestPDF.Infrastructure;
 
 namespace TubeFeeding.Pages.Controls
 {
+    /*
+     * This PDF library only supports desktop apps - TO DO: find one that supports mobile apps too.
+     */
     public class ExportDoc : IDocument
     {
-        private readonly FeedingSchedule _schedule;
+        private readonly FeedingSchedule feedingSchedule;
 
         public ExportDoc(FeedingSchedule schedule)
         {
             QuestPDF.Settings.License = LicenseType.Community;
-            _schedule = schedule;
+            feedingSchedule = schedule;
         }
 
         public void Compose(IDocumentContainer container)
@@ -27,27 +30,27 @@ namespace TubeFeeding.Pages.Controls
                 {
                     col.Item().Text(" ");
 
-                    col.Item().Text($"Patient: {_schedule.Patient.PatientName}          Client: {_schedule.Patient.ClientName}          Species: {_schedule.Patient.Species}          Body weight: {_schedule.Patient.BodyWeight}kg").Bold();
+                    col.Item().Text($"Patient: {feedingSchedule.Patient.PatientName}          Client: {feedingSchedule.Patient.ClientName}          Species: {feedingSchedule.Patient.Species}          Body weight: {feedingSchedule.Patient.BodyWeight}kg").Bold();
 
                     col.Item().Text(" ");
 
-                    col.Item().Text($"Diet to feed: {_schedule.Patient.FoodName}").Bold();
+                    col.Item().Text($"Diet to feed: {feedingSchedule.Patient.FoodName}").Bold();
 
                     col.Item().Text(" ");
 
-                    col.Item().Text($"Number of meals per day: {_schedule.Patient.MealsPerDay}          Estimated packs of food used per day: {_schedule.Patient.CansPerDay}");
+                    col.Item().Text($"Number of meals per day: {feedingSchedule.Patient.MealsPerDay}          Estimated packs of food used per day: {feedingSchedule.Patient.CansPerDay}");
 
                     col.Item().Text(" ");
 
-                    col.Item().Text($"Food per meal: {_schedule.Patient.FoodPerMeal}ml          Water to add to each meal: {WaterToAdd()}");
+                    col.Item().Text($"Food per meal: {feedingSchedule.Patient.FoodPerMeal}ml          Water to add to each meal: {WaterToAdd()}");
 
                     col.Item().Text(" ");
 
-                    col.Item().Text($"Water per flush (before and after each meal): {_schedule.Patient.FlushPerMeal}ml");
+                    col.Item().Text($"Water per flush (before and after each meal): {feedingSchedule.Patient.FlushPerMeal}ml");
 
                     col.Item().Text(" ");
 
-                    col.Item().Text(PrintSchedule(_schedule.FormattedFeedingTimes));
+                    col.Item().Text(PrintSchedule(feedingSchedule.FormattedFeedingTimes));
                 });
 
                 page.Footer().AlignCenter().Text(x =>
@@ -62,9 +65,9 @@ namespace TubeFeeding.Pages.Controls
         {
             string waterToAdd = "None";
 
-            if (_schedule.Patient.WaterToAddPerMeal > 0)
+            if (feedingSchedule.Patient.WaterToAddPerMeal > 0)
             {
-                waterToAdd = _schedule.Patient.WaterToAddPerMeal.ToString() + "ml";
+                waterToAdd = feedingSchedule.Patient.WaterToAddPerMeal.ToString() + "ml";
             }
 
             return waterToAdd;
