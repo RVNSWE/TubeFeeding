@@ -1,6 +1,8 @@
-﻿using TubeFeeding.Models;
-using QuestPDF.Fluent;
+﻿using iText.Kernel.Pdf;
+using iText.Layout;
+using iText.Layout.Element;
 using SQLite;
+using TubeFeeding.Models;
 using TubeFeeding.Pages.Controls;
 
 namespace TubeFeeding.Data
@@ -47,15 +49,17 @@ namespace TubeFeeding.Data
 
                 int scheduleId = patient.Id;
 
-                FeedingSchedule feedingSchedule = new FeedingSchedule(patient);
-                ExportDoc output = new ExportDoc(feedingSchedule);
-                string pdf = Globals.GetLocalPath($"{patient.PatientName}_{patient.ClientName}_{patient.FoodName}.pdf");
-                output.GeneratePdf(pdf);
+                FeedingSchedule feedingSchedule = new(patient);
+                ExportDoc output = new(feedingSchedule);
+                string pdfPath = Globals.GetLocalPath($"{patient.PatientName}_{patient.ClientName}_{patient.FoodName}.pdf");
+                PdfWriter writer = new(pdfPath);
+                PdfDocument pdf = new(writer);
+                Document document = new(pdf);
 
                 await Share.RequestAsync(new ShareFileRequest
                 {
                     Title = $"{patient.PatientName} {patient.ClientName} - Tube Feeding Patient",
-                    File = new ShareFile(pdf)
+                    File = new ShareFile(pdfPath)
                 });
             }
             catch (Exception ex)
