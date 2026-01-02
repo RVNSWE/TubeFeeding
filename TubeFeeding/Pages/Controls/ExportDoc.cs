@@ -129,7 +129,7 @@ namespace TubeFeeding.Pages.Controls
             p.Add(new Text("1.")
                 .SetUnderline()
                 .SimulateBold());
-            p.Add(new Text(" Attach an empty syringe to the feeding tube port before each feed, and gently draw back on the plunger. You should feel some resistance, and the plunger should return to its starting position when you let go of it."));
+            p.Add(new Text(" Pinch the feeding tube to prevent food from leaking out when you remove the cap. Attach an empty syringe to the feeding tube port, stop pinching, and then gently draw back on the plunger. You should feel some resistance, and the plunger should return to its starting position when you let go of it."));
             document.Add(p);
             p = new Paragraph();
             p.Add(new Text("If this does not happen, it may mean the tube has become displaced. STOP immediately, and contact the clinic for advice.")
@@ -146,7 +146,7 @@ namespace TubeFeeding.Pages.Controls
             p.Add(new Text(flushPerMeal
                 + "ml")
                 .SimulateBold());
-            p.Add(new Text(" of water before each feed."));
+            p.Add(new Text(" of water before administering any food."));
             document.Add(p);
             p = new Paragraph();
             p.Add(new Text("If your pet starts coughing, gagging, retching, or otherwise showing signs of discomfort while flushing, STOP immediately and contact the clinic for advice.")
@@ -162,7 +162,7 @@ namespace TubeFeeding.Pages.Controls
             p.Add(new Text(" Slowly administer the prepared volume of food through the tube."));
             document.Add(p);
             p = new Paragraph();
-            p.Add(new Text("You may notice your pet swallowing as you do this. This is normal, as the food is being administered into the oesophagus rather than directly into the stomach. If they regurgitate, slow down the rate of administration."));
+            p.Add(new Text("You may notice your pet swallowing as you do this. This is normal, as the food is being administered into the oesophagus rather than directly into the stomach. If they regurgitate, slow down the rate of administration. "));
             p.Add(new Text("If regurgitation continues, stop feeding and contact the clinic for advice.")
                 .SimulateBold());
             document.Add(p);
@@ -177,7 +177,7 @@ namespace TubeFeeding.Pages.Controls
             p.Add(new Text(flushPerMeal
                 + "ml")
                 .SimulateBold());
-            p.Add(new Text(" of water again to clear the tube of any residual food."));
+            p.Add(new Text(" of water again to clear it of any residual food."));
             document.Add(p);
 
             document.Add(new Paragraph(" "));
@@ -186,7 +186,7 @@ namespace TubeFeeding.Pages.Controls
             p.Add(new Text("5.")
                 .SetUnderline()
                 .SimulateBold());
-            p.Add(new Text(" Place the cap back on the feeding tube and wipe away any food on the outside of the tube with a clean, damp cloth. Ensure the outside of the tube is dry before tucking it away again. Rinse the used syringes with water to clean them."));
+            p.Add(new Text(" Place the cap back on the feeding tube and wipe away any food from the outside of the tube with a clean, damp cloth. Ensure the outside of the tube is dry before tucking it away again. Rinse the used syringes with water to clean them ready for the next feed."));
             document.Add(p);
 
             document.Close();
