@@ -1,4 +1,6 @@
-﻿namespace TubeFeeding.Pages
+﻿using TubeFeeding.Pages.Controls;
+
+namespace TubeFeeding.Pages
 {
     public partial class MainPage : ContentPage
     {

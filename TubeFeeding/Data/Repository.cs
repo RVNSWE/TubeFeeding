@@ -39,36 +39,6 @@ namespace TubeFeeding.Data
         }
 
         /*
-         * Output a chart as a PDF.
-         */
-        public async Task OutputChart(int patientId)
-        {
-            try
-            {
-                Patient patient = await GetPatient(patientId);
-
-                int scheduleId = patient.Id;
-
-                FeedingSchedule feedingSchedule = new(patient);
-                ExportDoc output = new(feedingSchedule);
-                string pdfPath = Globals.GetLocalPath($"{patient.PatientName}_{patient.ClientName}_{patient.FoodName}.pdf");
-                PdfWriter writer = new(pdfPath);
-                PdfDocument pdf = new(writer);
-                Document document = new(pdf);
-
-                await Share.RequestAsync(new ShareFileRequest
-                {
-                    Title = $"{patient.PatientName} {patient.ClientName} - Tube Feeding Patient",
-                    File = new ShareFile(pdfPath)
-                });
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("Could not export PDF. Error: " + ex.Message);
-            }
-        }
-
-        /*
          * FOR DEBUGGING - Drop the current Patient table.
          */
         public async Task DropPatientTable()

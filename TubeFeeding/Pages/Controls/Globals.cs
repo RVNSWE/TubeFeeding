@@ -1,4 +1,6 @@
-﻿namespace TubeFeeding.Data
+﻿using TubeFeeding.Models;
+
+namespace TubeFeeding.Pages.Controls
 {
     public static class Globals
     {
@@ -80,6 +82,19 @@
             return true;
         }*/
 
+        /*
+         * Validate an integer.
+         */
+        /*public static bool ValidateInt(string userInput)
+        {
+            if (int.TryParse(userInput, out var number))
+            {
+                return true;
+            }
+
+            return false;
+        }*/
+
         public static double CalculateRER(double bodyWeight, string species)
         {
             double rER;
@@ -96,10 +111,8 @@
             return rER;
         }
 
-        public static List<double> CalculateFeedingPlan(double mealsPerDay)
+        public static double CalculateInterval(double mealsPerDay)
         {
-            List<double> feedingTimes = [];
-            int midPoint = 15; // Corresponding to 15:00 or 3pm
             int hours = 14; // Over a period of n hours
 
             double preciseInterval = hours / mealsPerDay;
@@ -109,8 +122,16 @@
                 interval = 1; // Minimum feeding interval is 1 hour
             }
 
+            return interval;
+        }
+
+        public static List<double> CalculateFeedingPlan(double mealsPerDay)
+        {
+            double interval = CalculateInterval(mealsPerDay);
+
             double preciseMealHalfTime = (mealsPerDay / 2) * interval; // Effectively hours / 2
             double mealHalfTime = Math.Round(preciseMealHalfTime / 5, 1, MidpointRounding.AwayFromZero) * 5;
+            int midPoint = 15; // Corresponding to 15:00 or 3pm
             int startTime = midPoint - (int)mealHalfTime;
             int endTime = midPoint + (int)mealHalfTime;
 
@@ -122,6 +143,8 @@
             }
 
             double time = startTime;
+
+            List<double> feedingTimes = [];
 
             if (interval > 1)
             {
@@ -195,20 +218,41 @@
             return formattedList;
         }
 
-        /*
-         * Go back to the schedule list.
-         */
-        public static async void GoToSchedule()
+        public static async Task CreatePDF()
         {
-            await Shell.Current.GoToAsync("//schedule");
-        }
+            int patientId;
 
-        /*
-         * Go back to the food list.
-         */
-        public static async void GoToFood()
-        {
-            await Shell.Current.GoToAsync("//food");
+            if (App.PatientPage?.SelectedPatient == null)
+            {
+                patientId = App.PatientPage.LastPatientSelected.Id;
+            }
+            else
+            {
+                patientId = App.PatientPage.SelectedPatient.Id;
+            }
+
+            System.Diagnostics.Debug.WriteLine($"Attempting to create PDF for patient ID {patientId}");
+
+            try
+            {
+                Patient patient = await App.Repo.GetPatient(patientId);
+
+                string pdfPath = Globals.GetLocalPath($"{patient.PatientName}_{patient.ClientName}_{patient.FoodName}.pdf");
+                FeedingSchedule feedingSchedule = new(patient);
+                ExportDoc output = new(feedingSchedule, pdfPath);
+
+                await Share.RequestAsync(new ShareFileRequest
+                {
+                    Title = $"{patient.PatientName} {patient.ClientName} - Tube Feeding Patient",
+                    File = new ShareFile(pdfPath)
+                });
+
+                System.Diagnostics.Debug.WriteLine("PDF creation successful.");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Could not create PDF. Error: " + ex.Message);
+            }
         }
 
         /*
@@ -242,26 +286,5 @@
         {
             await Shell.Current.GoToAsync("edit");
         }
-
-        /*
-         * Refresh the lists.
-         */
-        public static async void RefreshSchedules()
-        {
-            await App.PatientPage?.RefreshPatients();
-        }
-
-        /*
-         * Validate an integer.
-         */
-        /*public static bool ValidateInt(string userInput)
-        {
-            if (int.TryParse(userInput, out var number))
-            {
-                return true;
-            }
-
-            return false;
-        }*/
     }
 }

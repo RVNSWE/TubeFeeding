@@ -1,3 +1,6 @@
+using TubeFeeding.Models;
+using TubeFeeding.Pages.Controls;
+
 namespace TubeFeeding.Pages;
 
 public partial class PatientDetailsPage : ContentPage
@@ -8,7 +11,7 @@ public partial class PatientDetailsPage : ContentPage
 
         InitializeComponent();
 
-        btnCreatePDF.Clicked += async (s, e) => await CreatePDF();
+        btnCreatePDF.Clicked += async (s, e) => await Globals.CreatePDF();
 
         btnDeleteSchedule.Clicked += async (s, e) => await DeletePatient();
     }
@@ -38,27 +41,6 @@ public partial class PatientDetailsPage : ContentPage
         }
 
         Dispatcher.DispatchAsync(App.PatientPage.RefreshPatients);
-    }
-
-    /*
-     * Export this chart to PDF.
-     */
-    public async Task CreatePDF()
-    {
-        int patientId;
-
-        if (App.PatientPage?.SelectedPatient == null)
-        {
-            patientId = App.PatientPage.LastPatientSelected.Id;
-        }
-        else
-        {
-            patientId = App.PatientPage.SelectedPatient.Id;
-        }
-
-        System.Diagnostics.Debug.WriteLine($"Creating PDF for patient ID {patientId}");
-
-        await App.Repo.OutputChart(patientId);
     }
 
     /*
