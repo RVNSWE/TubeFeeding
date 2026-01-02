@@ -1,6 +1,6 @@
-﻿using iText.Kernel.Geom;
-using iText.Kernel.Pdf;
+﻿using iText.Kernel.Pdf;
 using iText.Layout;
+using iText.Layout.Borders;
 using iText.Layout.Element;
 
 namespace TubeFeeding.Pages.Controls
@@ -30,54 +30,176 @@ namespace TubeFeeding.Pages.Controls
             string foodName = $"{feedingSchedule.Patient.FoodName}";
             string cansPerDay = $"{feedingSchedule.Patient.CansPerDay}";
             string foodPerMeal = $"{feedingSchedule.Patient.FoodPerMeal}";
-            string waterToAddPerMeal = $"{feedingSchedule.Patient.WaterToAddPerMeal}";
             string flushPerMeal = $"{feedingSchedule.Patient.FlushPerMeal}";
             string mealsPerDay = $"{feedingSchedule.Patient.MealsPerDay}";
             string interval = Globals.CalculateInterval(feedingSchedule.Patient.MealsPerDay).ToString();
             List<string> schedule = feedingSchedule.FormattedFeedingTimes;
 
-            document.Add(new Paragraph($"Tube Feeding Instructions for " + PatientName())
-                .SetFontSize(16)
+            Paragraph p = new();
+            p.Add(new Text("Tube Feeding Instructions for "
+                + PrintPatientName()));
+            document.Add(p
+                .SetFontSize(18)
                 .SetUnderline()
                 .SimulateBold()
                 .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER));
+
             document.Add(new Paragraph(" "));
             document.Add(new Paragraph(" "));
-            document.Add(new Paragraph($"Diet: " + foodName + "                Estimated cans of food per day: " + cansPerDay)
+            
+            p = new Paragraph();
+            p.Add(new Text("Diet: ")
                 .SimulateBold());
-            document.Add(new Paragraph(foodName + " food to administer each meal: " + foodPerMeal + "ml" + "        Water to add to each meal: " + WaterToAdd())
+            p.Add(new Text(foodName));
+            p.AddTabStops(new TabStop(1000, iText.Layout.Properties.TabAlignment.RIGHT));
+            p.Add(new iText.Layout.Element.Tab());
+            p.Add(new Text("Estimated cans of food per day: ")
                 .SimulateBold());
-            document.Add(new Paragraph("Volume of water per flush: " + flushPerMeal)
+            p.Add(new Text(cansPerDay));
+            document.Add(p);
+
+            p = new Paragraph();
+            p.Add(new Text("Food to administer each meal: ")
                 .SimulateBold());
+            p.Add(new Text(foodPerMeal
+                + "ml"));
+            p.AddTabStops(new TabStop(1000, iText.Layout.Properties.TabAlignment.RIGHT));
+            p.Add(new iText.Layout.Element.Tab());
+            p.Add(new Text("Water to add to each meal: ")
+                .SimulateBold());
+            p.Add(new Text(PrintWaterToAdd()));
+            document.Add(p);
+
+            p = new Paragraph();
+            p.Add(new Text("Volume of water per flush: ")
+                .SimulateBold());
+            p.Add(new Text(flushPerMeal
+                + "ml"));
+            document.Add(p);
+
             document.Add(new Paragraph(" "));
+            document.Add(new Paragraph(" "));
+
             document.Add(new Paragraph("Feeding Schedule:")
                 .SetFontSize(14)
                 .SetUnderline()
                 .SimulateBold());
-            document.Add(new Paragraph("Your pet will need to be fed roughly every "
+
+            document.Add(PrintScheduleInstructions());
+
+            p = new Paragraph();
+            p.Add(new Text("A possible time schedule for feeding every "
                 + interval
-                + " hours, for a total of "
-                + mealsPerDay
-                + " times per day."));
-            document.Add(new Paragraph("A schedule has been estimated as follows:"));
-            document.Add(new Paragraph(PrintSchedule(schedule)));
-            document.Add(new Paragraph("You may wish to adjust these times to suit you, but please ensure a minimum of one hour between each feed to avoid overloading the stomach and causing regurgitation."));
+                + " hours may be:"));
+            document.Add(p);
+
+            document.Add(PrintSchedule(schedule)
+                .SetUnderline());
+
+            document.Add(new Paragraph("You are free to adjust these times to suit you, but please allow a minimum of one hour between each feed to avoid overloading the stomach and causing regurgitation."));
+
             document.Add(new Paragraph(" "));
+            document.Add(new Paragraph(" "));
+
             document.Add(new Paragraph("Preparing the food:")
                 .SetFontSize(14)
                 .SetUnderline()
                 .SimulateBold());
+
+            document.Add(PrintPreparationInstructions());
+            p = new Paragraph();
+            p.Add(new Text("Place the filled syringes into a jug of "));
+            p.Add(new Text("warm")
+                .SimulateBold());
+            p.Add(new Text(" (not hot!) water until they reach body temperature. "));
+            p.Add(new Text("DO NOT MICROWAVE,")
+                .SimulateBold());
+            p.Add(new Text(" as this can create pockets of hot liquid that may scald your pet."));
+            document.Add(p);
+
+            document.Add(new Paragraph(" "));
+            document.Add(new Paragraph(" "));
+
+            document.Add(new Paragraph("Administering the food:")
+                .SetFontSize(14)
+                .SetUnderline()
+                .SimulateBold());
+
+            p = new Paragraph();
+            p.Add(new Text("1.")
+                .SetUnderline()
+                .SimulateBold());
+            p.Add(new Text(" Attach an empty syringe to the feeding tube port before each feed, and gently draw back on the plunger. You should feel some resistance, and the plunger should return to its starting position when you let go of it."));
+            document.Add(p);
+            p = new Paragraph();
+            p.Add(new Text("If this does not happen, it may mean the tube has become displaced. STOP immediately, and contact the clinic for advice.")
+                .SimulateBold());
+            document.Add(p);
+
+            document.Add(new Paragraph(" "));
+
+            p = new Paragraph();
+            p.Add(new Text("2.")
+                .SetUnderline()
+                .SimulateBold());
+            p.Add(new Text(" Slowly flush the feeding tube with "));
+            p.Add(new Text(flushPerMeal
+                + "ml")
+                .SimulateBold());
+            p.Add(new Text(" of water before each feed."));
+            document.Add(p);
+            p = new Paragraph();
+            p.Add(new Text("If your pet starts coughing, gagging, retching, or otherwise showing signs of discomfort while flushing, STOP immediately and contact the clinic for advice.")
+                .SimulateBold());
+            document.Add(p);
+
+            document.Add(new Paragraph(" "));
+
+            p = new Paragraph();
+            p.Add(new Text("3.")
+                .SetUnderline()
+                .SimulateBold());
+            p.Add(new Text(" Slowly administer the prepared volume of food through the tube."));
+            document.Add(p);
+            p = new Paragraph();
+            p.Add(new Text("You may notice your pet swallowing as you do this. This is normal, as the food is being administered into the oesophagus rather than directly into the stomach. If they regurgitate, slow down the rate of administration."));
+            p.Add(new Text("If regurgitation continues, stop feeding and contact the clinic for advice.")
+                .SimulateBold());
+            document.Add(p);
+
+            document.Add(new Paragraph(" "));
+
+            p = new Paragraph();
+            p.Add(new Text("4.")
+                .SetUnderline()
+                .SimulateBold());
+            p.Add(new Text(" Slowly flush the tube with "));
+            p.Add(new Text(flushPerMeal
+                + "ml")
+                .SimulateBold());
+            p.Add(new Text(" of water again to clear the tube of any residual food."));
+            document.Add(p);
+
+            document.Add(new Paragraph(" "));
+
+            p = new Paragraph();
+            p.Add(new Text("5.")
+                .SetUnderline()
+                .SimulateBold());
+            p.Add(new Text(" Place the cap back on the feeding tube and wipe away any food on the outside of the tube with a clean, damp cloth. Ensure the outside of the tube is dry before tucking it away again. Rinse the used syringes with water to clean them."));
+            document.Add(p);
+
             document.Close();
         }
 
-        private string PatientName()
+        private string PrintPatientName()
         {
-            string name = $"{feedingSchedule.Patient.PatientName}" + $"{feedingSchedule.Patient.ClientName}";
+            string name = $"{feedingSchedule.Patient.PatientName}" + " " + $"{feedingSchedule.Patient.ClientName}";
 
             return name;
         }
 
-        private string WaterToAdd()
+        private string PrintWaterToAdd()
         {
             string waterToAdd = "None";
 
@@ -89,25 +211,96 @@ namespace TubeFeeding.Pages.Controls
             return waterToAdd;
         }
 
-        private string PreparationInstructions()
+        private Paragraph PrintScheduleInstructions()
         {
-            string instructions = "";
+            Paragraph p = new();
+            double cansPerDay = feedingSchedule.Patient.CansPerDay;
+            string foodName = feedingSchedule.Patient.FoodName;
+            double mealsPerDay = feedingSchedule.Patient.MealsPerDay;
 
+            p.Add(new Text("Your pet will need to consume "));
+            p.Add(new Text(cansPerDay.ToString())
+                .SimulateBold());
 
+            if (cansPerDay > 1)
+            {
+                p.Add(new Text(" cans/bottles of "));
+            }
+            else if (cansPerDay == 1)
+            {
+                p.Add(new Text(" can/bottle of "));
+            }
+            else
+            {
+                p.Add(new Text(" of a can/bottle of "));
+            }
+            
+            p.Add(new Text(foodName)
+                        .SimulateBold());
+            p.Add(new Text(" food per day in order to meet their nutritional needs. They will therefore need to be tube fed "));
+            p.Add(new Text(mealsPerDay.ToString())
+                .SimulateBold());
+            p.Add(new Text(" times per day if they are not eating unaided."));
 
-            return instructions;
+            return p;
         }
 
-        private string PrintSchedule(List<string> schedule)
+        private Paragraph PrintPreparationInstructions()
         {
-            string listOfHours = "";
+            Paragraph p = new();
+
+            double waterToAddPerMeal = feedingSchedule.Patient.WaterToAddPerMeal;
+            double foodPerMeal = feedingSchedule.Patient.FoodPerMeal;
+            double flushPerMeal = feedingSchedule.Patient.FlushPerMeal;
+            string foodName = feedingSchedule.Patient.FoodName;
+
+            if (feedingSchedule.Patient.WaterToAddPerMeal > 0)
+            {
+                p.Add(new Text("Mix "));
+                p.Add(new Text(waterToAddPerMeal.ToString()
+                    + "ml")
+                .SimulateBold());
+                p.Add(new Text(" of water into "));
+                p.Add(new Text(foodPerMeal.ToString()
+                    + "ml")
+                .SimulateBold());
+                p.Add(new Text(" of food, and draw this up into a syringe. Prepare two other syringes with "));
+                p.Add(new Text(flushPerMeal.ToString()
+                    + "ml")
+                .SimulateBold());
+                p.Add(new Text(" of plain tap water in each, which will be used to flush the tube before and after feeding."));
+            }
+            else
+            {
+                p.Add(new Text("Prepare two syringes with "));
+                p.Add(new Text(flushPerMeal.ToString()
+                    + "ml")
+                .SimulateBold());
+                p.Add(new Text(" of water in each, and another syringe containing "));
+                p.Add(new Text(foodPerMeal
+                    + "ml")
+                .SimulateBold());
+                p.Add(new Text(" of "));
+                p.Add(new Text(foodName)
+                .SimulateBold());
+                p.Add(new Text(" food."));
+            }
+
+                return p;
+        }
+
+        private static Paragraph PrintSchedule(List<string> schedule)
+        {
+            Paragraph p = new();
+            p.AddTabStops(new TabStop(10, iText.Layout.Properties.TabAlignment.RIGHT));
 
             foreach (string item in schedule)
             {
-                listOfHours = listOfHours + item + "    ";
+                p.Add(new Text(item));
+                p.Add(new iText.Layout.Element.Tab());
             }
 
-            return listOfHours;
+            return p;
         }
     }
 }
