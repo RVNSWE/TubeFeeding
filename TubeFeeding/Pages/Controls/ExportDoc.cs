@@ -1,19 +1,16 @@
 ﻿using iText.Kernel.Pdf;
 using iText.Layout;
-using iText.Layout.Borders;
 using iText.Layout.Element;
 
 namespace TubeFeeding.Pages.Controls
 {
-    /*
-     * This PDF library only supports desktop apps - TO DO: find one that supports mobile apps too.
-     */
     public class ExportDoc
     {
         private readonly FeedingSchedule feedingSchedule;
         private PdfWriter writer;
         private PdfDocument pdf;
         private Document document;
+        private readonly string patientName;
 
         public ExportDoc(FeedingSchedule schedule, string pdfPath)
         {
@@ -21,6 +18,8 @@ namespace TubeFeeding.Pages.Controls
             writer = new PdfWriter(pdfPath);
             pdf = new PdfDocument(writer);
             document = new Document(pdf);
+
+            patientName = $"{feedingSchedule.Patient.PatientName}";
 
             Compose(document);
         }
@@ -114,7 +113,9 @@ namespace TubeFeeding.Pages.Controls
             p.Add(new Text(" (not hot!) water until they reach body temperature. "));
             p.Add(new Text("DO NOT MICROWAVE,")
                 .SimulateBold());
-            p.Add(new Text(" as this can create pockets of hot liquid that may scald your pet."));
+            p.Add(new Text(" as this can create pockets of hot liquid that may scald "
+                + patientName
+                + "."));
             document.Add(p);
 
             document.Add(new Paragraph(" "));
@@ -149,7 +150,9 @@ namespace TubeFeeding.Pages.Controls
             p.Add(new Text(" of water before administering any food."));
             document.Add(p);
             p = new Paragraph();
-            p.Add(new Text("If your pet starts coughing, gagging, retching, or otherwise showing signs of discomfort while flushing, STOP immediately and contact the clinic for advice.")
+            p.Add(new Text("If "
+                + patientName
+                + " starts coughing, gagging, retching, or otherwise showing signs of discomfort while flushing, STOP immediately and contact the clinic for advice.")
                 .SimulateBold());
             document.Add(p);
 
@@ -162,7 +165,9 @@ namespace TubeFeeding.Pages.Controls
             p.Add(new Text(" Slowly administer the prepared volume of food through the tube."));
             document.Add(p);
             p = new Paragraph();
-            p.Add(new Text("You may notice your pet swallowing as you do this. This is normal, as the food is being administered into the oesophagus rather than directly into the stomach. If they regurgitate, slow down the rate of administration. "));
+            p.Add(new Text("You may notice "
+                + patientName
+                + " swallowing as you do this. This is normal, as the food is being administered into the oesophagus rather than directly into the stomach. If they regurgitate, slow down the rate of administration. "));
             p.Add(new Text("If regurgitation continues, stop feeding and contact the clinic for advice.")
                 .SimulateBold());
             document.Add(p);
@@ -194,7 +199,7 @@ namespace TubeFeeding.Pages.Controls
 
         private string PrintPatientName()
         {
-            string name = $"{feedingSchedule.Patient.PatientName}" + " " + $"{feedingSchedule.Patient.ClientName}";
+            string name = patientName + " " + $"{feedingSchedule.Patient.ClientName}";
 
             return name;
         }
@@ -218,7 +223,8 @@ namespace TubeFeeding.Pages.Controls
             string foodName = feedingSchedule.Patient.FoodName;
             double mealsPerDay = feedingSchedule.Patient.MealsPerDay;
 
-            p.Add(new Text("Your pet will need to consume "));
+            p.Add(new Text(patientName
+                + " will need to consume "));
             p.Add(new Text(cansPerDay.ToString())
                 .SimulateBold());
 
