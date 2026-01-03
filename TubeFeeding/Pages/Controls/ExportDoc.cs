@@ -7,9 +7,9 @@ namespace TubeFeeding.Pages.Controls
     public class ExportDoc
     {
         private readonly FeedingSchedule feedingSchedule;
-        private PdfWriter writer;
-        private PdfDocument pdf;
-        private Document document;
+        private readonly PdfWriter writer;
+        private readonly PdfDocument pdf;
+        private readonly Document document;
         private readonly string patientName;
 
         public ExportDoc(FeedingSchedule schedule, string pdfPath)
@@ -95,7 +95,7 @@ namespace TubeFeeding.Pages.Controls
             document.Add(PrintSchedule(schedule)
                 .SetUnderline());
 
-            document.Add(new Paragraph("You are free to adjust these times to suit you, but please allow a minimum of one hour between each feed to avoid overloading the stomach and causing regurgitation."));
+            document.Add(new Paragraph("You are free to adjust these times to suit you, but please allow a minimum of one hour between feeds to avoid overloading the stomach and causing regurgitation."));
 
             document.Add(new Paragraph(" "));
             document.Add(new Paragraph(" "));

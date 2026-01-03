@@ -1,135 +1,85 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:sf="clr-namespace:Syncfusion.Maui.Toolkit.TextInputLayout;assembly=Syncfusion.Maui.Toolkit"
              xmlns:pages="clr-namespace:TubeFeeding.PageModels"
              xmlns:local="clr-namespace:TubeFeeding"
              x:Class="TubeFeeding.Pages.AddPatientPage"
              x:DataType="pages:PatientPageModel"
-             Title="Create New Tube Feeding Schedule">
+             Title="Create Tube Feeding Schedule">
 
-    <ScrollView Margin="10">
+    <Grid>
+        <ScrollView>
+            <VerticalStackLayout Spacing="{StaticResource LayoutSpacing}" Padding="{StaticResource LayoutPadding}">
+                
+                <sf:SfTextInputLayout Hint="Patient">
+                    <Entry
+                        Text="The patient's name"
+                        x:Name="newPatientName"
+                        SemanticProperties.Description="Patient name" />
+                </sf:SfTextInputLayout>
 
-        <VerticalStackLayout>
+                <sf:SfTextInputLayout Hint="Client">
+                    <Entry
+                        Text="The client's surname"
+                        x:Name="newClientName"
+                        SemanticProperties.Description="Client surname" />
+                </sf:SfTextInputLayout>
 
-            <HorizontalStackLayout>
-                <Grid ColumnDefinitions="140,125" Margin="5">
-                    <Label Text="Patient name: "
-                           Margin="10"
-                           HorizontalTextAlignment="End" />
-                    <Entry x:Name="newPatientName"
-                           IsTextPredictionEnabled="false"
-                           IsSpellCheckEnabled="false"
-                           MaxLength="30"
-                           Grid.Column="1" />
-                </Grid>
+                <sf:SfTextInputLayout Hint="Species">
+                    <Entry
+                        Text="Eg. cat"
+                        x:Name="newSpecies"
+                        SemanticProperties.Description="Patient species" />
+                </sf:SfTextInputLayout>
 
-                <Grid ColumnDefinitions="140,125" Margin="5">
-                    <Label Text="Client surname: "
-                           Margin="10"
-                           HorizontalTextAlignment="End" />
-                    <Entry x:Name="newClientName"
-                           IsTextPredictionEnabled="false"
-                           IsSpellCheckEnabled="false"
-                           MaxLength="30"
-                           Grid.Column="1" />
-                </Grid>
-            </HorizontalStackLayout>
+                <sf:SfTextInputLayout Hint="Body weight (kg)">
+                    <Entry
+                        Text="Eg. 10"
+                        x:Name="newBodyWeight"
+                        SemanticProperties.Description="Patient body weight (kg)" />
+                </sf:SfTextInputLayout>
 
-            <HorizontalStackLayout>
-                <Grid ColumnDefinitions="140,125" Margin="5">
-                    <Label Text="Species: "
-                           Margin="10"
-                           HorizontalTextAlignment="End" />
-                    <Entry x:Name="newSpecies"
-                           IsTextPredictionEnabled="false"
-                           IsSpellCheckEnabled="false"
-                           MaxLength="6"
-                           Grid.Column="1" />
-                </Grid>
-            </HorizontalStackLayout>
+                <sf:SfTextInputLayout Hint="Diet">
+                    <Entry
+                        Text="The name of the diet to be fed"
+                        x:Name="newFoodName"
+                        SemanticProperties.Description="The name of the diet to be fed" />
+                </sf:SfTextInputLayout>
 
-            <HorizontalStackLayout>
-                <Grid ColumnDefinitions="140,125" Margin="5">
-                    <Label Text="Patient body weight (kg): "
-                           Margin="10"
-                           HorizontalTextAlignment="End" />
-                    <Entry x:Name="newBodyWeight"
-                           IsTextPredictionEnabled="false"
-                           IsSpellCheckEnabled="false"
-                           Keyboard="Numeric"
-                           MaxLength="6"
-                           Grid.Column="1" />
-                </Grid>
-            </HorizontalStackLayout>
+                <sf:SfTextInputLayout Hint="Diet kcal per kg">
+                    <Entry
+                        Text="Kcals per kg of food"
+                        x:Name="newKcal"
+                        SemanticProperties.Description="Kcals per kg of food" />
+                </sf:SfTextInputLayout>
 
-            <HorizontalStackLayout>
-                <Grid ColumnDefinitions="140,125" Margin="5">
-                    <Label Text="Food name: "
-                           Margin="10"
-                           HorizontalTextAlignment="End" />
-                    <Entry x:Name="newFoodName"
-                           IsTextPredictionEnabled="false"
-                           IsSpellCheckEnabled="false"
-                           MaxLength="40"
-                           Grid.Column="1" />
-                </Grid>
-            </HorizontalStackLayout>
+                <sf:SfTextInputLayout Hint="Weight (g) or volume (ml) of food per container">
+                    <Entry
+                        Text="The net weight listed on the food container"
+                        x:Name="newNetWeight"
+                        SemanticProperties.Description="Weight (g) or volume (ml) of food per container" />
+                </sf:SfTextInputLayout>
 
-            <HorizontalStackLayout>
-                <Grid ColumnDefinitions="140,125" Margin="5">
-                    <Label Text="Kcal per kg of food: "
-                           Margin="10"
-                           HorizontalTextAlignment="End" />
-                    <Entry x:Name="newKcal"
-                           IsTextPredictionEnabled="false"
-                           IsSpellCheckEnabled="false"
-                           Keyboard="Numeric"
-                           MaxLength="6"
-                           Grid.Column="1" />
-                </Grid>
-            </HorizontalStackLayout>
+                <sf:SfTextInputLayout Hint="Percentage of water">
+                    <Entry
+                        Text="Percentage water content of the food, eg. 77"
+                        x:Name="newWaterPercentage"
+                        SemanticProperties.Description="Percentage water content of food" />
+                </sf:SfTextInputLayout>
 
-            <HorizontalStackLayout>
-                <Grid ColumnDefinitions="140,125" Margin="5">
-                    <Label Text="Net weight (g) or volume (ml) of food per container: "
-                           Margin="10"
-                           HorizontalTextAlignment="End" />
-                    <Entry x:Name="newNetWeight"
-                           IsTextPredictionEnabled="false"
-                           IsSpellCheckEnabled="false"
-                           Keyboard="Numeric"
-                           MaxLength="6"
-                           Grid.Column="1" />
-                </Grid>
-            </HorizontalStackLayout>
-
-            <HorizontalStackLayout>
-                <Grid ColumnDefinitions="140,125" Margin="5">
-                    <Label Text="Percentage water content of food: "
-                           Margin="10"
-                           HorizontalTextAlignment="End" />
-                    <Entry x:Name="newWaterPercentage"
-                           IsTextPredictionEnabled="false"
-                           IsSpellCheckEnabled="false"
-                           Keyboard="Numeric"
-                           MaxLength="6"
-                           Grid.Column="1" />
-                </Grid>
-            </HorizontalStackLayout>
-
-            <HorizontalStackLayout>
                 <Button x:Name="btnSave"
+                        MinimumHeightRequest="{OnIdiom 44, Desktop=60}"
                         Text="Save"
                         Margin="30" />
 
                 <Button x:Name="btnCancel"
+                        MinimumHeightRequest="{OnIdiom 44, Desktop=60}"
                         Text="Cancel"
                         Margin="30"
                         BackgroundColor="PaleVioletRed"/>
-            </HorizontalStackLayout>
-
-        </VerticalStackLayout>
-
-    </ScrollView>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
 
 </ContentPage>

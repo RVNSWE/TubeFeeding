@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Logging;
 using Syncfusion.Maui.Toolkit.Hosting;
 using TubeFeeding.Pages.Controls;
+using Syncfusion.Maui.Core.Hosting;
+
 
 namespace TubeFeeding
 {
@@ -12,6 +14,7 @@ namespace TubeFeeding
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .ConfigureSyncfusionCore()
                 .UseMauiCommunityToolkit()
                 .ConfigureSyncfusionToolkit()
                 .ConfigureFonts(fonts =>
@@ -29,8 +32,6 @@ namespace TubeFeeding
 
             string dbPath = Globals.GetLocalPath(Globals.DatabaseName);
             builder.Services.AddSingleton<Repository>(s => ActivatorUtilities.CreateInstance<Repository>(s, dbPath));
-
-            //builder.Services.AddSingleton<ModalErrorHandler>();
 
             return builder.Build();
         }
