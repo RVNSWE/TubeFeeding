@@ -11,59 +11,83 @@
     <Grid>
         <ScrollView>
             <VerticalStackLayout Spacing="{StaticResource LayoutSpacing}" Padding="{StaticResource LayoutPadding}">
-                
-                <sf:SfTextInputLayout Hint="Patient">
+
+                <sf:SfTextInputLayout Hint="Patient"
+                                      HelperText="The patient's name"
+                                      CharMaxLength="30"
+                                      ContainerType="Outlined"
+                                      Margin="20">
                     <Entry
-                        Text="The patient's name"
                         x:Name="newPatientName"
                         SemanticProperties.Description="Patient name" />
                 </sf:SfTextInputLayout>
 
-                <sf:SfTextInputLayout Hint="Client">
+                <sf:SfTextInputLayout Hint="Client"
+                                      HelperText="The client's surname"
+                                      CharMaxLength="30"
+                                      ContainerType="Outlined"
+                                      Margin="20">
                     <Entry
-                        Text="The client's surname"
                         x:Name="newClientName"
                         SemanticProperties.Description="Client surname" />
                 </sf:SfTextInputLayout>
 
-                <sf:SfTextInputLayout Hint="Species">
+                <sf:SfTextInputLayout Hint="Species"
+                                      HelperText="Eg. cat"
+                                      CharMaxLength="30"
+                                      ContainerType="Outlined"
+                                      Margin="20">
                     <Entry
-                        Text="Eg. cat"
                         x:Name="newSpecies"
                         SemanticProperties.Description="Patient species" />
                 </sf:SfTextInputLayout>
 
-                <sf:SfTextInputLayout Hint="Body weight (kg)">
+                <sf:SfTextInputLayout Hint="Body weight (kg)"
+                                      HelperText="Eg. 10"
+                                      CharMaxLength="6"
+                                      ContainerType="Outlined"
+                                      Margin="20">
                     <Entry
-                        Text="Eg. 10"
                         x:Name="newBodyWeight"
                         SemanticProperties.Description="Patient body weight (kg)" />
                 </sf:SfTextInputLayout>
 
-                <sf:SfTextInputLayout Hint="Diet">
+                <sf:SfTextInputLayout Hint="Diet"
+                                      HelperText="The name of the diet to be fed"
+                                      CharMaxLength="30"
+                                      ContainerType="Outlined"
+                                      Margin="20">
                     <Entry
-                        Text="The name of the diet to be fed"
                         x:Name="newFoodName"
                         SemanticProperties.Description="The name of the diet to be fed" />
                 </sf:SfTextInputLayout>
 
-                <sf:SfTextInputLayout Hint="Diet kcal per kg">
+                <sf:SfTextInputLayout Hint="Diet kcal per kg"
+                                      HelperText="Kcals per kg of food"
+                                      CharMaxLength="7"
+                                      ContainerType="Outlined"
+                                      Margin="20">
                     <Entry
-                        Text="Kcals per kg of food"
                         x:Name="newKcal"
                         SemanticProperties.Description="Kcals per kg of food" />
                 </sf:SfTextInputLayout>
 
-                <sf:SfTextInputLayout Hint="Weight (g) or volume (ml) of food per container">
+                <sf:SfTextInputLayout Hint="Weight (g) or volume (ml) of food per container"
+                                      HelperText="The net weight listed on the food container"
+                                      CharMaxLength="6"
+                                      ContainerType="Outlined"
+                                      Margin="20">
                     <Entry
-                        Text="The net weight listed on the food container"
                         x:Name="newNetWeight"
                         SemanticProperties.Description="Weight (g) or volume (ml) of food per container" />
                 </sf:SfTextInputLayout>
 
-                <sf:SfTextInputLayout Hint="Percentage of water">
+                <sf:SfTextInputLayout Hint="Percentage of water"
+                                      HelperText="Percentage water content of the food, eg. 77"
+                                      CharMaxLength="3"
+                                      ContainerType="Outlined"
+                                      Margin="20">
                     <Entry
-                        Text="Percentage water content of the food, eg. 77"
                         x:Name="newWaterPercentage"
                         SemanticProperties.Description="Percentage water content of food" />
                 </sf:SfTextInputLayout>
@@ -77,7 +101,7 @@
                         MinimumHeightRequest="{OnIdiom 44, Desktop=60}"
                         Text="Cancel"
                         Margin="30"
-                        BackgroundColor="PaleVioletRed"/>
+                        BackgroundColor="#d76f8b"/>
             </VerticalStackLayout>
         </ScrollView>
     </Grid>
