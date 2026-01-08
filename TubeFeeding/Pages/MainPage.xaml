@@ -17,17 +17,15 @@
                                 SelectionChanged="OnCollectionViewSelectionChanged" >
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="pageModels:PatientPageModel" >
-                            <ScrollView Orientation="Horizontal">
-                                <Grid ColumnDefinitions="*,*,*,*,Auto"
-                                      MinimumHeightRequest="{OnIdiom 44, Desktop=60}"
-                                      SemanticProperties.Description="List of saved schedules" >
+                                <HorizontalStackLayout
+                                    MinimumHeightRequest="{OnIdiom 44, Desktop=60}"
+                                    SemanticProperties.Description="List of saved schedules" >
                                     <Label Text="{Binding PatientName}" Style="{StaticResource Body1Strong}" />
-                                    <Label Text="{Binding ClientName}" Style="{StaticResource Body1Strong}" Grid.Column="1" />
-                                    <Label Text="{Binding Species}" Style="{StaticResource Body1Strong}" Grid.Column="2" />
-                                    <Label Text="{Binding WeightString}" Style="{StaticResource Body1Strong}" Grid.Column="3" />
-                                    <Label Text="{Binding FoodName}" Style="{StaticResource Body1Strong}" Grid.Column="4" />
-                                </Grid>
-                            </ScrollView>
+                                    <Label Text="{Binding ClientName}" Style="{StaticResource Body1Strong}" />
+                                    <Label Text="{Binding Species}" Style="{StaticResource Body1Strong}" />
+                                    <Label Text="{Binding WeightString}" Style="{StaticResource Body1Strong}" />
+                                    <Label Text="{Binding FoodName}" Style="{StaticResource Body1Strong}" />
+                                </HorizontalStackLayout>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
