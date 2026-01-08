@@ -152,14 +152,23 @@ public partial class AddPatientPage : ContentPage
 
         switch (bodyWeight)
         {
-            case < 1:
+            case < 1.5:
                 flushPerMeal = 2;
+                break;
+            case < 2:
+                flushPerMeal = 3;
                 break;
             case < 3:
                 flushPerMeal = 4;
                 break;
             case < 4:
                 flushPerMeal = 5;
+                break;
+            case < 4.5:
+                flushPerMeal = 6;
+                break;
+            case < 5:
+                flushPerMeal = 8;
                 break;
             case < 8:
                 flushPerMeal = 10;

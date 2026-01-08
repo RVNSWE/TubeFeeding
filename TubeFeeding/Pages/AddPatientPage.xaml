@@ -101,7 +101,7 @@
                         MinimumHeightRequest="{OnIdiom 44, Desktop=60}"
                         Text="Cancel"
                         Margin="30"
-                        BackgroundColor="#d76f8b"/>
+                        BackgroundColor="#d76f8b" />
             </VerticalStackLayout>
         </ScrollView>
     </Grid>

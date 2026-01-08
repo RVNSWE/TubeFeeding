@@ -89,7 +89,7 @@ namespace TubeFeeding.Data
                 BodyWeight = bodyWeight,
                 MaxTotalVolumePerMeal = maxTotalVolumePerMeal,
                 FoodPerMeal = foodPerMeal,
-                FlushPerMeal = flushPerMeal,
+                VolPerFlush = flushPerMeal,
                 WaterToAddPerMeal = waterToAddPerMeal,
                 MealsPerDay = mealsPerDay,
                 CansPerDay = cansPerDay
@@ -144,7 +144,7 @@ namespace TubeFeeding.Data
                 BodyWeight = bodyWeight,
                 MaxTotalVolumePerMeal = maxTotalVolumePerMeal,
                 FoodPerMeal = foodPerMeal,
-                FlushPerMeal = flushPerMeal,
+                VolPerFlush = flushPerMeal,
                 WaterToAddPerMeal = waterToAddPerMeal,
                 MealsPerDay = mealsPerDay,
                 CansPerDay = cansPerDay

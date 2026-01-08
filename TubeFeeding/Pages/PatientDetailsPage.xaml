@@ -6,121 +6,69 @@
              x:DataType="pageModels:PatientPageModel"
              Title="Tube Feeding Schedule">
 
-    <ScrollView Margin="10">
+    <Grid>
+        <ScrollView>
+            <VerticalStackLayout Spacing="{StaticResource LayoutSpacing}" Padding="{StaticResource LayoutPadding}">
 
-        <VerticalStackLayout>
+                <ScrollView Orientation="Horizontal">
+                    <Grid ColumnDefinitions="Auto,Auto,Auto"
+                          RowDefinitions="*,*,*,*,*,*,*,*,*,*,*,*"
+                          MinimumHeightRequest="{OnIdiom 44, Desktop=60}"
+                          ColumnSpacing="{StaticResource LayoutSpacing}"
+                          RowSpacing="{StaticResource LayoutSpacing}"
+                          HorizontalOptions="Center" >
+                        <Label Text="Patient:" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  />
+                        <Label Text="{Binding NameString}" Style="{StaticResource Body1}" Grid.Column="1" />
 
-            <HorizontalStackLayout>
-                <Grid ColumnDefinitions="190,125" Margin="5">
-                    <Label Text="Client name:" Margin="5" />
-                    <Label Text="{Binding ClientName}" Margin="5" Grid.Column="1" />
-                </Grid>
-            </HorizontalStackLayout>
+                        <Label Text="Client name:" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="1" />
+                        <Label Text="{Binding ClientName}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="1" />
 
-            <HorizontalStackLayout>
-                <Grid ColumnDefinitions="190,125" Margin="5">
-                    <Label Text="Patient name:" Margin="5" />
-                    <Label Text="{Binding PatientName}" Margin="5" Grid.Column="1" />
-                </Grid>
-            </HorizontalStackLayout>
+                        <Label Text="Species:" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="2" />
+                        <Label Text="{Binding Species}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="2" />
 
-            <HorizontalStackLayout>
+                        <Label Text="Body weight:" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="3" />
+                        <Label Text="{Binding WeightString}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="3" />
 
-                <Grid ColumnDefinitions="190,125" Margin="5">
-                    <Label Text="Species:" Margin="5" />
-                    <Label Text="{Binding Species}" Margin="5" Grid.Column="1" />
-                </Grid>
-            </HorizontalStackLayout>
+                        <Label Text="Diet name:" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="4" />
+                        <Label Text="{Binding FoodName}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="4" />
 
-            <HorizontalStackLayout>
-                <Grid ColumnDefinitions="190,auto,auto" Margin="5">
-                    <Label Text="Weight:" Margin="5" />
-                    <Label Text="{Binding BodyWeight}" Margin="5" Grid.Column="1" />
-                    <Label Text="kg" Margin="5" Grid.Column="2" />
-                </Grid>
-            </HorizontalStackLayout>
+                        <Label Text="Diet kcal/ml:" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="5" />
+                        <Label Text="{Binding KcalString}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="5" />
 
-            <HorizontalStackLayout>
-                <Grid ColumnDefinitions="190,125" Margin="5">
-                    <Label Text="Food to administer:" Margin="5" />
-                    <Label Text="{Binding FoodName}" Margin="5" Grid.Column="1" />
-                </Grid>
-            </HorizontalStackLayout>
+                        <Label Text="Containers per day:" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="6" />
+                        <Label Text="{Binding CansPerDay}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="6" />
 
-            <HorizontalStackLayout>
-                <Grid ColumnDefinitions="190,125" Margin="5">
-                    <Label Text="Food kcal per ml:" Margin="5" />
-                    <Label Text="{Binding KcalPerMl}" Margin="5" Grid.Column="1" />
-                </Grid>
-            </HorizontalStackLayout>
+                        <Label Text="Feeds per day:" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="7" />
+                        <Label Text="{Binding MealsPerDay}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="7" />
 
-            <HorizontalStackLayout>
+                        <Label Text="Max meal volume:" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="8" />
+                        <Label Text="{Binding MaxVolString}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="8" />
 
-                <Grid ColumnDefinitions="190,125" Margin="5">
-                    <Label Text="Number of meals per day:" Margin="5" />
-                    <Label Text="{Binding MealsPerDay}" Margin="5" Grid.Column="1" />
-                </Grid>
-            </HorizontalStackLayout>
+                        <Label Text="Food per meal:" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="9" />
+                        <Label Text="{Binding FoodPerMealString}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="9" />
 
-            <HorizontalStackLayout>
-                <Grid ColumnDefinitions="190,125" Margin="5">
-                    <Label Text="Cans of food used per day:" Margin="5" />
-                    <Label Text="{Binding CansPerDay}" Margin="5" Grid.Column="1" />
-                </Grid>
-            </HorizontalStackLayout>
+                        <Label Text="Water added:" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="10" />
+                        <Label Text="{Binding WaterPerMealString}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="10" />
 
-            <HorizontalStackLayout>
+                        <Label Text="Water per flush:" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="11" />
+                        <Label Text="{Binding FlushString}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="11" />
+                    </Grid>
+                </ScrollView>
 
-                <Grid ColumnDefinitions="190,auto,auto" Margin="5">
-                    <Label Text="Max food allowable per meal:" Margin="5" />
-                    <Label Text="{Binding MaxTotalVolumePerMeal}" Margin="5" Grid.Column="1" />
-                    <Label Text="ml" Margin="5" Grid.Column="2" />
-                </Grid>
-            </HorizontalStackLayout>
+                <Button x:Name="btnCreatePDF"
+                        MinimumHeightRequest="{OnIdiom 44, Desktop=60}"
+                        Text="Export to PDF"
+                        Margin="30" />
 
-            <HorizontalStackLayout>
-                <Grid ColumnDefinitions="190,auto,auto" Margin="5">
-                    <Label Text="Food per meal:" Margin="5" />
-                    <Label Text="{Binding FoodPerMeal}" Margin="5" Grid.Column="1" />
-                    <Label Text="ml" Margin="5" Grid.Column="2" />
-                </Grid>
-            </HorizontalStackLayout>
+                <Button x:Name="btnDeleteSchedule"
+                        MinimumHeightRequest="{OnIdiom 44, Desktop=60}"
+                        Text="Delete schedule"
+                        Margin="30"
+                        BackgroundColor="#d76f8b" />
 
-            <HorizontalStackLayout>
+            </VerticalStackLayout>
 
-                <Grid ColumnDefinitions="190,auto,auto" Margin="5">
-                    <Label Text="Volume of flush before and after each meal:" Margin="5" />
-                    <Label Text="{Binding FlushPerMeal}" Margin="5" Grid.Column="1" />
-                    <Label Text="ml" Margin="5" Grid.Column="2" />
-                </Grid>
-            </HorizontalStackLayout>
+        </ScrollView>
+    </Grid>
 
-            <HorizontalStackLayout>
-                <Grid ColumnDefinitions="190,auto,auto" Margin="5">
-                    <Label Text="Water to add to each meal:" Margin="5" />
-                    <Label Text="{Binding WaterToAddPerMeal}" Margin="5" Grid.Column="1" />
-                    <Label Text="ml" Margin="5" Grid.Column="2" />
-                </Grid>
-            </HorizontalStackLayout>
-
-            <HorizontalStackLayout>
-                <Grid ColumnDefinitions="*,*" Margin="5">
-                    <Button x:Name="btnCreatePDF"
-                            Text="Export to PDF"
-                            Grid.Row="0"
-                            Margin="5" />
-
-                    <Button x:Name="btnDeleteSchedule"
-                            Text="Delete schedule"
-                            Grid.Row="0"
-                            Grid.Column="1"
-                            Margin="5"
-                            BackgroundColor="PaleVioletRed" />
-                </Grid>
-            </HorizontalStackLayout>
-
-        </VerticalStackLayout>
-
-    </ScrollView>
-    
 </ContentPage>

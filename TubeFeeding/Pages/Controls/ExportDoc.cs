@@ -29,7 +29,7 @@ namespace TubeFeeding.Pages.Controls
             string foodName = $"{feedingSchedule.Patient.FoodName}";
             string cansPerDay = $"{feedingSchedule.Patient.CansPerDay}";
             string foodPerMeal = $"{feedingSchedule.Patient.FoodPerMeal}";
-            string flushPerMeal = $"{feedingSchedule.Patient.FlushPerMeal}";
+            string flushPerMeal = $"{feedingSchedule.Patient.VolPerFlush}";
             string mealsPerDay = $"{feedingSchedule.Patient.MealsPerDay}";
             string interval = Globals.CalculateInterval(feedingSchedule.Patient.MealsPerDay).ToString();
             List<string> schedule = feedingSchedule.FormattedFeedingTimes;
@@ -87,9 +87,21 @@ namespace TubeFeeding.Pages.Controls
             document.Add(PrintScheduleInstructions());
 
             p = new Paragraph();
-            p.Add(new Text("A possible time schedule for feeding every "
+            p.Add(new Text("Unless advised otherwise by your clinic, you should leave a fresh "
+                + foodPerMeal.ToString()
+                + "ml of food available for "
+                + patientName
+                + " between each feeding session in case they are able to eat unassisted. If they have eaten it all by the time the next feed is due, you can skip this feed and offer them another "
+                + foodPerMeal.ToString()
+                + "ml of food. Otherwise, draw up the remaining uneaten food into a syringe (or the same volume of fresh food). This is the volume of food you will need to administer to "
+                + patientName
+                + " this session."));
+            document.Add(p);
+
+            p = new Paragraph();
+            p.Add(new Text("The following times are offered as a suggested schedule for feeding every "
                 + interval
-                + " hours may be:"));
+                + " hours:"));
             document.Add(p);
 
             document.Add(PrintSchedule(schedule)
@@ -143,7 +155,9 @@ namespace TubeFeeding.Pages.Controls
             p.Add(new Text("2.")
                 .SetUnderline()
                 .SimulateBold());
-            p.Add(new Text(" Slowly flush the feeding tube with "));
+            p.Add(new Text(" Slowly")
+                .SimulateBold());
+            p.Add(new Text(" flush the feeding tube with "));
             p.Add(new Text(flushPerMeal
                 + "ml")
                 .SimulateBold());
@@ -222,31 +236,37 @@ namespace TubeFeeding.Pages.Controls
             double cansPerDay = feedingSchedule.Patient.CansPerDay;
             string foodName = feedingSchedule.Patient.FoodName;
             double mealsPerDay = feedingSchedule.Patient.MealsPerDay;
+            double foodPerMeal = feedingSchedule.Patient.FoodPerMeal;
 
             p.Add(new Text(patientName
                 + " will need to consume "));
+            p.Add(new Text(foodPerMeal.ToString()
+                + "ml")
+                .SimulateBold());
+            p.Add(new Text(" of "));
+            p.Add(new Text(foodName)
+                .SimulateBold());
+            p.Add(new Text(" food "));
+            p.Add(new Text(mealsPerDay.ToString())
+                .SimulateBold());
+            p.Add(new Text(" times per day in order to meet their nutritional needs. This is expected to equal around "));
             p.Add(new Text(cansPerDay.ToString())
                 .SimulateBold());
 
             if (cansPerDay > 1)
             {
-                p.Add(new Text(" cans/bottles of "));
+                p.Add(new Text(" containers of "));
             }
             else if (cansPerDay == 1)
             {
-                p.Add(new Text(" can/bottle of "));
+                p.Add(new Text(" container of "));
             }
             else
             {
-                p.Add(new Text(" of a can/bottle of "));
+                p.Add(new Text(" of a container of "));
             }
-            
-            p.Add(new Text(foodName)
-                        .SimulateBold());
-            p.Add(new Text(" food per day in order to meet their nutritional needs. They will therefore need to be tube fed "));
-            p.Add(new Text(mealsPerDay.ToString())
-                .SimulateBold());
-            p.Add(new Text(" times per day if they are not eating unaided."));
+
+            p.Add(new Text("food per day."));
 
             return p;
         }
@@ -257,7 +277,7 @@ namespace TubeFeeding.Pages.Controls
 
             double waterToAddPerMeal = feedingSchedule.Patient.WaterToAddPerMeal;
             double foodPerMeal = feedingSchedule.Patient.FoodPerMeal;
-            double flushPerMeal = feedingSchedule.Patient.FlushPerMeal;
+            double flushPerMeal = feedingSchedule.Patient.VolPerFlush;
             string foodName = feedingSchedule.Patient.FoodName;
 
             if (feedingSchedule.Patient.WaterToAddPerMeal > 0)
@@ -282,14 +302,16 @@ namespace TubeFeeding.Pages.Controls
                 p.Add(new Text(flushPerMeal.ToString()
                     + "ml")
                 .SimulateBold());
-                p.Add(new Text(" of water in each, and another syringe containing "));
+                p.Add(new Text(" of plain tap water in each, which will be used to flush the tube before and after feeding. Prepare a separate syringe containing any offered "));
+                p.Add(new Text(foodName)
+                .SimulateBold());
+                p.Add(new Text(" food left uneaten since the last scheduled feed (or the same volume of fresh food). If "
+                    + patientName
+                    + " has eaten nothing at all since the last scheduled feed, this will be "));
                 p.Add(new Text(foodPerMeal
                     + "ml")
                 .SimulateBold());
-                p.Add(new Text(" of "));
-                p.Add(new Text(foodName)
-                .SimulateBold());
-                p.Add(new Text(" food."));
+                p.Add(new Text(" of food."));
             }
 
                 return p;

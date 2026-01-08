@@ -181,6 +181,8 @@
                 Value="17" />
         <Setter Property="LineHeight"
                 Value="1.29" />
+        <Setter Property="Margin"
+                Value="5" />
         <!-- 22 -->
     </Style>
     <Style x:Key="Body1Strong"
@@ -189,6 +191,8 @@
                 Value="17" />
         <Setter Property="LineHeight"
                 Value="1.29" />
+        <Setter Property="Margin"
+                Value="5" />
         <!-- 22 -->
         <Setter Property="FontFamily"
                 Value="{OnPlatform WinUI=SegoeSemibold, iOS=.SFUI-SemiBold, MacCatalyst=.SFUI-SemiBold, Default=''}" />

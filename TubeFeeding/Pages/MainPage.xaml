@@ -2,38 +2,42 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:pageModels="clr-namespace:TubeFeeding.PageModels"
-             xmlns:pullToRefresh="clr-namespace:Syncfusion.Maui.Toolkit.PullToRefresh;assembly=Syncfusion.Maui.Toolkit"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="TubeFeeding.Pages.MainPage"
              x:DataType="pageModels:PatientListPageModel"
              Title="Cat and Dog Tube Feeding Calculator">
 
-    <Grid Padding="5"
-          RowSpacing="10"
-          ColumnSpacing="20"
-          RowDefinitions="Auto,Auto,Auto,Auto,Auto,*">
+    <Grid>
+        <ScrollView>
+            <VerticalStackLayout Spacing="{StaticResource LayoutSpacing}" Padding="{StaticResource LayoutPadding}">
 
-        <Button x:Name="btnCreateSchedule"
-            Text="Create new schedule" />
+                <CollectionView ItemsSource="{Binding Patients}"
+                                SelectionMode="Single"
+                                SelectedItem="{Binding SelectedPatient, Mode=OneWayToSource}"
+                                SelectionChanged="OnCollectionViewSelectionChanged" >
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="pageModels:PatientPageModel" >
+                            <ScrollView Orientation="Horizontal">
+                                <Grid ColumnDefinitions="*,*,*,*,Auto"
+                                      MinimumHeightRequest="{OnIdiom 44, Desktop=60}"
+                                      SemanticProperties.Description="List of saved schedules" >
+                                    <Label Text="{Binding PatientName}" Style="{StaticResource Body1Strong}" />
+                                    <Label Text="{Binding ClientName}" Style="{StaticResource Body1Strong}" Grid.Column="1" />
+                                    <Label Text="{Binding Species}" Style="{StaticResource Body1Strong}" Grid.Column="2" />
+                                    <Label Text="{Binding WeightString}" Style="{StaticResource Body1Strong}" Grid.Column="3" />
+                                    <Label Text="{Binding FoodName}" Style="{StaticResource Body1Strong}" Grid.Column="4" />
+                                </Grid>
+                            </ScrollView>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
 
-        <CollectionView ItemsSource="{Binding Patients}"
-                        SelectionMode="Single"
-                        SelectedItem="{Binding SelectedPatient, Mode=OneWayToSource}"
-                        SelectionChanged="OnCollectionViewSelectionChanged"
-                        Margin="10"
-                        Grid.Row="1" >
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="pageModels:PatientPageModel">
-                    <HorizontalStackLayout>
-                        <Label Text="{Binding PatientName}" Margin="5" />
-                        <Label Text="{Binding ClientName}" Margin="5" Grid.Column="1" />
-                        <Label Text="{Binding Species}" Margin="5" Grid.Column="2" />
-                        <Label Text="{Binding BodyWeight}" Margin="5" Grid.Column="3" />
-                        <Label Text="{Binding FoodName}" Margin="5" Grid.Column="4" />
-                    </HorizontalStackLayout>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+                <Button x:Name="btnCreateSchedule"
+                        MinimumHeightRequest="{OnIdiom 44, Desktop=60}"
+                        Text="Create new schedule" />
+
+            </VerticalStackLayout>
+        </ScrollView>
 
     </Grid>
 

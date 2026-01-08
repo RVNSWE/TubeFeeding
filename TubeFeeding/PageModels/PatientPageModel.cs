@@ -16,7 +16,7 @@ namespace TubeFeeding.PageModels
         private double _bodyWeight; // kg
         private double _maxTotalVolumePerMeal;
         private double _foodPerMeal;
-        private double _flushPerMeal;
+        private double _volPerFlush;
         private double _waterToAddPerMeal;
         private int _mealsPerDay;
         private double _cansPerDay;
@@ -87,10 +87,10 @@ namespace TubeFeeding.PageModels
             set => SetProperty(ref _foodPerMeal, value);
         }
 
-        public double FlushPerMeal
+        public double VolPerFlush
         {
-            get => _flushPerMeal;
-            set => SetProperty(ref _flushPerMeal, value);
+            get => _volPerFlush;
+            set => SetProperty(ref _volPerFlush, value);
         }
 
         public double WaterToAddPerMeal
@@ -111,6 +111,14 @@ namespace TubeFeeding.PageModels
             set => SetProperty(ref _cansPerDay, value);
         }
 
+        public string NameString { get; private set; }
+        public string WeightString { get; private set; }
+        public string KcalString { get; private set; }
+        public string MaxVolString { get; private set; }
+        public string FoodPerMealString { get; private set; }
+        public string WaterPerMealString { get; private set; }
+        public string FlushString { get; private set; }
+
         public PatientPageModel(Patient model)
         {
             _id = model.Id;
@@ -124,10 +132,18 @@ namespace TubeFeeding.PageModels
             _bodyWeight = model.BodyWeight;
             _maxTotalVolumePerMeal = model.MaxTotalVolumePerMeal;
             _foodPerMeal = model.FoodPerMeal;
-            _flushPerMeal = model.FlushPerMeal;
+            _volPerFlush = model.VolPerFlush;
             _waterToAddPerMeal = model.WaterToAddPerMeal;
             _mealsPerDay = model.MealsPerDay;
             _cansPerDay = model.CansPerDay;
+
+            NameString = $"{_patientName} {_clientName}";
+            WeightString = $"{_bodyWeight} kg";
+            KcalString = $"{_kcalPerMl} kcal/ml";
+            MaxVolString = $"{_maxTotalVolumePerMeal} ml";
+            FoodPerMealString = $"{_foodPerMeal} ml";
+            WaterPerMealString = $"{_waterToAddPerMeal} ml";
+            FlushString = $"{_volPerFlush} ml";
         }
     }
 }

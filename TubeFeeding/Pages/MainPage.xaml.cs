@@ -20,7 +20,6 @@ namespace TubeFeeding.Pages
         {
             base.OnAppearing();
             Dispatcher.DispatchAsync(App.PatientPage.RefreshPatients);
-            //Dispatcher.DispatchAsync(App.SchedulePages.RefreshFoods);
         }
 
         /*
