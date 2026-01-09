@@ -111,15 +111,48 @@ namespace TubeFeeding.Pages.Controls
             return rER;
         }
 
+        public static double RecalculateTotalFluidRequirement(double bodyWeight, string species)
+        {
+            int mlPerKgPerDay;
+            int altMultiplier;
+
+            if (species == "Cat")
+            {
+                mlPerKgPerDay = 40;
+                altMultiplier = 80;
+            }
+            else
+            {
+                mlPerKgPerDay = 60;
+                altMultiplier = 132;
+            }
+
+            double altFluidCalcOne = mlPerKgPerDay * bodyWeight;
+            double altFluidCalcTwo = altMultiplier * Math.Pow(bodyWeight, 0.75);
+
+            if (altFluidCalcOne < altFluidCalcTwo)
+            {
+                return altFluidCalcOne;
+            }
+            else
+            {
+                return altFluidCalcTwo;
+            }
+        }
+
+        /*
+         * Calculate the time interval between feeds.
+         */
         public static double CalculateInterval(double mealsPerDay)
         {
-            int hours = 14; // Over a period of n hours
+            int hours = 15; // Number of hours to spread the feeds over
 
             double preciseInterval = hours / mealsPerDay;
             double interval = Math.Round(preciseInterval / 5, 1, MidpointRounding.AwayFromZero) * 5; // To the nearest 5 = to the nearest half hour
+            
             if (interval < 1)
             {
-                interval = 1; // Minimum feeding interval is 1 hour
+                interval = 1; // Minimum feeding interval is always 1 hour
             }
 
             return interval;
@@ -129,17 +162,17 @@ namespace TubeFeeding.Pages.Controls
         {
             double interval = CalculateInterval(mealsPerDay);
 
-            double preciseMealHalfTime = (mealsPerDay / 2) * interval; // Effectively hours / 2
+            double preciseMealHalfTime = (mealsPerDay * interval) / 2; // Effectively hours / 2
             double mealHalfTime = Math.Round(preciseMealHalfTime / 5, 1, MidpointRounding.AwayFromZero) * 5;
-            int midPoint = 15; // Corresponding to 15:00 or 3pm
-            int startTime = midPoint - (int)mealHalfTime;
-            int endTime = midPoint + (int)mealHalfTime;
+            int midPoint = 16; // Corresponding to 16:00 or 4pm
+            double startTime = midPoint - mealHalfTime;
+            double endTime = startTime + mealHalfTime;
 
-            while (endTime > 23)
+            while (endTime > 23.5)
             {
                 midPoint -= 1;
-                startTime = midPoint - (int)mealHalfTime;
-                endTime = midPoint + (int)mealHalfTime;
+                startTime = midPoint - mealHalfTime;
+                endTime = midPoint + mealHalfTime;
             }
 
             double time = startTime;
@@ -150,10 +183,8 @@ namespace TubeFeeding.Pages.Controls
             {
                 for (int i = 0; i < mealsPerDay; i++)
                 {
-                    System.Diagnostics.Debug.WriteLine("time = " + time);
                     feedingTimes.Add(time);
                     time += interval;
-                    System.Diagnostics.Debug.WriteLine("time: " + time + " += " + interval);
                 }
             }
             else if (mealsPerDay > 23)
@@ -162,7 +193,6 @@ namespace TubeFeeding.Pages.Controls
                 for (int i = 0; i < 24; i++)
                 {
                     feedingTimes.Add(time);
-                    System.Diagnostics.Debug.WriteLine("time = " + time);
                     time++;
                 }
             }
@@ -171,7 +201,6 @@ namespace TubeFeeding.Pages.Controls
                 for (int i = 0; i < mealsPerDay; i++)
                 {
                     feedingTimes.Add(time);
-                    System.Diagnostics.Debug.WriteLine("time = " + time);
                     time++;
                 }
             }
@@ -190,31 +219,23 @@ namespace TubeFeeding.Pages.Controls
 
                 string hours = time.ToString();
                 string minutes = ":00";
-                System.Diagnostics.Debug.WriteLine("hours = " + hours);
-                System.Diagnostics.Debug.WriteLine("minutes = " + minutes);
 
                 if (time < roundedTime)
                 {
-                    System.Diagnostics.Debug.WriteLine("(before) time = " + hours);
                     hours = Math.Round(time, 0, MidpointRounding.ToZero).ToString();
-                    System.Diagnostics.Debug.WriteLine("(after) time = " + hours);
                     minutes = ":30";
-                    System.Diagnostics.Debug.WriteLine("minutes = " + minutes);
                 }
 
                 if (time < 10)
                 {
                     hours = "0" + Math.Round(time, 0, MidpointRounding.ToZero).ToString();
-                    System.Diagnostics.Debug.WriteLine("hours = " + hours);
                 }
 
                 formattedTime = hours + minutes;
-                System.Diagnostics.Debug.WriteLine("Adding formattedTime = " + formattedTime);
 
                 formattedList.Add(formattedTime);
             }
 
-            System.Diagnostics.Debug.WriteLine("Formatted list = " + formattedList);
             return formattedList;
         }
 
@@ -277,14 +298,6 @@ namespace TubeFeeding.Pages.Controls
         public static async void GoToView()
         {
             await Shell.Current.GoToAsync("view");
-        }
-
-        /*
-         * Navigate to the 'edit' Path of the current Route.
-         */
-        public static async void GoToEdit()
-        {
-            await Shell.Current.GoToAsync("edit");
         }
     }
 }

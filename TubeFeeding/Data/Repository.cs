@@ -1,9 +1,5 @@
-﻿using iText.Kernel.Pdf;
-using iText.Layout;
-using iText.Layout.Element;
-using SQLite;
+﻿using SQLite;
 using TubeFeeding.Models;
-using TubeFeeding.Pages.Controls;
 
 namespace TubeFeeding.Data
 {

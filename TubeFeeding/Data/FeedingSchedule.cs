@@ -15,31 +15,9 @@ namespace TubeFeeding.Data
         public FeedingSchedule(Patient patient)
         {
             Patient = patient;
-
-            FormattedListOfHours = [];
             FormattedFeedingTimes = [];
             ListOfHours = [];
             FeedingTimes = Globals.CalculateFeedingPlan(Patient.MealsPerDay);
-
-            PopulateTimes();
-        }
-
-        public void PopulateTimes()
-        {
-            double time = FeedingTimes.First();
-
-            while (time <= FeedingTimes.Max())
-            {
-                ListOfHours.Add(time);
-                time++;
-
-                if (time > 23)
-                {
-                    break;
-                }
-            }
-
-            FormattedListOfHours = Globals.CreateFormattedListOfTimes(ListOfHours);
             FormattedFeedingTimes = Globals.CreateFormattedListOfTimes(FeedingTimes);
         }
     }

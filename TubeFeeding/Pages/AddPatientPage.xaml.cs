@@ -101,9 +101,16 @@ public partial class AddPatientPage : ContentPage
             System.Diagnostics.Debug.WriteLine("foodPerDay = " + foodPerDay);
 
             double waterPerDay = totalFluidsPerDay - (foodPerDay * waterContent);
+
             if (waterPerDay < 0)
             {
-                waterPerDay = 0; // TO DO: CHECK ALTERNATIVE FLUID CALCS, POSS RECOMMEND DIFFERENT FOOD
+                totalFluidsPerDay = Globals.RecalculateTotalFluidRequirement(bodyWeight, species);
+                waterPerDay = totalFluidsPerDay - (foodPerDay * waterContent);
+
+                if (waterPerDay < 0)
+                {
+                    waterPerDay = 0; // TO DO: Recommend different food?
+                }
             }
 
             double totalFoodAndWaterPerDay = foodPerDay + waterPerDay;
@@ -143,45 +150,28 @@ public partial class AddPatientPage : ContentPage
     private void CalculateMeals(double foodPerDay, int mealsPerDay, double waterPerDay, double bodyWeight)
     {
         foodPerMeal = foodPerDay / mealsPerDay;
-
         waterPerMeal = waterPerDay / mealsPerDay;
+
         if (waterPerMeal < 0)
         {
             waterPerMeal = 0;
         }
 
-        switch (bodyWeight)
+        flushPerMeal = bodyWeight switch
         {
-            case < 1.5:
-                flushPerMeal = 2;
-                break;
-            case < 2:
-                flushPerMeal = 3;
-                break;
-            case < 3:
-                flushPerMeal = 4;
-                break;
-            case < 4:
-                flushPerMeal = 5;
-                break;
-            case < 4.5:
-                flushPerMeal = 6;
-                break;
-            case < 5:
-                flushPerMeal = 8;
-                break;
-            case < 8:
-                flushPerMeal = 10;
-                break;
-            case < 20:
-                flushPerMeal = 12;
-                break;
-            default:
-                flushPerMeal = 20;
-                break;
-        }
+            < 1.5 => 2,
+            < 2 => 3,
+            < 3 => 4,
+            < 4 => 5,
+            < 4.5 => 6,
+            < 5 => 8,
+            < 8 => 10,
+            < 20 => 12,
+            _ => 20,
+        };
 
         waterToAddPerMeal = Math.Round(waterPerMeal - flushPerMeal, 1, MidpointRounding.AwayFromZero);
+
         if (waterToAddPerMeal < 0)
         {
             waterToAddPerMeal = 0;

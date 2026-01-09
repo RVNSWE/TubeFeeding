@@ -30,7 +30,6 @@ namespace TubeFeeding.Pages.Controls
             string cansPerDay = $"{feedingSchedule.Patient.CansPerDay}";
             string foodPerMeal = $"{feedingSchedule.Patient.FoodPerMeal}";
             string flushPerMeal = $"{feedingSchedule.Patient.VolPerFlush}";
-            string mealsPerDay = $"{feedingSchedule.Patient.MealsPerDay}";
             string interval = Globals.CalculateInterval(feedingSchedule.Patient.MealsPerDay).ToString();
             List<string> schedule = feedingSchedule.FormattedFeedingTimes;
 
@@ -52,7 +51,7 @@ namespace TubeFeeding.Pages.Controls
             p.Add(new Text(foodName));
             p.AddTabStops(new TabStop(1000, iText.Layout.Properties.TabAlignment.RIGHT));
             p.Add(new iText.Layout.Element.Tab());
-            p.Add(new Text("Estimated cans of food per day: ")
+            p.Add(new Text("Estimated containers of food per day: ")
                 .SimulateBold());
             p.Add(new Text(cansPerDay));
             document.Add(p);
@@ -91,7 +90,7 @@ namespace TubeFeeding.Pages.Controls
                 + foodPerMeal.ToString()
                 + "ml of food available for "
                 + patientName
-                + " between each feeding session in case they are able to eat unassisted. If they have eaten it all by the time the next feed is due, you can skip this feed and offer them another "
+                + " between each feeding session in case they are able to eat unassisted. If it has all been eaten by the time the next feed is due, you can skip this feed and offer another "
                 + foodPerMeal.ToString()
                 + "ml of food. Otherwise, draw up the remaining uneaten food into a syringe (or the same volume of fresh food). This is the volume of food you will need to administer to "
                 + patientName
@@ -290,7 +289,7 @@ namespace TubeFeeding.Pages.Controls
                 p.Add(new Text(foodPerMeal.ToString()
                     + "ml")
                 .SimulateBold());
-                p.Add(new Text(" of food, and draw this up into a syringe. Prepare two other syringes with "));
+                p.Add(new Text(" of food, then draw it up into a syringe. Prepare two other syringes with "));
                 p.Add(new Text(flushPerMeal.ToString()
                     + "ml")
                 .SimulateBold());
