@@ -111,33 +111,151 @@ namespace TubeFeeding.Pages.Controls
             return rER;
         }
 
-        public static double RecalculateTotalFluidRequirement(double bodyWeight, string species)
+        /*
+         * The 2024 AAHA IVFT guidelines suggest two separate sets of two different species specific fluid calculations.
+         * There's no official consensus on a "correct" way because it's always patient-dependent, so this function tries
+         * to choose the most convenient calculation for the purposes of scheduling.
+         */
+        public static double CalculateTotalFluidRequirement(
+            double bodyWeight,
+            string species,
+            double foodPerDay,
+            double waterContent)
         {
-            int mlPerKgPerDay;
-            int altMultiplier;
+            double calcOneTotalFluidsPerDay;
+            double calcTwoTotalFluidsPerDay;
+            double waterPerDay;
+
+            double foodWaterContent = foodPerDay * waterContent;
 
             if (species == "Cat")
             {
-                mlPerKgPerDay = 40;
-                altMultiplier = 80;
+                calcOneTotalFluidsPerDay = FirstFluidCalculation(40, bodyWeight);
+                calcTwoTotalFluidsPerDay = SecondFluidCalculation(80, bodyWeight);
             }
             else
             {
-                mlPerKgPerDay = 60;
-                altMultiplier = 132;
+                calcOneTotalFluidsPerDay = FirstFluidCalculation(60, bodyWeight);
+                calcTwoTotalFluidsPerDay = SecondFluidCalculation(132, bodyWeight);
             }
 
-            double altFluidCalcOne = mlPerKgPerDay * bodyWeight;
-            double altFluidCalcTwo = altMultiplier * Math.Pow(bodyWeight, 0.75);
-
-            if (altFluidCalcOne < altFluidCalcTwo)
+            if (calcOneTotalFluidsPerDay < calcTwoTotalFluidsPerDay) // Use whichever is the smallest volume
             {
-                return altFluidCalcOne;
+                waterPerDay = calcOneTotalFluidsPerDay - foodWaterContent;
             }
             else
             {
-                return altFluidCalcTwo;
+                waterPerDay = calcTwoTotalFluidsPerDay - foodWaterContent;
             }
+
+            if (waterPerDay < 0)
+            {
+                if (waterPerDay + foodWaterContent < 0) // If foodWaterContent is more than double the total daily requirement
+                {
+                    // TBD: Suggest different food?
+                }
+                waterPerDay = 0;
+            }
+
+            return waterPerDay;
+        }
+
+        public static double FirstFluidCalculation(int multiplier, double bodyWeight)
+        {
+            double resultOneTotalFluidsPerDay = multiplier * bodyWeight;
+
+            return resultOneTotalFluidsPerDay;
+        }
+
+        public static double SecondFluidCalculation(int multiplier, double bodyWeight)
+        {
+            double resultTwoTotalFluidsPerDay = multiplier * Math.Pow(bodyWeight, 0.75);
+
+            return resultTwoTotalFluidsPerDay;
+        }
+
+        public static double CalculateFoodPerMeal(int mealsPerDay, double foodPerDay)
+        {
+            double foodPerMeal = foodPerDay / mealsPerDay;
+
+            return foodPerMeal;
+        }
+
+        public static double CalculateWaterPerMeal(int mealsPerDay, double waterPerDay)
+        {
+            double waterPerMeal = waterPerDay / mealsPerDay;
+
+            return waterPerMeal;
+        }
+
+        public static double GetFlushPerMeal(double bodyWeight)
+        {
+            double flushPerMeal = bodyWeight switch
+            {
+                < 1.5 => 2,
+                < 2 => 3,
+                < 3 => 4,
+                < 4 => 5,
+                < 4.5 => 6,
+                < 5 => 8,
+                < 8 => 10,
+                < 20 => 12,
+                _ => 20,
+            };
+
+            return flushPerMeal;
+        }
+
+        public static double CalculateWaterToAddPerMeal(double waterPerMeal, double flushPerMeal)
+        {
+            if (waterPerMeal < 0)
+            {
+                waterPerMeal = 0;
+            }
+
+            double waterToAddPerMeal = Math.Round(waterPerMeal - flushPerMeal, 1, MidpointRounding.AwayFromZero);
+
+            if (waterToAddPerMeal < 0)
+            {
+                waterToAddPerMeal = 0;
+            }
+
+            return waterToAddPerMeal;
+        }
+
+        public static double CalculateTotalVolumePerMeal(double foodPerMeal, double flushPerMeal, double waterToAddPerMeal)
+        {
+            double totalVolumePerMeal = foodPerMeal + flushPerMeal + waterToAddPerMeal;
+
+            return totalVolumePerMeal;
+        }
+
+        public static int EnsureMaxTotalVolumeNotExceeded(
+            double totalVolumePerMeal,
+            double maxTotalVolumePerMeal,
+            int mealsPerDay,
+            double foodPerMeal,
+            double flushPerMeal,
+            double waterToAddPerMeal)
+        {
+            while (totalVolumePerMeal > maxTotalVolumePerMeal)
+            {
+                mealsPerDay += 1;
+
+                Globals.CalculateTotalVolumePerMeal(foodPerMeal, flushPerMeal, waterToAddPerMeal);
+            }
+
+            return mealsPerDay;
+        }
+
+        public static List<List<string>> CreateRefeedingSchedule()
+        {
+            List<List<string>> refeedingSchedule = [];
+            List<double> dayOne = [];
+
+
+
+            return refeedingSchedule;
         }
 
         /*

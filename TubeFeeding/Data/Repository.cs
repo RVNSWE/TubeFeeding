@@ -66,10 +66,18 @@ namespace TubeFeeding.Data
             double bodyWeight,
             double maxTotalVolumePerMeal,
             double foodPerMeal,
+            double foodPerMealDayOne,
+            double foodPerMealDayTwo,
             double flushPerMeal,
             double waterToAddPerMeal,
+            double waterToAddPerMealDayOne,
+            double waterToAddPerMealDayTwo,
             int mealsPerDay,
-            double cansPerDay
+            int mealsPerDayOne,
+            int mealsPerDayTwo,
+            double cansPerDay,
+            double cansPerDayOne,
+            double cansPerDayTwo
             )
         {
             System.Diagnostics.Debug.WriteLine("Attempting to add patient");
@@ -85,10 +93,18 @@ namespace TubeFeeding.Data
                 BodyWeight = bodyWeight,
                 MaxTotalVolumePerMeal = maxTotalVolumePerMeal,
                 FoodPerMeal = foodPerMeal,
+                FoodPerMealDayOne = foodPerMealDayOne,
+                FoodPerMealDayTwo = foodPerMealDayTwo,
                 VolPerFlush = flushPerMeal,
                 WaterToAddPerMeal = waterToAddPerMeal,
+                WaterToAddPerMealDayOne = waterToAddPerMealDayOne,
+                WaterToAddPerMealDayTwo = waterToAddPerMealDayTwo,
                 MealsPerDay = mealsPerDay,
-                CansPerDay = cansPerDay
+                MealsPerDayOne = mealsPerDayOne,
+                MealsPerDayTwo = mealsPerDayTwo,
+                CansPerDay = cansPerDay,
+                CansPerDayOne = cansPerDayOne,
+                CansPerDayTwo = cansPerDayTwo
             };
 
             int result;
@@ -122,10 +138,18 @@ namespace TubeFeeding.Data
             double bodyWeight,
             double maxTotalVolumePerMeal,
             double foodPerMeal,
+            double foodPerMealDayOne,
+            double foodPerMealDayTwo,
             double flushPerMeal,
             double waterToAddPerMeal,
+            double waterToAddPerMealDayOne,
+            double waterToAddPerMealDayTwo,
             int mealsPerDay,
-            double cansPerDay
+            int mealsPerDayOne,
+            int mealsPerDayTwo,
+            double cansPerDay,
+            double cansPerDayOne,
+            double cansPerDayTwo
             )
         {
             Patient patient = new()
@@ -140,10 +164,18 @@ namespace TubeFeeding.Data
                 BodyWeight = bodyWeight,
                 MaxTotalVolumePerMeal = maxTotalVolumePerMeal,
                 FoodPerMeal = foodPerMeal,
+                FoodPerMealDayOne = foodPerMealDayOne,
+                FoodPerMealDayTwo = foodPerMealDayTwo,
                 VolPerFlush = flushPerMeal,
                 WaterToAddPerMeal = waterToAddPerMeal,
+                WaterToAddPerMealDayOne = waterToAddPerMealDayOne,
+                WaterToAddPerMealDayTwo = waterToAddPerMealDayTwo,
                 MealsPerDay = mealsPerDay,
-                CansPerDay = cansPerDay
+                MealsPerDayOne = mealsPerDayOne,
+                MealsPerDayTwo = mealsPerDayTwo,
+                CansPerDay = cansPerDay,
+                CansPerDayOne = cansPerDayOne,
+                CansPerDayTwo = cansPerDayTwo
             };
 
             await conn.UpdateAsync(patient);

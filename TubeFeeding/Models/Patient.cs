@@ -17,9 +17,17 @@ namespace TubeFeeding.Models
         public double BodyWeight { get; set; }
         public double MaxTotalVolumePerMeal { get; set; }
         public double FoodPerMeal { get; set; }
+        public double FoodPerMealDayOne { get; set; }
+        public double FoodPerMealDayTwo { get; set; }
         public double VolPerFlush { get; set; }
         public double WaterToAddPerMeal { get; set; }
+        public double WaterToAddPerMealDayOne { get; set; }
+        public double WaterToAddPerMealDayTwo { get; set; }
         public int MealsPerDay { get; set; }
+        public int MealsPerDayOne { get; set; }
+        public int MealsPerDayTwo { get; set; }
         public double CansPerDay { get; set; }
+        public double CansPerDayOne { get; set; }
+        public double CansPerDayTwo { get; set; }
     }
 }

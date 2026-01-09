@@ -16,10 +16,18 @@ namespace TubeFeeding.PageModels
         private double _bodyWeight; // kg
         private double _maxTotalVolumePerMeal;
         private double _foodPerMeal;
+        private double _foodPerMealDayOne;
+        private double _foodPerMealDayTwo;
         private double _volPerFlush;
         private double _waterToAddPerMeal;
+        private double _waterToAddPerMealDayOne;
+        private double _waterToAddPerMealDayTwo;
         private int _mealsPerDay;
+        private int _mealsPerDayOne;
+        private int _mealsPerDayTwo;
         private double _cansPerDay;
+        private double _cansPerDayOne;
+        private double _cansPerDayTwo;
 
         public int Id
         {
@@ -87,6 +95,18 @@ namespace TubeFeeding.PageModels
             set => SetProperty(ref _foodPerMeal, value);
         }
 
+        public double FoodPerMealDayOne
+        {
+            get => _foodPerMealDayOne;
+            set => SetProperty(ref _foodPerMealDayOne, value);
+        }
+
+        public double FoodPerMealDayTwo
+        {
+            get => _foodPerMealDayTwo;
+            set => SetProperty(ref _foodPerMealDayTwo, value);
+        }
+
         public double VolPerFlush
         {
             get => _volPerFlush;
@@ -99,16 +119,52 @@ namespace TubeFeeding.PageModels
             set => SetProperty(ref _waterToAddPerMeal, value);
         }
 
+        public double WaterToAddPerMealDayOne
+        {
+            get => _waterToAddPerMealDayOne;
+            set => SetProperty(ref _waterToAddPerMealDayOne, value);
+        }
+
+        public double WaterToAddPerMealDayTwo
+        {
+            get => _waterToAddPerMealDayTwo;
+            set => SetProperty(ref _waterToAddPerMealDayTwo, value);
+        }
+
         public int MealsPerDay
         {
             get => _mealsPerDay;
             set => SetProperty(ref _mealsPerDay, value);
         }
 
+        public int MealsPerDayOne
+        {
+            get => _mealsPerDayOne;
+            set => SetProperty(ref _mealsPerDayOne, value);
+        }
+
+        public int MealsPerDayTwo
+        {
+            get => _mealsPerDayTwo;
+            set => SetProperty(ref _mealsPerDayTwo, value);
+        }
+
         public double CansPerDay
         {
             get => _cansPerDay;
             set => SetProperty(ref _cansPerDay, value);
+        }
+
+        public double CansPerDayOne
+        {
+            get => _cansPerDayOne;
+            set => SetProperty(ref _cansPerDayOne, value);
+        }
+
+        public double CansPerDayTwo
+        {
+            get => _cansPerDayTwo;
+            set => SetProperty(ref _cansPerDayTwo, value);
         }
 
         public string NameString { get; private set; }
@@ -132,10 +188,18 @@ namespace TubeFeeding.PageModels
             _bodyWeight = model.BodyWeight;
             _maxTotalVolumePerMeal = model.MaxTotalVolumePerMeal;
             _foodPerMeal = model.FoodPerMeal;
+            _foodPerMealDayOne = model.FoodPerMealDayOne;
+            _foodPerMealDayTwo = model.FoodPerMealDayTwo;
             _volPerFlush = model.VolPerFlush;
             _waterToAddPerMeal = model.WaterToAddPerMeal;
+            _waterToAddPerMealDayOne = model.WaterToAddPerMealDayOne;
+            _waterToAddPerMealDayTwo = model.WaterToAddPerMealDayTwo;
             _mealsPerDay = model.MealsPerDay;
+            _mealsPerDayOne = model.MealsPerDayOne;
+            _mealsPerDayTwo = model.MealsPerDayTwo;
             _cansPerDay = model.CansPerDay;
+            _cansPerDayOne = model.CansPerDayOne;
+            _cansPerDayTwo = model.CansPerDayTwo;
 
             NameString = $"{_patientName} {_clientName}";
             WeightString = $"{_bodyWeight} kg";
