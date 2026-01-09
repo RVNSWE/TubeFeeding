@@ -15,6 +15,8 @@ namespace TubeFeeding.PageModels
         // private bool _paediatric;
         private double _bodyWeight; // kg
         private double _maxTotalVolumePerMeal;
+        private double _maxTotalVolumePerMealDayOne;
+        private double _maxTotalVolumePerMealDayTwo;
         private double _foodPerMeal;
         private double _foodPerMealDayOne;
         private double _foodPerMealDayTwo;
@@ -87,6 +89,18 @@ namespace TubeFeeding.PageModels
         {
             get => _maxTotalVolumePerMeal;
             set => SetProperty(ref _maxTotalVolumePerMeal, value);
+        }
+
+        public double MaxTotalVolumePerMealDayOne
+        {
+            get => _maxTotalVolumePerMealDayOne;
+            set => SetProperty(ref _maxTotalVolumePerMealDayOne, value);
+        }
+
+        public double MaxTotalVolumePerMealDayTwo
+        {
+            get => _maxTotalVolumePerMealDayTwo;
+            set => SetProperty(ref _maxTotalVolumePerMealDayTwo, value);
         }
 
         public double FoodPerMeal
@@ -187,6 +201,8 @@ namespace TubeFeeding.PageModels
             // _paediatric = model.Paediatric;
             _bodyWeight = model.BodyWeight;
             _maxTotalVolumePerMeal = model.MaxTotalVolumePerMeal;
+            _maxTotalVolumePerMealDayOne = model.MaxTotalVolumePerMealDayOne;
+            _maxTotalVolumePerMealDayTwo = model.MaxTotalVolumePerMealDayTwo;
             _foodPerMeal = model.FoodPerMeal;
             _foodPerMealDayOne = model.FoodPerMealDayOne;
             _foodPerMealDayTwo = model.FoodPerMealDayTwo;

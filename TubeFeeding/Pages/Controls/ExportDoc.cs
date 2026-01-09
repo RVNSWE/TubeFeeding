@@ -28,9 +28,15 @@ namespace TubeFeeding.Pages.Controls
         {
             string foodName = $"{feedingSchedule.Patient.FoodName}";
             string cansPerDay = $"{feedingSchedule.Patient.CansPerDay}";
+            string cansPerDayOne = $"{feedingSchedule.Patient.CansPerDayOne}";
+            string cansPerDayTwo = $"{feedingSchedule.Patient.CansPerDayTwo}";
             string foodPerMeal = $"{feedingSchedule.Patient.FoodPerMeal}";
+            string foodPerMealDayOne = $"{feedingSchedule.Patient.FoodPerMealDayOne}";
+            string foodPerMealDayTwo = $"{feedingSchedule.Patient.FoodPerMealDayTwo}";
             string flushPerMeal = $"{feedingSchedule.Patient.VolPerFlush}";
             string interval = Globals.CalculateInterval(feedingSchedule.Patient.MealsPerDay).ToString();
+            string intervalDayOne = Globals.CalculateInterval(feedingSchedule.Patient.MealsPerDayOne).ToString();
+            string intervalDayTwo = Globals.CalculateInterval(feedingSchedule.Patient.MealsPerDayTwo).ToString();
             List<string> schedule = feedingSchedule.FormattedFeedingTimes;
             List<string> scheduleDayOne = feedingSchedule.FormattedFeedingTimesDayOne;
             List<string> scheduleDayTwo = feedingSchedule.FormattedFeedingTimesDayTwo; // TO DO: ADD REFEEDING SCHEDULES INTO PDF

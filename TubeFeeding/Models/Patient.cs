@@ -16,6 +16,8 @@ namespace TubeFeeding.Models
         // public bool Paediatric { get; set; }
         public double BodyWeight { get; set; }
         public double MaxTotalVolumePerMeal { get; set; }
+        public double MaxTotalVolumePerMealDayOne { get; set; }
+        public double MaxTotalVolumePerMealDayTwo { get; set; }
         public double FoodPerMeal { get; set; }
         public double FoodPerMealDayOne { get; set; }
         public double FoodPerMealDayTwo { get; set; }

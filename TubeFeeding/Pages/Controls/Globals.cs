@@ -142,18 +142,25 @@ namespace TubeFeeding.Pages.Controls
             if (calcOneTotalFluidsPerDay < calcTwoTotalFluidsPerDay) // Use whichever is the smallest volume
             {
                 waterPerDay = calcOneTotalFluidsPerDay - foodWaterContent;
+
+                // If foodWaterContent is more than double the total daily requirement
+                if (waterPerDay + (calcOneTotalFluidsPerDay * 2) < 0)
+                {
+                    // TBD: Suggest different food?
+                }
             }
             else
             {
                 waterPerDay = calcTwoTotalFluidsPerDay - foodWaterContent;
+
+                if (waterPerDay + (calcTwoTotalFluidsPerDay * 2) < 0)
+                {
+                    // TBD: Suggest different food?
+                }
             }
 
             if (waterPerDay < 0)
             {
-                if (waterPerDay + foodWaterContent < 0) // If foodWaterContent is more than double the total daily requirement
-                {
-                    // TBD: Suggest different food?
-                }
                 waterPerDay = 0;
             }
 
@@ -213,7 +220,7 @@ namespace TubeFeeding.Pages.Controls
                 waterPerMeal = 0;
             }
 
-            double waterToAddPerMeal = Math.Round(waterPerMeal - flushPerMeal, 1, MidpointRounding.AwayFromZero);
+            double waterToAddPerMeal = waterPerMeal - flushPerMeal;
 
             if (waterToAddPerMeal < 0)
             {
@@ -228,24 +235,6 @@ namespace TubeFeeding.Pages.Controls
             double totalVolumePerMeal = foodPerMeal + flushPerMeal + waterToAddPerMeal;
 
             return totalVolumePerMeal;
-        }
-
-        public static int EnsureMaxTotalVolumeNotExceeded(
-            double totalVolumePerMeal,
-            double maxTotalVolumePerMeal,
-            int mealsPerDay,
-            double foodPerMeal,
-            double flushPerMeal,
-            double waterToAddPerMeal)
-        {
-            while (totalVolumePerMeal > maxTotalVolumePerMeal)
-            {
-                mealsPerDay += 1;
-
-                Globals.CalculateTotalVolumePerMeal(foodPerMeal, flushPerMeal, waterToAddPerMeal);
-            }
-
-            return mealsPerDay;
         }
 
         /*
