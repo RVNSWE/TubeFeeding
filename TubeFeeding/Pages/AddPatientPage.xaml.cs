@@ -96,25 +96,28 @@ public partial class AddPatientPage : ContentPage
             double foodPerDay = rER / kcalPerMl;
             double foodPerDayOne = foodPerDay * 0.33;
             double foodPerDayTwo = foodPerDay * 0.66;
+            double calcOneTotalFluidsPerDay;
+            double calcTwoTotalFluidsPerDay;
 
-            double waterPerDay = Globals.CalculateTotalFluidRequirement(
-                    bodyWeight,
-                    species,
-                    foodPerDay,
-                    waterContent
-                    );
-            double waterPerDayOne = Globals.CalculateTotalFluidRequirement(
-                    bodyWeight,
-                    species,
-                    foodPerDayOne,
-                    waterContent
-                    );
-            double waterPerDayTwo = Globals.CalculateTotalFluidRequirement(
-                    bodyWeight,
-                    species,
-                    foodPerDayTwo,
-                    waterContent
-                    );
+            if (species == "Cat")
+            {
+                calcOneTotalFluidsPerDay = Globals.FirstFluidCalculation(40, bodyWeight);
+                calcTwoTotalFluidsPerDay = Globals.SecondFluidCalculation(80, bodyWeight);
+            }
+            else
+            {
+                calcOneTotalFluidsPerDay = Globals.FirstFluidCalculation(60, bodyWeight);
+                calcTwoTotalFluidsPerDay = Globals.SecondFluidCalculation(132, bodyWeight);
+            }
+
+            double totalFluidsPerDay = Globals.CalculateTotalFluidRequirement(calcOneTotalFluidsPerDay, calcTwoTotalFluidsPerDay);
+
+            double foodWaterContent = foodPerDay * waterContent;
+            double foodWaterContentDayOne = foodPerDayOne * waterContent;
+            double foodWaterContentDayTwo = foodPerDayTwo * waterContent;
+            double waterPerDay = Globals.CalculateWaterPerDay(totalFluidsPerDay, foodWaterContent, waterContent);
+            double waterPerDayOne = Globals.CalculateWaterPerDay(totalFluidsPerDay, foodWaterContentDayOne, waterContent);
+            double waterPerDayTwo = Globals.CalculateWaterPerDay(totalFluidsPerDay, foodWaterContentDayTwo, waterContent);
 
             double totalFoodAndWaterPerDay = foodPerDay + waterPerDay;
             double totalFoodAndWaterPerDayOne = foodPerDayOne + waterPerDayOne;
@@ -196,6 +199,7 @@ public partial class AddPatientPage : ContentPage
                 Math.Round(foodPerDayOne, 1, MidpointRounding.AwayFromZero),
                 Math.Round(foodPerDayTwo, 1, MidpointRounding.AwayFromZero),
                 flushPerMeal / 2,
+                Math.Round(totalFluidsPerDay, 1, MidpointRounding.AwayFromZero),
                 Math.Round(waterToAddPerMeal, 1, MidpointRounding.AwayFromZero),
                 Math.Round(waterToAddPerMealDayOne, 1, MidpointRounding.AwayFromZero),
                 Math.Round(waterToAddPerMealDayTwo, 1, MidpointRounding.AwayFromZero),

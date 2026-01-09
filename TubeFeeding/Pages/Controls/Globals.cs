@@ -111,56 +111,31 @@ namespace TubeFeeding.Pages.Controls
             return rER;
         }
 
-        /*
-         * The 2024 AAHA IVFT guidelines suggest two separate sets of two different species specific fluid calculations.
-         * There's no official consensus on a "correct" way because it's always patient-dependent, so this function tries
-         * to choose the most convenient calculation for the purposes of scheduling.
-         */
-        public static double CalculateTotalFluidRequirement(
-            double bodyWeight,
-            string species,
-            double foodPerDay,
-            double waterContent)
+        public static double CalculateTotalFluidRequirement(double calcOneTotalFluidsPerDay, double calcTwoTotalFluidsPerDay)
         {
-            double calcOneTotalFluidsPerDay;
-            double calcTwoTotalFluidsPerDay;
-            double waterPerDay;
-
-            double foodWaterContent = foodPerDay * waterContent;
-
-            if (species == "Cat")
-            {
-                calcOneTotalFluidsPerDay = FirstFluidCalculation(40, bodyWeight);
-                calcTwoTotalFluidsPerDay = SecondFluidCalculation(80, bodyWeight);
-            }
-            else
-            {
-                calcOneTotalFluidsPerDay = FirstFluidCalculation(60, bodyWeight);
-                calcTwoTotalFluidsPerDay = SecondFluidCalculation(132, bodyWeight);
-            }
-
             if (calcOneTotalFluidsPerDay < calcTwoTotalFluidsPerDay) // Use whichever is the smallest volume
             {
-                waterPerDay = calcOneTotalFluidsPerDay - foodWaterContent;
-
-                // If foodWaterContent is more than double the total daily requirement
-                if (waterPerDay + (calcOneTotalFluidsPerDay * 2) < 0)
-                {
-                    // TBD: Suggest different food?
-                }
+                return calcOneTotalFluidsPerDay;
             }
             else
             {
-                waterPerDay = calcTwoTotalFluidsPerDay - foodWaterContent;
-
-                if (waterPerDay + (calcTwoTotalFluidsPerDay * 2) < 0)
-                {
-                    // TBD: Suggest different food?
-                }
+                return calcTwoTotalFluidsPerDay;
             }
+        }
+
+        public static double CalculateWaterPerDay(double totalFluidsPerDay,  double foodWaterContent, double waterContent)
+        {
+            double waterPerDay;
+
+            waterPerDay = totalFluidsPerDay - foodWaterContent;
 
             if (waterPerDay < 0)
             {
+                // If foodWaterContent is more than double the total daily requirement
+                if (waterPerDay + (totalFluidsPerDay * 2) < 0)
+                {
+                    // TBD: Suggest different food?
+                }
                 waterPerDay = 0;
             }
 
