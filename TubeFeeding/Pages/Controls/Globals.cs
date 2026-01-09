@@ -248,16 +248,6 @@ namespace TubeFeeding.Pages.Controls
             return mealsPerDay;
         }
 
-        public static List<List<string>> CreateRefeedingSchedule()
-        {
-            List<List<string>> refeedingSchedule = [];
-            List<double> dayOne = [];
-
-
-
-            return refeedingSchedule;
-        }
-
         /*
          * Calculate the time interval between feeds.
          */

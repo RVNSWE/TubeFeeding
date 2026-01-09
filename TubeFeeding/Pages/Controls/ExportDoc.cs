@@ -32,6 +32,8 @@ namespace TubeFeeding.Pages.Controls
             string flushPerMeal = $"{feedingSchedule.Patient.VolPerFlush}";
             string interval = Globals.CalculateInterval(feedingSchedule.Patient.MealsPerDay).ToString();
             List<string> schedule = feedingSchedule.FormattedFeedingTimes;
+            List<string> scheduleDayOne = feedingSchedule.FormattedFeedingTimesDayOne;
+            List<string> scheduleDayTwo = feedingSchedule.FormattedFeedingTimesDayTwo; // TO DO: ADD REFEEDING SCHEDULES INTO PDF
 
             Paragraph p = new();
             p.Add(new Text("Tube Feeding Instructions for "
