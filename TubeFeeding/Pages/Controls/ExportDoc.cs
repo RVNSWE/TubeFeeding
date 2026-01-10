@@ -57,39 +57,79 @@ namespace TubeFeeding.Pages.Controls
             p.Add(new Text("Diet: ")
                 .SimulateBold());
             p.Add(new Text(foodName));
-            p.AddTabStops(new TabStop(1000, iText.Layout.Properties.TabAlignment.RIGHT));
-            p.Add(new iText.Layout.Element.Tab());
-            p.Add(new Text("Estimated containers of food per day: ")
-                .SimulateBold());
-            p.Add(new Text(cansPerDay));
-            document.Add(p);
-
-            p = new Paragraph();
-            p.Add(new Text("Volume of food per meal: ")
-                .SimulateBold());
-            p.Add(new Text(foodPerMeal
-                + "ml"));
-            p.AddTabStops(new TabStop(1000, iText.Layout.Properties.TabAlignment.RIGHT));
-            p.Add(new iText.Layout.Element.Tab());
-            p.Add(new Text("Water to add to each meal: ")
-                .SimulateBold());
-            p.Add(new Text(PrintWaterToAdd()));
-            document.Add(p);
-
-            p = new Paragraph();
-            p.Add(new Text("Volume of water per flush: ")
-                .SimulateBold());
-            p.Add(new Text(flushPerMeal
-                + "ml"));
             document.Add(p);
 
             document.Add(new Paragraph(" "));
             document.Add(new Paragraph(" "));
 
-            document.Add(new Paragraph("Feeding Schedule:")
+            document.Add(new Paragraph("Feeding Schedule")
                 .SetFontSize(14)
                 .SetUnderline()
+                .SimulateBold()
+                .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER));
+
+            document.Add(new Paragraph("Day One")
+                .SetUnderline()
                 .SimulateBold());
+
+            document.Add(new Paragraph(" "));
+
+            document.Add(PrintFoodVolumesForDay(1));
+
+            document.Add(PrintWaterVolumesForDay(1));
+
+            p = new Paragraph();
+            p.Add(new Text("Suggested "
+                + interval
+                + " hourly feeding schedule:"));
+            document.Add(p);
+
+            document.Add(PrintSchedule(scheduleDayOne)
+                .SetUnderline());
+
+            document.Add(new Paragraph(" "));
+
+            document.Add(new Paragraph("Day Two")
+                .SetUnderline()
+                .SimulateBold());
+
+            document.Add(new Paragraph(" "));
+
+            document.Add(PrintFoodVolumesForDay(2));
+
+            document.Add(PrintWaterVolumesForDay(2));
+
+            p = new Paragraph();
+            p.Add(new Text("Suggested "
+                + interval
+                + " hourly feeding schedule:"));
+            document.Add(p);
+
+            document.Add(PrintSchedule(scheduleDayTwo)
+                .SetUnderline());
+
+            document.Add(new Paragraph(" "));
+
+            document.Add(new Paragraph("Day Three Onwards")
+                .SetUnderline()
+                .SimulateBold());
+
+            document.Add(new Paragraph(" "));
+
+            document.Add(PrintFoodVolumesForDay(3));
+
+            document.Add(PrintWaterVolumesForDay(3));
+
+            p = new Paragraph();
+            p.Add(new Text("Suggested "
+                + interval
+                + " hourly feeding schedule:"));
+            document.Add(p);
+
+            document.Add(PrintSchedule(schedule)
+                .SetUnderline());
+
+            document.Add(new Paragraph(" "));
 
             document.Add(PrintScheduleInstructions());
 
@@ -105,24 +145,16 @@ namespace TubeFeeding.Pages.Controls
                 + " this session."));
             document.Add(p);
 
-            p = new Paragraph();
-            p.Add(new Text("The following times are offered as a suggested schedule for feeding every "
-                + interval
-                + " hours:"));
-            document.Add(p);
-
-            document.Add(PrintSchedule(schedule)
-                .SetUnderline());
-
             document.Add(new Paragraph("You are free to adjust these times to suit you, but please allow a minimum of one hour between feeds to avoid overloading the stomach and causing regurgitation."));
 
             document.Add(new Paragraph(" "));
             document.Add(new Paragraph(" "));
 
-            document.Add(new Paragraph("Preparing the food:")
+            document.Add(new Paragraph("Preparing the food")
                 .SetFontSize(14)
                 .SetUnderline()
-                .SimulateBold());
+                .SimulateBold()
+                .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER));
 
             document.Add(PrintPreparationInstructions());
             p = new Paragraph();
@@ -140,10 +172,11 @@ namespace TubeFeeding.Pages.Controls
             document.Add(new Paragraph(" "));
             document.Add(new Paragraph(" "));
 
-            document.Add(new Paragraph("Administering the food:")
+            document.Add(new Paragraph("Administering the food")
                 .SetFontSize(14)
                 .SetUnderline()
-                .SimulateBold());
+                .SimulateBold()
+                .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER));
 
             p = new Paragraph();
             p.Add(new Text("1.")
@@ -225,16 +258,63 @@ namespace TubeFeeding.Pages.Controls
             return name;
         }
 
-        private string PrintWaterToAdd()
+        private Paragraph PrintFoodVolumesForDay(int day)
         {
+            double foodPerMeal = day switch
+            {
+                1 => feedingSchedule.Patient.FoodPerMealDayOne,
+                2 => feedingSchedule.Patient.FoodPerMealDayTwo,
+                _ => feedingSchedule.Patient.FoodPerMeal,
+            };
+
+            double cansPerDay = day switch
+            {
+                1 => feedingSchedule.Patient.CansPerDayOne,
+                2 => feedingSchedule.Patient.CansPerDayTwo,
+                _ => feedingSchedule.Patient.CansPerDay,
+            };
+
+            Paragraph p = new Paragraph();
+            p.Add(new Text("Volume of food per meal: ")
+                .SimulateBold());
+            p.Add(new Text(foodPerMeal.ToString()
+                + "ml"));
+            p.AddTabStops(new TabStop(1000, iText.Layout.Properties.TabAlignment.RIGHT));
+            p.Add(new iText.Layout.Element.Tab());
+            p.Add(new Text("Estimated containers of food per day: ")
+                .SimulateBold());
+            p.Add(new Text(cansPerDay.ToString()));
+
+            return p;
+        }
+
+        private Paragraph PrintWaterVolumesForDay(int day)
+        {
+            double flushPerMeal = feedingSchedule.Patient.VolPerFlush;
             string waterToAdd = "None";
 
             if (feedingSchedule.Patient.WaterToAddPerMeal > 0)
             {
-                waterToAdd = feedingSchedule.Patient.WaterToAddPerMeal.ToString() + "ml";
+                waterToAdd = day switch
+                {
+                    1 => feedingSchedule.Patient.WaterToAddPerMealDayOne.ToString() + "ml",
+                    2 => feedingSchedule.Patient.WaterToAddPerMealDayTwo.ToString() + "ml",
+                    _ => feedingSchedule.Patient.WaterToAddPerMeal.ToString() + "ml",
+                };
             }
 
-            return waterToAdd;
+            Paragraph p = new Paragraph();
+            p.Add(new Text("Volume of water per flush: ")
+                .SimulateBold());
+            p.Add(new Text(flushPerMeal
+                + "ml"));
+            p.AddTabStops(new TabStop(1000, iText.Layout.Properties.TabAlignment.RIGHT));
+            p.Add(new iText.Layout.Element.Tab());
+            p.Add(new Text("Water to add to each meal: ")
+                .SimulateBold());
+            p.Add(new Text(waterToAdd));
+
+            return p;
         }
 
         private Paragraph PrintScheduleInstructions()
