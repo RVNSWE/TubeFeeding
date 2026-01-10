@@ -65,7 +65,7 @@ namespace TubeFeeding.Pages.Controls
             document.Add(p);
 
             p = new Paragraph();
-            p.Add(new Text("Food to administer each meal: ")
+            p.Add(new Text("Volume of food per meal: ")
                 .SimulateBold());
             p.Add(new Text(foodPerMeal
                 + "ml"));
@@ -287,7 +287,7 @@ namespace TubeFeeding.Pages.Controls
             double flushPerMeal = feedingSchedule.Patient.VolPerFlush;
             string foodName = feedingSchedule.Patient.FoodName;
 
-            if (feedingSchedule.Patient.WaterToAddPerMeal > 0)
+            if (waterToAddPerMeal > 0)
             {
                 p.Add(new Text("Mix "));
                 p.Add(new Text(waterToAddPerMeal.ToString()

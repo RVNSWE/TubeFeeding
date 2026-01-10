@@ -192,8 +192,15 @@ namespace TubeFeeding.PageModels
         public string WeightString { get; private set; }
         public string KcalString { get; private set; }
         public string MaxVolString { get; private set; }
+        public string MaxVolDayOneString { get; private set; }
+        public string MaxVolDayTwoString { get; private set; }
         public string FoodPerMealString { get; private set; }
+        public string FoodPerMealDayOneString { get; private set; }
+        public string FoodPerMealDayTwoString { get; private set; }
+        public string TotalFluidsString { get; private set; }
         public string WaterPerMealString { get; private set; }
+        public string WaterPerMealDayOneString { get; private set; }
+        public string WaterPerMealDayTwoString { get; private set; }
         public string FlushString { get; private set; }
 
         public PatientPageModel(Patient model)
@@ -228,8 +235,15 @@ namespace TubeFeeding.PageModels
             NameString = $"{_patientName} {_clientName}";
             WeightString = $"{_bodyWeight} kg";
             KcalString = $"{_kcalPerMl} kcal/ml";
+            MaxVolDayOneString = $"{_maxTotalVolumePerMealDayOne} ml";
+            MaxVolDayTwoString = $"{_maxTotalVolumePerMealDayTwo} ml";
             MaxVolString = $"{_maxTotalVolumePerMeal} ml";
+            FoodPerMealDayOneString = $"{_foodPerMealDayOne} ml";
+            FoodPerMealDayTwoString = $"{_foodPerMealDayTwo} ml";
             FoodPerMealString = $"{_foodPerMeal} ml";
+            TotalFluidsString = $"{_totalFluidsPerDay} ml";
+            WaterPerMealDayOneString = $"{_waterToAddPerMealDayOne} ml";
+            WaterPerMealDayTwoString = $"{_waterToAddPerMealDayTwo} ml";
             WaterPerMealString = $"{_waterToAddPerMeal} ml";
             FlushString = $"{_volPerFlush} ml";
         }
