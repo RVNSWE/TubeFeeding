@@ -143,7 +143,7 @@ namespace TubeFeeding.Pages.Controls
             p = new Paragraph();
             p.Add(new Text("It is vital you follow the above feeding plan to prevent refeeding syndrome. ")
                 .SimulateBold());
-            p.Add(new Text("Refeeding syndrome is an extremely life-threatening condition caused by reintroducing food too rapidly after prolonged periods of not eating, which is why it must be done gradually over the first three days."));
+            p.Add(new Text("Refeeding syndrome is a life-threatening condition caused by reintroducing food too rapidly after prolonged periods of not eating, which is why it must be done gradually over the first three days."));
             document.Add(p);
 
             p = new Paragraph();
