@@ -187,7 +187,7 @@ namespace TubeFeeding.Pages.Controls
             p.Add(new Text("1.")
                 .SetUnderline()
                 .SimulateBold());
-            p.Add(new Text(" Pinch the feeding tube to prevent food from leaking out when you remove the cap. Attach an empty syringe to the feeding tube port, stop pinching, and then gently draw back on the plunger. You should feel some resistance, and the plunger should return to its starting position when you let go of it."));
+            p.Add(new Text(" Pinch the feeding tube to prevent food from leaking out when you remove the cap. Attach an empty syringe to the feeding tube port, stop pinching, and gently draw back on the plunger. You should feel some resistance, and the plunger should return to its starting position when you let go of it."));
             document.Add(p);
             p = new Paragraph();
             p.Add(new Text("If this does not happen, it may mean the tube has become displaced. STOP immediately, and contact the clinic for advice.")
@@ -211,7 +211,7 @@ namespace TubeFeeding.Pages.Controls
             p = new Paragraph();
             p.Add(new Text("If "
                 + patientName
-                + " starts coughing, gagging, retching, or otherwise showing signs of discomfort while flushing, STOP immediately and contact the clinic for advice.")
+                + " starts coughing, gagging, retching, or appearing uncomfortable while flushing, STOP immediately and contact the clinic for advice.")
                 .SimulateBold());
             document.Add(p);
 
@@ -267,24 +267,26 @@ namespace TubeFeeding.Pages.Controls
         {
             string waterToAdd = "None";
 
-            if (feedingSchedule.Patient.WaterToAddPerMeal > 0)
+            double WaterToAddToday = day switch
             {
-                waterToAdd = day switch
-                {
-                    1 => feedingSchedule.Patient.WaterToAddPerMealDayOne.ToString() + "ml",
-                    2 => feedingSchedule.Patient.WaterToAddPerMealDayTwo.ToString() + "ml",
-                    _ => feedingSchedule.Patient.WaterToAddPerMeal.ToString() + "ml",
-                };
-            }
-
-            double foodPerMeal = day switch
-            {
-                1 => feedingSchedule.Patient.FoodPerMealDayOne,
-                2 => feedingSchedule.Patient.FoodPerMealDayTwo,
-                _ => feedingSchedule.Patient.FoodPerMeal,
+                1 => waterToAddPerMealDayOne,
+                2 => waterToAddPerMealDayTwo,
+                _ => waterToAddPerMeal,
             };
 
-            double mealsPerDay = day switch
+            if (WaterToAddToday > 0)
+            {
+                waterToAdd = WaterToAddToday.ToString() + "ml";
+            }
+
+            double foodPerMealToday = day switch
+            {
+                1 => foodPerMealDayOne,
+                2 => foodPerMealDayTwo,
+                _ => foodPerMeal,
+            };
+
+            double mealsPerDayToday = day switch
             {
                 1 => feedingSchedule.Patient.MealsPerDayOne,
                 2 => feedingSchedule.Patient.MealsPerDayTwo,
@@ -296,7 +298,7 @@ namespace TubeFeeding.Pages.Controls
             if (waterToAdd != "None")
             {
                 p.Add(new Text("Food per meal: "));
-                p.Add(new Text(foodPerMeal.ToString()
+                p.Add(new Text(foodPerMealToday.ToString()
                     + "ml")
                     .SimulateBold());
                 p.AddTabStops(new TabStop(10, iText.Layout.Properties.TabAlignment.RIGHT));
@@ -307,19 +309,19 @@ namespace TubeFeeding.Pages.Controls
                 p.AddTabStops(new TabStop(10, iText.Layout.Properties.TabAlignment.RIGHT));
                 p.Add(new iText.Layout.Element.Tab());
                 p.Add(new Text("Meals per day: "));
-                p.Add(new Text(mealsPerDay.ToString())
+                p.Add(new Text(mealsPerDayToday.ToString())
                     .SimulateBold());
             }
             else
             {
                 p.Add(new Text("Food per meal: "));
-                p.Add(new Text(foodPerMeal.ToString()
+                p.Add(new Text(foodPerMealToday.ToString()
                     + "ml")
                     .SimulateBold());
                 p.AddTabStops(new TabStop(10, iText.Layout.Properties.TabAlignment.RIGHT));
                 p.Add(new iText.Layout.Element.Tab());
                 p.Add(new Text("Meals per day: "));
-                p.Add(new Text(mealsPerDay.ToString())
+                p.Add(new Text(mealsPerDayToday.ToString())
                     .SimulateBold());
             }
 
@@ -328,14 +330,14 @@ namespace TubeFeeding.Pages.Controls
 
         private Paragraph PrintContainersUsedForDay(int day)
         {
-            double cansPerDay = day switch
+            double cansPerDayToday = day switch
             {
-                1 => feedingSchedule.Patient.CansPerDayOne,
-                2 => feedingSchedule.Patient.CansPerDayTwo,
-                _ => feedingSchedule.Patient.CansPerDay,
+                1 => cansPerDayOne,
+                2 => cansPerDayTwo,
+                _ => cansPerDay,
             };
 
-            string containersPerDay = cansPerDay switch
+            string containersPerDay = cansPerDayToday switch
             {
                 > 1 => " containers",
                 1 => " container",
@@ -345,7 +347,7 @@ namespace TubeFeeding.Pages.Controls
             Paragraph p = new();
 
             p.Add(new Text("Estimated total food used per day: "));
-            p.Add(new Text(cansPerDay.ToString()
+            p.Add(new Text(cansPerDayToday.ToString()
                 + containersPerDay)
                 .SimulateBold());
 
@@ -354,43 +356,32 @@ namespace TubeFeeding.Pages.Controls
 
         private Paragraph PrintPreparationInstructions()
         {
+            bool waterToAddDayOne = waterToAddPerMealDayOne > 0;
+            bool waterToAddDayTwo = waterToAddPerMealDayTwo > 0;
+            bool waterToAdd = waterToAddPerMeal > 0;
+
             Paragraph p = new();
+            
+            p.Add(new Text("Prepare two syringes with "));
+            p.Add(new Text(flushPerMeal.ToString()
+                + "ml")
+            .SimulateBold());
+            p.Add(new Text(" of plain tap water in each, which will be used to flush the tube before and after feeding."));
 
-            if (waterToAddPerMeal > 0)
+            if (waterToAddDayOne || waterToAddDayTwo || waterToAdd)
             {
-                p.Add(new Text("Mix "));
-                p.Add(new Text(waterToAddPerMeal.ToString()
-                    + "ml")
-                .SimulateBold());
-                p.Add(new Text(" of water into "));
-                p.Add(new Text(foodPerMeal.ToString()
-                    + "ml")
-                .SimulateBold());
-                p.Add(new Text(" of food, then draw it up into a syringe. Prepare two other syringes with "));
-                p.Add(new Text(flushPerMeal.ToString()
-                    + "ml")
-                .SimulateBold());
-                p.Add(new Text(" of plain tap water in each, which will be used to flush the tube before and after feeding."));
-            }
-            else
-            {
-                p.Add(new Text("Prepare two syringes with "));
-                p.Add(new Text(flushPerMeal.ToString()
-                    + "ml")
-                .SimulateBold());
-                p.Add(new Text(" of plain tap water in each, which will be used to flush the tube before and after feeding. Prepare a separate syringe containing any offered "));
-                p.Add(new Text(foodName)
-                .SimulateBold());
-                p.Add(new Text(" food left uneaten since the last scheduled feed (or the same volume of fresh food). If "
+                p.Add(new Text(" If "
                     + patientName
-                    + " has eaten nothing at all since the last scheduled feed, this will be "));
-                p.Add(new Text(foodPerMeal
-                    + "ml")
-                .SimulateBold());
-                p.Add(new Text(" of food."));
+                    + " has not been drinking anything, you will also need to mix in additional water as listed in the feeding plan before drawing it up."));
             }
 
-                return p;
+            p.Add(new Text(" If "
+                + patientName
+                + " has been offered food and eaten some but not all of it, draw the rest of it up into a syringe (or the same amount of fresh food if it's looking dry or stale). If "
+                + patientName
+                + " has not eaten anything at all since the last feed, you will need to draw up the full volume of food listed for this meal. "));
+
+            return p;
         }
 
         private static Paragraph PrintSchedule(List<string> schedule)

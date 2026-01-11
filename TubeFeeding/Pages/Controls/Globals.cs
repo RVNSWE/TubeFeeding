@@ -111,21 +111,17 @@ namespace TubeFeeding.Pages.Controls
             return rER;
         }
 
-        public static double CalculateWaterPerDay(double calcMinTotalFluidsPerDay, double calcMaxTotalFluidsPerDay, double foodWaterContent)
+        public static double CalculateInitialWaterPerDay(double minWaterPerDay, double maxWaterPerDay)
         {
-            double waterPerDay = calcMinTotalFluidsPerDay - foodWaterContent;
-
-            if (waterPerDay < 0)
+            if (minWaterPerDay < 0)
             {
-                waterPerDay = calcMaxTotalFluidsPerDay - foodWaterContent;
-
-                if (waterPerDay < 0)
+                if (maxWaterPerDay < 0)
                 {
-                    waterPerDay = 0;
+                    return 0;
                 }
+                return maxWaterPerDay;
             }
-
-            return waterPerDay;
+            return minWaterPerDay;
         }
 
         public static double MinFluidCalculation(int multiplier, double bodyWeight)
@@ -140,20 +136,6 @@ namespace TubeFeeding.Pages.Controls
             double resultTwoTotalFluidsPerDay = multiplier * Math.Pow(bodyWeight, 0.75);
 
             return resultTwoTotalFluidsPerDay;
-        }
-
-        public static double CalculateFoodPerMeal(int mealsPerDay, double foodPerDay)
-        {
-            double foodPerMeal = foodPerDay / mealsPerDay;
-
-            return foodPerMeal;
-        }
-
-        public static double CalculateWaterPerMeal(int mealsPerDay, double waterPerDay)
-        {
-            double waterPerMeal = waterPerDay / mealsPerDay;
-
-            return waterPerMeal;
         }
 
         public static double GetFlushPerMeal(double bodyWeight)
@@ -172,30 +154,6 @@ namespace TubeFeeding.Pages.Controls
             };
 
             return flushPerMeal;
-        }
-
-        public static double CalculateWaterToAddPerMeal(double waterPerMeal, double flushPerMeal)
-        {
-            if (waterPerMeal < 0)
-            {
-                waterPerMeal = 0;
-            }
-
-            double waterToAddPerMeal = waterPerMeal - flushPerMeal;
-
-            if (waterToAddPerMeal < 0)
-            {
-                waterToAddPerMeal = 0;
-            }
-
-            return waterToAddPerMeal;
-        }
-
-        public static double CalculateTotalVolumePerMeal(double foodPerMeal, double flushPerMeal, double waterToAddPerMeal)
-        {
-            double totalVolumePerMeal = foodPerMeal + flushPerMeal + waterToAddPerMeal;
-
-            return totalVolumePerMeal;
         }
 
         /*
