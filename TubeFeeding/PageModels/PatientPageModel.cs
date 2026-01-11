@@ -21,7 +21,6 @@ namespace TubeFeeding.PageModels
         private double _foodPerMealDayOne;
         private double _foodPerMealDayTwo;
         private double _volPerFlush;
-        private double _totalFluidsPerDay;
         private double _waterToAddPerMeal;
         private double _waterToAddPerMealDayOne;
         private double _waterToAddPerMealDayTwo;
@@ -128,12 +127,6 @@ namespace TubeFeeding.PageModels
             set => SetProperty(ref _volPerFlush, value);
         }
 
-        public double TotalFluidsPerDay
-        {
-            get => _totalFluidsPerDay;
-            set => SetProperty(ref _totalFluidsPerDay, value);
-        }
-
         public double WaterToAddPerMeal
         {
             get => _waterToAddPerMeal;
@@ -197,7 +190,6 @@ namespace TubeFeeding.PageModels
         public string FoodPerMealString { get; private set; }
         public string FoodPerMealDayOneString { get; private set; }
         public string FoodPerMealDayTwoString { get; private set; }
-        public string TotalFluidsString { get; private set; }
         public string WaterPerMealString { get; private set; }
         public string WaterPerMealDayOneString { get; private set; }
         public string WaterPerMealDayTwoString { get; private set; }
@@ -221,7 +213,6 @@ namespace TubeFeeding.PageModels
             _foodPerMealDayOne = model.FoodPerMealDayOne;
             _foodPerMealDayTwo = model.FoodPerMealDayTwo;
             _volPerFlush = model.VolPerFlush;
-            _totalFluidsPerDay = model.TotalFluidsPerDay;
             _waterToAddPerMeal = model.WaterToAddPerMeal;
             _waterToAddPerMealDayOne = model.WaterToAddPerMealDayOne;
             _waterToAddPerMealDayTwo = model.WaterToAddPerMealDayTwo;
@@ -241,7 +232,6 @@ namespace TubeFeeding.PageModels
             FoodPerMealDayOneString = $"{_foodPerMealDayOne} ml";
             FoodPerMealDayTwoString = $"{_foodPerMealDayTwo} ml";
             FoodPerMealString = $"{_foodPerMeal} ml";
-            TotalFluidsString = $"{_totalFluidsPerDay} ml";
             WaterPerMealDayOneString = $"{_waterToAddPerMealDayOne} ml";
             WaterPerMealDayTwoString = $"{_waterToAddPerMealDayTwo} ml";
             WaterPerMealString = $"{_waterToAddPerMeal} ml";

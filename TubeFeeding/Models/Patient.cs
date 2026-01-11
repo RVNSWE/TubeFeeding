@@ -22,7 +22,6 @@ namespace TubeFeeding.Models
         public double FoodPerMealDayOne { get; set; }
         public double FoodPerMealDayTwo { get; set; }
         public double VolPerFlush { get; set; }
-        public double TotalFluidsPerDay { get; set; }
         public double WaterToAddPerMeal { get; set; }
         public double WaterToAddPerMealDayOne { get; set; }
         public double WaterToAddPerMealDayTwo { get; set; }

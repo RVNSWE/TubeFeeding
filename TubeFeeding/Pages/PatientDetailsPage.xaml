@@ -44,38 +44,35 @@
                         <Label Text="Feeds per day (day 3+):" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="8" />
                         <Label Text="{Binding MealsPerDay}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="8" />
 
-                        <Label Text="Total fluids per day:" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="9" />
-                        <Label Text="{Binding TotalFluidsString}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="9" />
+                        <Label Text="Max meal volume (day 1):" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="9" />
+                        <Label Text="{Binding MaxVolDayOneString}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="9" />
 
-                        <Label Text="Max meal volume (day 1):" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="10" />
-                        <Label Text="{Binding MaxVolDayOneString}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="10" />
+                        <Label Text="Max meal volume (day 2):" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="10" />
+                        <Label Text="{Binding MaxVolDayTwoString}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="10" />
 
-                        <Label Text="Max meal volume (day 2):" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="11" />
-                        <Label Text="{Binding MaxVolDayTwoString}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="11" />
+                        <Label Text="Max meal volume (day 3+):" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="11" />
+                        <Label Text="{Binding MaxVolString}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="11" />
 
-                        <Label Text="Max meal volume (day 3+):" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="12" />
-                        <Label Text="{Binding MaxVolString}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="12" />
+                        <Label Text="Food per meal (day 1):" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="12" />
+                        <Label Text="{Binding FoodPerMealDayOneString}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="12" />
 
-                        <Label Text="Food per meal (day 1):" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="13" />
-                        <Label Text="{Binding FoodPerMealDayOneString}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="13" />
+                        <Label Text="Food per meal (day 2):" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="13" />
+                        <Label Text="{Binding FoodPerMealDayTwoString}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="13" />
 
-                        <Label Text="Food per meal (day 2):" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="14" />
-                        <Label Text="{Binding FoodPerMealDayTwoString}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="14" />
+                        <Label Text="Food per meal (day 3+):" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="14" />
+                        <Label Text="{Binding FoodPerMealString}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="14" />
 
-                        <Label Text="Food per meal (day 3+):" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="15" />
-                        <Label Text="{Binding FoodPerMealString}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="15" />
+                        <Label Text="Water to add (day 1):" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="15" />
+                        <Label Text="{Binding WaterPerMealDayOneString}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="15" />
 
-                        <Label Text="Water to add (day 1):" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="16" />
-                        <Label Text="{Binding WaterPerMealDayOneString}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="16" />
+                        <Label Text="Water to add (day 2):" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="16" />
+                        <Label Text="{Binding WaterPerMealDayTwoString}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="16" />
 
-                        <Label Text="Water to add (day 2):" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="17" />
-                        <Label Text="{Binding WaterPerMealDayTwoString}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="17" />
+                        <Label Text="Water to add (day 3+):" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="17" />
+                        <Label Text="{Binding WaterPerMealString}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="17" />
 
-                        <Label Text="Water to add (day 3+):" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="18" />
-                        <Label Text="{Binding WaterPerMealString}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="18" />
-
-                        <Label Text="Water per flush:" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="19" />
-                        <Label Text="{Binding FlushString}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="19" />
+                        <Label Text="Water per flush:" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="18" />
+                        <Label Text="{Binding FlushString}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="18" />
                     </Grid>
                 </ScrollView>
 

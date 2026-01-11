@@ -92,7 +92,7 @@ namespace TubeFeeding.Pages.Controls
             p = new Paragraph();
             p.Add(new Text("Example "
                 + intervalDayOne
-                + " hourly feeding scheduleList:"));
+                + " hourly feeding schedule:"));
             document.Add(p);
 
             document.Add(PrintSchedule(scheduleListDayOne)
@@ -110,7 +110,7 @@ namespace TubeFeeding.Pages.Controls
             p = new Paragraph();
             p.Add(new Text("Example "
                 + intervalDayTwo
-                + " hourly feeding scheduleList:"));
+                + " hourly feeding schedule:"));
             document.Add(p);
 
             document.Add(PrintSchedule(scheduleListDayTwo)
@@ -128,7 +128,7 @@ namespace TubeFeeding.Pages.Controls
             p = new Paragraph();
             p.Add(new Text("Example "
                 + interval
-                + " hourly feeding scheduleList:"));
+                + " hourly feeding schedule:"));
             document.Add(p);
 
             document.Add(PrintSchedule(scheduleList)
@@ -140,7 +140,11 @@ namespace TubeFeeding.Pages.Controls
                 + patientName
                 + " to suit you, but please spread them out as much as possible and allow a minimum of one hour between feeds to avoid overloading the stomach and causing regurgitation."));
 
-            document.Add(new Paragraph("It is extremely important to follow the above feeding plan in order to prevent re-feeding syndrome and avoid overloading the stomach. Re-feeding syndrome is an extremely life-threatening condition caused by reintroducing food too rapidly after prolonged periods of not eating, which is why it must be done gradually over the first three days."));
+            p = new Paragraph();
+            p.Add(new Text("It is vital you follow the above feeding plan to prevent refeeding syndrome. ")
+                .SimulateBold());
+            p.Add(new Text("Refeeding syndrome is an extremely life-threatening condition caused by reintroducing food too rapidly after prolonged periods of not eating, which is why it must be done gradually over the first three days."));
+            document.Add(p);
 
             p = new Paragraph();
             p.Add(new Text("Unless advised otherwise by your clinic, fresh water should remain available at all times and you should leave the calculated volume of food in "
@@ -289,18 +293,18 @@ namespace TubeFeeding.Pages.Controls
 
             Paragraph p = new();
 
-            p.AddTabStops(new TabStop(10, iText.Layout.Properties.TabAlignment.RIGHT));
-
             if (waterToAdd != "None")
             {
                 p.Add(new Text("Food per meal: "));
                 p.Add(new Text(foodPerMeal.ToString()
                     + "ml")
                     .SimulateBold());
+                p.AddTabStops(new TabStop(10, iText.Layout.Properties.TabAlignment.RIGHT));
                 p.Add(new iText.Layout.Element.Tab());
                 p.Add(new Text("Additional water per meal: "));
                 p.Add(new Text(waterToAdd)
                     .SimulateBold());
+                p.AddTabStops(new TabStop(10, iText.Layout.Properties.TabAlignment.RIGHT));
                 p.Add(new iText.Layout.Element.Tab());
                 p.Add(new Text("Meals per day: "));
                 p.Add(new Text(mealsPerDay.ToString())
@@ -312,6 +316,7 @@ namespace TubeFeeding.Pages.Controls
                 p.Add(new Text(foodPerMeal.ToString()
                     + "ml")
                     .SimulateBold());
+                p.AddTabStops(new TabStop(10, iText.Layout.Properties.TabAlignment.RIGHT));
                 p.Add(new iText.Layout.Element.Tab());
                 p.Add(new Text("Meals per day: "));
                 p.Add(new Text(mealsPerDay.ToString())

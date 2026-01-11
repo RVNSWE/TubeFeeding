@@ -111,45 +111,31 @@ namespace TubeFeeding.Pages.Controls
             return rER;
         }
 
-        public static double CalculateTotalFluidRequirement(double calcOneTotalFluidsPerDay, double calcTwoTotalFluidsPerDay)
+        public static double CalculateWaterPerDay(double calcMinTotalFluidsPerDay, double calcMaxTotalFluidsPerDay, double foodWaterContent)
         {
-            if (calcOneTotalFluidsPerDay < calcTwoTotalFluidsPerDay) // Use whichever is the smallest volume
-            {
-                return calcOneTotalFluidsPerDay;
-            }
-            else
-            {
-                return calcTwoTotalFluidsPerDay;
-            }
-        }
-
-        public static double CalculateWaterPerDay(double totalFluidsPerDay,  double foodWaterContent, double waterContent)
-        {
-            double waterPerDay;
-
-            waterPerDay = totalFluidsPerDay - foodWaterContent;
+            double waterPerDay = calcMinTotalFluidsPerDay - foodWaterContent;
 
             if (waterPerDay < 0)
             {
-                // If foodWaterContent is more than double the total daily requirement
-                if (waterPerDay + (totalFluidsPerDay * 2) < 0)
+                waterPerDay = calcMaxTotalFluidsPerDay - foodWaterContent;
+
+                if (waterPerDay < 0)
                 {
-                    // TBD: Suggest different food?
+                    waterPerDay = 0;
                 }
-                waterPerDay = 0;
             }
 
             return waterPerDay;
         }
 
-        public static double FirstFluidCalculation(int multiplier, double bodyWeight)
+        public static double MinFluidCalculation(int multiplier, double bodyWeight)
         {
             double resultOneTotalFluidsPerDay = multiplier * bodyWeight;
 
             return resultOneTotalFluidsPerDay;
         }
 
-        public static double SecondFluidCalculation(int multiplier, double bodyWeight)
+        public static double MaxFluidCalculation(int multiplier, double bodyWeight)
         {
             double resultTwoTotalFluidsPerDay = multiplier * Math.Pow(bodyWeight, 0.75);
 
