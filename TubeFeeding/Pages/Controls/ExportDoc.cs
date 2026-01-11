@@ -188,9 +188,7 @@ namespace TubeFeeding.Pages.Controls
                 .SetUnderline()
                 .SimulateBold());
             p.Add(new Text(" Pinch the feeding tube to prevent food from leaking out when you remove the cap. Attach an empty syringe to the feeding tube port, stop pinching, and gently draw back on the plunger. You should feel some resistance, and the plunger should return to its starting position when you let go of it."));
-            document.Add(p);
-            p = new Paragraph();
-            p.Add(new Text("If this does not happen, it may mean the tube has become displaced. STOP immediately, and contact the clinic for advice.")
+            p.Add(new Text(" If this does not happen, it may mean the tube has become displaced. STOP immediately, and contact the clinic for advice.")
                 .SimulateBold());
             document.Add(p);
 
@@ -207,9 +205,7 @@ namespace TubeFeeding.Pages.Controls
                 + "ml")
                 .SimulateBold());
             p.Add(new Text(" of water before administering any food."));
-            document.Add(p);
-            p = new Paragraph();
-            p.Add(new Text("If "
+            p.Add(new Text(" If "
                 + patientName
                 + " starts coughing, gagging, retching, or appearing uncomfortable while flushing, STOP immediately and contact the clinic for advice.")
                 .SimulateBold());
