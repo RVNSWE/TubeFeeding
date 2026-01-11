@@ -39,7 +39,7 @@ namespace TubeFeeding.Pages.Controls
             string intervalDayTwo = Globals.CalculateInterval(feedingSchedule.Patient.MealsPerDayTwo).ToString();
             List<string> schedule = feedingSchedule.FormattedFeedingTimes;
             List<string> scheduleDayOne = feedingSchedule.FormattedFeedingTimesDayOne;
-            List<string> scheduleDayTwo = feedingSchedule.FormattedFeedingTimesDayTwo; // TO DO: ADD REFEEDING SCHEDULES INTO PDF
+            List<string> scheduleDayTwo = feedingSchedule.FormattedFeedingTimesDayTwo;
 
             Paragraph p = new();
             p.Add(new Text("Tube Feeding Instructions for "
@@ -56,8 +56,7 @@ namespace TubeFeeding.Pages.Controls
             document.Add(new Paragraph("Feeding Schedule")
                 .SetFontSize(16)
                 .SetUnderline()
-                .SimulateBold()
-                .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER));
+                .SimulateBold());
 
             p = new Paragraph();
             p.Add(new Text("Diet: "));
@@ -66,20 +65,17 @@ namespace TubeFeeding.Pages.Controls
             document.Add(p);
 
             document.Add(new Paragraph(" "));
-            document.Add(new Paragraph(" "));
 
-            document.Add(new Paragraph("Day One")
-                .SetUnderline()
+            document.Add(new Paragraph("Day One:")
                 .SimulateBold());
 
-            document.Add(PrintFoodUsedForDay(1));
             document.Add(PrintFoodPerMealForDay(1));
-            document.Add(PrintWaterAddedPerMealForDay(1));
+            document.Add(PrintContainersUsedForDay(1));
 
             p = new Paragraph();
-            p.Add(new Text("Example schedule for feeding every "
+            p.Add(new Text("Example "
                 + intervalDayOne
-                + " hours:"));
+                + " hourly feeding schedule:"));
             document.Add(p);
 
             document.Add(PrintSchedule(scheduleDayOne)
@@ -87,18 +83,16 @@ namespace TubeFeeding.Pages.Controls
 
             document.Add(new Paragraph(" "));
 
-            document.Add(new Paragraph("Day Two")
-                .SetUnderline()
+            document.Add(new Paragraph("Day Two:")
                 .SimulateBold());
 
-            document.Add(PrintFoodUsedForDay(2));
             document.Add(PrintFoodPerMealForDay(2));
-            document.Add(PrintWaterAddedPerMealForDay(2));
+            document.Add(PrintContainersUsedForDay(2));
 
             p = new Paragraph();
-            p.Add(new Text("Example schedule for feeding every "
+            p.Add(new Text("Example "
                 + intervalDayTwo
-                + " hours:"));
+                + " hourly feeding schedule:"));
             document.Add(p);
 
             document.Add(PrintSchedule(scheduleDayTwo)
@@ -106,18 +100,16 @@ namespace TubeFeeding.Pages.Controls
 
             document.Add(new Paragraph(" "));
 
-            document.Add(new Paragraph("Day Three Onwards")
-                .SetUnderline()
+            document.Add(new Paragraph("Day Three Onwards:")
                 .SimulateBold());
 
-            document.Add(PrintFoodUsedForDay(3));
             document.Add(PrintFoodPerMealForDay(3));
-            document.Add(PrintWaterAddedPerMealForDay(3));
+            document.Add(PrintContainersUsedForDay(3));
 
             p = new Paragraph();
-            p.Add(new Text("Example schedule for feeding every "
+            p.Add(new Text("Example "
                 + interval
-                + " hours:"));
+                + " hourly feeding schedule:"));
             document.Add(p);
 
             document.Add(PrintSchedule(schedule)
@@ -125,21 +117,19 @@ namespace TubeFeeding.Pages.Controls
 
             document.Add(new Paragraph(" "));
 
-            document.Add(PrintScheduleInstructions());
+            document.Add(new Paragraph("You are free to adjust the times at which you feed "
+                + patientName
+                + " to suit you, but please spread them out as much as possible and allow a minimum of one hour between feeds to avoid overloading the stomach and causing regurgitation."));
+
+            document.Add(new Paragraph("It is extremely important to follow the above feeding plan in order to prevent re-feeding syndrome and avoid causing regurgitation due to stomach overload. Re-feeding syndrome is an extremely life-threatening condition caused by reintroducing food too rapidly after prolonged periods of not eating, which is why it must be done gradually over the first three days."));
 
             p = new Paragraph();
-            p.Add(new Text("Unless advised otherwise by your clinic, you should leave a fresh "
-                + foodPerMeal.ToString()
-                + "ml of food available for "
+            p.Add(new Text("Unless advised otherwise by your clinic, fresh water should remain available at all times and you should leave the calculated volume of food in "
                 + patientName
-                + " between each feeding session in case they are able to eat unassisted. If it has all been eaten by the time the next feed is due, you can skip this feed and offer another "
-                + foodPerMeal.ToString()
-                + "ml of food. Otherwise, draw up the remaining uneaten food into a syringe (or the same volume of fresh food). This is the volume of food you will need to administer to "
+                + "'s normal bowl between feeds to allow the opportunity to eat unassisted. If it has all been eaten by the time of their next scheduled feed, offer a fresh bowl of food instead of tube feeding. Otherwise, draw up any remaining uneaten food into a syringe (or the same volume of fresh food if it's looking dry or stale). This is the volume of food you will need to administer to "
                 + patientName
                 + " this session."));
             document.Add(p);
-
-            document.Add(new Paragraph("You are free to adjust these times to suit you, but please allow a minimum of one hour between feeds to avoid overloading the stomach and causing regurgitation."));
 
             document.Add(new Paragraph(" "));
             document.Add(new Paragraph(" "));
@@ -147,8 +137,7 @@ namespace TubeFeeding.Pages.Controls
             document.Add(new Paragraph("Preparing the food")
                 .SetFontSize(16)
                 .SetUnderline()
-                .SimulateBold()
-                .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER));
+                .SimulateBold());
 
             document.Add(PrintPreparationInstructions());
             p = new Paragraph();
@@ -169,8 +158,7 @@ namespace TubeFeeding.Pages.Controls
             document.Add(new Paragraph("Administering the food")
                 .SetFontSize(16)
                 .SetUnderline()
-                .SimulateBold()
-                .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER));
+                .SimulateBold());
 
             p = new Paragraph();
             p.Add(new Text("1.")
@@ -254,32 +242,6 @@ namespace TubeFeeding.Pages.Controls
 
         private Paragraph PrintFoodPerMealForDay(int day)
         {
-            double foodPerMeal = day switch
-            {
-                1 => feedingSchedule.Patient.FoodPerMealDayOne,
-                2 => feedingSchedule.Patient.FoodPerMealDayTwo,
-                _ => feedingSchedule.Patient.FoodPerMeal,
-            };
-
-            double cansPerDay = day switch
-            {
-                1 => feedingSchedule.Patient.CansPerDayOne,
-                2 => feedingSchedule.Patient.CansPerDayTwo,
-                _ => feedingSchedule.Patient.CansPerDay,
-            };
-
-            Paragraph p = new();
-
-            p.Add(new Text("Food volume per meal: "));
-            p.Add(new Text(foodPerMeal.ToString()
-                + "ml")
-                .SimulateBold());
-
-            return p;
-        }
-
-        private Paragraph PrintWaterAddedPerMealForDay(int day)
-        {
             string waterToAdd = "None";
 
             if (feedingSchedule.Patient.WaterToAddPerMeal > 0)
@@ -292,16 +254,55 @@ namespace TubeFeeding.Pages.Controls
                 };
             }
 
+            double foodPerMeal = day switch
+            {
+                1 => feedingSchedule.Patient.FoodPerMealDayOne,
+                2 => feedingSchedule.Patient.FoodPerMealDayTwo,
+                _ => feedingSchedule.Patient.FoodPerMeal,
+            };
+
+            double mealsPerDay = day switch
+            {
+                1 => feedingSchedule.Patient.MealsPerDayOne,
+                2 => feedingSchedule.Patient.MealsPerDayTwo,
+                _ => feedingSchedule.Patient.MealsPerDay,
+            };
+
             Paragraph p = new();
 
-            p.Add(new Text("Water to add per meal: "));
-            p.Add(new Text(waterToAdd)
-                .SimulateBold());
+            p.AddTabStops(new TabStop(10, iText.Layout.Properties.TabAlignment.RIGHT));
+
+            if (waterToAdd != "None")
+            {
+                p.Add(new Text("Food per meal: "));
+                p.Add(new Text(foodPerMeal.ToString()
+                    + "ml")
+                    .SimulateBold());
+                p.Add(new iText.Layout.Element.Tab());
+                p.Add(new Text("Additional water per meal: "));
+                p.Add(new Text(waterToAdd)
+                    .SimulateBold());
+                p.Add(new iText.Layout.Element.Tab());
+                p.Add(new Text("Meals per day: "));
+                p.Add(new Text(mealsPerDay.ToString())
+                    .SimulateBold());
+            }
+            else
+            {
+                p.Add(new Text("Food per meal: "));
+                p.Add(new Text(foodPerMeal.ToString()
+                    + "ml")
+                    .SimulateBold());
+                p.Add(new iText.Layout.Element.Tab());
+                p.Add(new Text("Meals per day: "));
+                p.Add(new Text(mealsPerDay.ToString())
+                    .SimulateBold());
+            }
 
             return p;
         }
 
-        private Paragraph PrintFoodUsedForDay(int day)
+        private Paragraph PrintContainersUsedForDay(int day)
         {
             double cansPerDay = day switch
             {
@@ -310,17 +311,18 @@ namespace TubeFeeding.Pages.Controls
                 _ => feedingSchedule.Patient.CansPerDay,
             };
 
-            string description = day switch
+            string containersPerDay = cansPerDay switch
             {
-                1 => "Estimated containers of food used on day one: ",
-                2 => "Estimated containers of food used on day two: ",
-                _ => "Estimated containers of food used from day three onwards: ",
+                > 1 => " containers",
+                1 => " container",
+                _ => " of a container",
             };
 
             Paragraph p = new();
 
-            p.Add(new Text(description));
-            p.Add(new Text(cansPerDay.ToString())
+            p.Add(new Text("Estimated total food used per day: "));
+            p.Add(new Text(cansPerDay.ToString()
+                + containersPerDay)
                 .SimulateBold());
 
             return p;
@@ -330,8 +332,13 @@ namespace TubeFeeding.Pages.Controls
         {
             double cansPerDay = feedingSchedule.Patient.CansPerDay;
             string foodName = feedingSchedule.Patient.FoodName;
+            double mealsPerDayOne = feedingSchedule.Patient.MealsPerDayOne;
+            double mealsPerDayTwo = feedingSchedule.Patient.MealsPerDayTwo;
             double mealsPerDay = feedingSchedule.Patient.MealsPerDay;
+            double foodPerMealDayOne = feedingSchedule.Patient.FoodPerMealDayOne;
+            double foodPerMealDayTwo = feedingSchedule.Patient.FoodPerMealDayTwo;
             double foodPerMeal = feedingSchedule.Patient.FoodPerMeal;
+            double waterToAddDayOne = feedingSchedule.Patient.WaterToAddPerMealDayOne;
 
             Paragraph p = new();
 
@@ -346,24 +353,42 @@ namespace TubeFeeding.Pages.Controls
             p.Add(new Text(" food "));
             p.Add(new Text(mealsPerDay.ToString())
                 .SimulateBold());
-            p.Add(new Text(" times per day in order to meet their nutritional needs. This is expected to equal around "));
+            p.Add(new Text(" times per day in order to meet their nutritional needs, expected to equal around "));
             p.Add(new Text(cansPerDay.ToString())
                 .SimulateBold());
 
-            if (cansPerDay > 1)
+            string containersOf = cansPerDay switch
             {
-                p.Add(new Text(" containers of "));
-            }
-            else if (cansPerDay == 1)
-            {
-                p.Add(new Text(" container of "));
-            }
-            else
-            {
-                p.Add(new Text(" of a container of "));
-            }
+                > 1 => " containers of ",
+                1 => " container of ",
+                _ => " of a container of ",
+            };
 
-            p.Add(new Text("food per day."));
+            p.Add(new Text(containersOf));
+            p.Add(new Text("food per day total. This is reduced to "));
+            p.Add(new Text(foodPerMealDayOne.ToString()
+                + "ml")
+                .SimulateBold());
+            p.Add(new Text(" of food "));
+            p.Add(new Text(mealsPerDayOne.ToString())
+                .SimulateBold());
+            p.Add(new Text(" times per day on the first day and "));
+            p.Add(new Text(foodPerMealDayTwo.ToString()
+                + "ml")
+                .SimulateBold());
+            p.Add(new Text(" of food "));
+            p.Add(new Text(mealsPerDayTwo.ToString())
+                .SimulateBold());
+            p.Add(new Text(" times per day on the second day to give "
+                + patientName
+                + "'s body time to safely readjust to eating normal amounts."));
+
+            if (waterToAddDayOne > 0)
+            {
+                p.Add(new Text(" This will affect the amount of additional water "
+                    + patientName
+                    + " will need to be given with each feed, so please read the above instructions for each day carefully."));
+            }
 
             return p;
         }
