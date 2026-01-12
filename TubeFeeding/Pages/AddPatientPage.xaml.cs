@@ -36,6 +36,7 @@ public partial class AddPatientPage : ContentPage
 
         speciesLabel = new Label();
         speciesLabel.SetBinding(Label.TextProperty, Binding.Create(static (Picker picker) => picker.SelectedItem, source: picker));
+        species = "None";
 
         btnSave.Clicked += async (s, e) => await SaveNewSchedule();
 
@@ -96,6 +97,10 @@ public partial class AddPatientPage : ContentPage
         else if (rawWaterPercentage.Length > 0 && !double.TryParse(rawWaterPercentage, out waterPercentage))
         {
             await DisplayAlertAsync("Invalid dry weight", "Please enter the dry (dehydrated) weight (g) or volume (ml) of food per container as either a whole number or decimal.", "OK");
+        }
+        else if (species == "None")
+        {
+            await DisplayAlertAsync("No species entered", "Please select the patient's species.", "OK");
         }
         else
         {
