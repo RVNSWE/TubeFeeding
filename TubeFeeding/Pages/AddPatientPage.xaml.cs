@@ -25,6 +25,8 @@ public partial class AddPatientPage : ContentPage
     private double totalFoodAndWaterPerDayOne;
     private double totalFoodAndWaterPerDayTwo;
     private double totalFoodAndWaterPerDay;
+    private string species;
+    private Label speciesLabel;
 
     public AddPatientPage()
     {
@@ -32,44 +34,40 @@ public partial class AddPatientPage : ContentPage
 
         InitializeComponent();
 
-        btnSave.Clicked += async (s, e) => await SaveNewSchedule(
-            newPatientName.Text,
-            newClientName.Text,
-            newSpecies.Text,
-            newBodyWeight.Text,
-            newFoodName.Text,
-            newKcal.Text,
-            newNetWeight.Text,
-            newWaterPercentage.Text
-            );
+        speciesLabel = new Label();
+        speciesLabel.SetBinding(Label.TextProperty, Binding.Create(static (Picker picker) => picker.SelectedItem, source: picker));
+
+        btnSave.Clicked += async (s, e) => await SaveNewSchedule();
 
         btnCancel.Clicked += (s, e) => Globals.GoToList();
     }
 
-    public async Task SaveNewSchedule(
-        string patientName,
-        string clientName,
-        string species,
-        string rawBodyWeight,
-        string foodName,
-        string rawKcal,
-        string rawNetWeight,
-        string rawWaterPercentage
-        )
+    void OnPickerSelectedIndexChanged(object sender, EventArgs e)
+    {
+        var picker = (Picker)sender;
+        int selectedIndex = picker.SelectedIndex;
+
+        if (selectedIndex != -1)
+        {
+            speciesLabel.Text = (string)picker.ItemsSource[selectedIndex];
+        }
+    }
+
+    public async Task SaveNewSchedule()
     {
         double bodyWeight = 0;
         double kcal = 0;
         double netWeight = 0;
         double waterPercentage = 0;
 
-        patientName = Globals.FormatString(patientName);
-        clientName = Globals.FormatString(clientName);
-        species = Globals.FormatString(species);
-        rawBodyWeight = Globals.FormatString(rawBodyWeight);
-        foodName = Globals.FormatString(foodName);
-        rawKcal = Globals.FormatString(rawKcal);
-        rawNetWeight = Globals.FormatString(rawNetWeight);
-        rawWaterPercentage = Globals.FormatString(rawWaterPercentage);
+        string patientName = Globals.FormatString(newPatientName.Text);
+        string clientName = Globals.FormatString(newClientName.Text);
+        string rawBodyWeight = Globals.FormatString(newBodyWeight.Text);
+        string foodName = Globals.FormatString(newFoodName.Text);
+        string rawKcal = Globals.FormatString(newKcal.Text);
+        string rawNetWeight = Globals.FormatString(newNetWeight.Text);
+        string rawWaterPercentage = Globals.FormatString(newWaterPercentage.Text);
+        species = speciesLabel.Text;
 
         if (Globals.IsStringEmpty(patientName))
         {
@@ -78,10 +76,6 @@ public partial class AddPatientPage : ContentPage
         else if (Globals.IsStringEmpty(clientName))
         {
             await DisplayAlertAsync("No client name entered", "Please enter the client's name.", "OK");
-        }
-        else if (Globals.IsStringEmpty(species))
-        {
-            await DisplayAlertAsync("No species entered", "Please enter the species.", "OK");
         }
         else if (rawBodyWeight.Length > 0 && !double.TryParse(rawBodyWeight, out bodyWeight))
         {

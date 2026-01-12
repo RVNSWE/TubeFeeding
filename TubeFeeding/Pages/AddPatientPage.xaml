@@ -32,15 +32,15 @@
                         SemanticProperties.Description="Client surname" />
                 </sf:SfTextInputLayout>
 
-                <sf:SfTextInputLayout Hint="Species"
-                                      HelperText="Eg. cat"
-                                      CharMaxLength="30"
-                                      ContainerType="Outlined"
-                                      Margin="20">
-                    <Entry
-                        x:Name="newSpecies"
-                        SemanticProperties.Description="Patient species" />
-                </sf:SfTextInputLayout>
+                <Picker x:Name="picker"
+                        Title="Select a species" >
+                    <Picker.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>Cat</x:String>
+                            <x:String>Dog</x:String>
+                        </x:Array>
+                    </Picker.ItemsSource>
+                </Picker>
 
                 <sf:SfTextInputLayout Hint="Body weight (kg)"
                                       HelperText="Eg. 10"

@@ -37,7 +37,7 @@ namespace TubeFeeding.Data
         /*
          * FOR DEBUGGING - Drop the current Patient table.
          */
-        public async Task DropPatientTable()
+        /*public async Task DropPatientTable()
         {
             System.Diagnostics.Debug.WriteLine("Attempting to drop patient table");
 
@@ -51,7 +51,7 @@ namespace TubeFeeding.Data
             {
                 System.Diagnostics.Debug.WriteLine("Could not drop table. Error: {1}", ex.Message);
             }
-        }
+        }*/
 
         /*
          * Add a new patient.
@@ -131,7 +131,7 @@ namespace TubeFeeding.Data
         /*
          * Update the currently selected patient.
          */
-        public async Task UpdatePatient(
+        /*public async Task UpdatePatient(
             int id,
             string foodName,
             double kcalPerMl,
@@ -189,7 +189,7 @@ namespace TubeFeeding.Data
             await conn.UpdateAsync(patient);
 
             await App.PatientPage?.UpdatePatients(patient);
-        }
+        }*/
 
         /*
          * Get a list of all patients.
