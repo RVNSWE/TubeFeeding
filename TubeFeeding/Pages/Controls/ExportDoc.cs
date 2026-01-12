@@ -65,7 +65,7 @@ namespace TubeFeeding.Pages.Controls
             p.Add(new Text("Tube Feeding Instructions for "
                 + PrintPatientName()));
             document.Add(p
-                .SetFontSize(20)
+                .SetFontSize(18)
                 .SetUnderline()
                 .SimulateBold()
                 .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER));
@@ -78,7 +78,7 @@ namespace TubeFeeding.Pages.Controls
             p.Add(new Text(foodName)
                 .SimulateBold());
             document.Add(p
-                .SetFontSize(16));
+                .SetFontSize(14));
 
             document.Add(new Paragraph(" "));
 
@@ -136,15 +136,15 @@ namespace TubeFeeding.Pages.Controls
 
             document.Add(new Paragraph(" "));
 
-            document.Add(new Paragraph("You are free to adjust the times at which you feed "
-                + patientName
-                + " to suit you, but please spread them out as much as possible and allow a minimum of one hour between feeds to avoid overloading the stomach and causing regurgitation."));
-
             p = new Paragraph();
-            p.Add(new Text("It is vital you follow the above feeding plan to prevent refeeding syndrome. ")
+            p.Add(new Text("It is vital you follow the above feeding plan in order to prevent refeeding syndrome. ")
                 .SimulateBold());
             p.Add(new Text("Refeeding syndrome is a life-threatening condition caused by reintroducing food too rapidly after prolonged periods of not eating, which is why it must be done gradually over the first three days."));
             document.Add(p);
+
+            document.Add(new Paragraph("You are free to adjust the times at which you feed "
+                + patientName
+                + " to suit you, but please spread them out as much as possible and allow a minimum of one hour between feeds to avoid overloading the stomach and causing regurgitation."));
 
             p = new Paragraph();
             p.Add(new Text("Unless advised otherwise by your clinic, fresh water should remain available at all times and you should leave the calculated volume of food in "
@@ -218,8 +218,6 @@ namespace TubeFeeding.Pages.Controls
                 .SetUnderline()
                 .SimulateBold());
             p.Add(new Text(" Slowly administer the prepared volume of food through the tube."));
-            document.Add(p);
-            p = new Paragraph();
             p.Add(new Text("You may notice "
                 + patientName
                 + " swallowing as you do this. This is normal, as the food is being administered into the oesophagus rather than directly into the stomach. If they regurgitate, slow down the rate of administration. "));
