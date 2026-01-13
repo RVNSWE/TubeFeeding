@@ -290,4 +290,13 @@ public partial class AddPatientPage : ContentPage
             totalVolumePerMeal = foodPerMeal + flushPerMeal + waterToAddPerMeal;
         }
     }
+
+    /*
+     * Override the back button.
+     */
+    protected override bool OnBackButtonPressed()
+    {
+        Globals.GoToList();
+        return true;
+    }
 }
