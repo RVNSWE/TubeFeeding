@@ -32,7 +32,6 @@
 
                 <sf:SfTextInputLayout Hint="Species"
                                       HelperText="Select the species"
-                                      CharMaxLength="30"
                                       ContainerType="Outlined"
                                       Margin="20">
                     <Picker x:Name="picker"
@@ -46,7 +45,7 @@
                     </Picker>
                 </sf:SfTextInputLayout>
 
-                <sf:SfTextInputLayout Hint="Body weight (kg)"
+                <sf:SfTextInputLayout Hint="Body weight in kg"
                                       HelperText="Eg. 10"
                                       CharMaxLength="6"
                                       ContainerType="Outlined"
@@ -73,8 +72,8 @@
                            SemanticProperties.Description="Kcals per kg of food" />
                 </sf:SfTextInputLayout>
 
-                <sf:SfTextInputLayout Hint="Weight (g) or volume (ml) of food per container"
-                                      HelperText="Eg. 195"
+                <sf:SfTextInputLayout Hint="Food per container"
+                                      HelperText="Volume (ml) or weight (g), eg. 180"
                                       CharMaxLength="6"
                                       ContainerType="Outlined"
                                       Margin="20">
@@ -83,13 +82,15 @@
                 </sf:SfTextInputLayout>
 
                 <sf:SfTextInputLayout Hint="Percentage of water"
-                                      HelperText="Percentage water content of the food, eg. 77"
+                                      HelperText="% water content of the food, eg. 77"
                                       CharMaxLength="3"
                                       ContainerType="Outlined"
                                       Margin="20">
                     <Entry x:Name="newWaterPercentage"
                            SemanticProperties.Description="Percentage water content of food" />
                 </sf:SfTextInputLayout>
+
+                <Label Text="{Binding GeneratingPdf}" />
 
                 <Button x:Name="btnSave"
                         MinimumHeightRequest="{OnIdiom 44, Desktop=60}"

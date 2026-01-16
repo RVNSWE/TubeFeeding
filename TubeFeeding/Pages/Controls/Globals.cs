@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Storage;
 using System.Text;
-using TubeFeeding.Models;
 
 namespace TubeFeeding.Pages.Controls
 {
@@ -17,43 +16,6 @@ namespace TubeFeeding.Pages.Controls
         public static string GetLocalPath(string fileName)
         {
             return System.IO.Path.Combine(FileSystem.AppDataDirectory, fileName);
-        }
-
-        public static async Task CreatePDF()
-        {
-            int patientId;
-
-            if (App.PatientPage?.SelectedPatient == null)
-            {
-                patientId = App.PatientPage.LastPatientSelected.Id;
-            }
-            else
-            {
-                patientId = App.PatientPage.SelectedPatient.Id;
-            }
-
-            System.Diagnostics.Debug.WriteLine($"Attempting to create PDF for patient ID {patientId}");
-
-            try
-            {
-                Patient patient = await App.Repo.GetPatient(patientId);
-
-                string pdfPath = GetLocalPath($"{patient.PatientName}_{patient.ClientName}_{patient.FoodName}.pdf");
-                FeedingSchedule feedingSchedule = new(patient);
-                ExportDoc output = new(feedingSchedule, pdfPath);
-
-                await Share.RequestAsync(new ShareFileRequest
-                {
-                    Title = $"{patient.PatientName} {patient.ClientName} - Tube Feeding Plan",
-                    File = new ShareFile(pdfPath)
-                });
-
-                System.Diagnostics.Debug.WriteLine("PDF creation successful.");
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("Could not create PDF. Error: " + ex.Message);
-            }
         }
 
         async static Task SaveFile(CancellationToken cancellationToken)

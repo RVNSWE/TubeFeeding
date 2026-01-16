@@ -1,10 +1,15 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using TubeFeeding.Models;
+using TubeFeeding.Pages.Controls;
 
 namespace TubeFeeding.PageModels
 {
-    public partial class PatientPageModel : ObservableObject
+    public partial class PatientPageModel : ObservableObject, INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
         private int _id;
         private string _foodName;
         private double _kcalPerMl;
@@ -30,6 +35,8 @@ namespace TubeFeeding.PageModels
         private double _cansPerDay;
         private double _cansPerDayOne;
         private double _cansPerDayTwo;
+
+        private string _generatingPdf;
 
         public int Id
         {
@@ -181,6 +188,19 @@ namespace TubeFeeding.PageModels
             set => SetProperty(ref _cansPerDayTwo, value);
         }
 
+        public string GeneratingPdf
+        {
+            get => _generatingPdf;
+            set
+            {
+                if (_generatingPdf != value)
+                {
+                    _generatingPdf = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public string NameString { get; private set; }
         public string WeightString { get; private set; }
         public string KcalString { get; private set; }
@@ -236,6 +256,11 @@ namespace TubeFeeding.PageModels
             WaterPerMealDayTwoString = $"{_waterToAddPerMealDayTwo} ml";
             WaterPerMealString = $"{_waterToAddPerMeal} ml";
             FlushString = $"{_volPerFlush} ml";
+
+            GeneratingPdf = "";
         }
+
+        public void OnPropertyChanged([CallerMemberName] string name = "") =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 }

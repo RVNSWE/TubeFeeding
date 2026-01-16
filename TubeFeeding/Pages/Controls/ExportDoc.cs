@@ -216,8 +216,7 @@ namespace TubeFeeding.Pages.Controls
             p.Add(new Text("3.")
                 .SetUnderline()
                 .SimulateBold());
-            p.Add(new Text(" Slowly administer the prepared volume of food through the tube."));
-            p.Add(new Text("You may notice "
+            p.Add(new Text(" Slowly administer the prepared volume of food through the tube. You may notice "
                 + patientName
                 + " swallowing as you do this. This is normal, as the food is being administered into the oesophagus rather than directly into the stomach. If they regurgitate, slow down the rate of administration. "));
             p.Add(new Text("If regurgitation continues, stop feeding and contact the clinic for advice.")
