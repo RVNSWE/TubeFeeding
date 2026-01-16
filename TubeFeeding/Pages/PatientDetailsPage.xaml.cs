@@ -1,4 +1,3 @@
-using TubeFeeding.Models;
 using TubeFeeding.Pages.Controls;
 
 namespace TubeFeeding.Pages;
@@ -11,8 +10,7 @@ public partial class PatientDetailsPage : ContentPage
 
         InitializeComponent();
 
-        btnCreatePDF.Clicked += async (s, e) => await App.PatientPage?.SelectedPatient.CreatePDF();
-
+        btnCreatePDF.Clicked += async (s, e) => await CreatePdf();
         btnDeleteSchedule.Clicked += async (s, e) => await DeletePatient();
     }
 
@@ -34,6 +32,7 @@ public partial class PatientDetailsPage : ContentPage
 
         if (App.PatientPage?.SelectedPatient != null)
         {
+            App.PatientPage.LastPatientSelected = App.PatientPage.SelectedPatient;
             System.Diagnostics.Debug.WriteLine(
                 $"Selected {App.PatientPage?.SelectedPatient.PatientName} {App.PatientPage.SelectedPatient.ClientName} (PatientDetailsPage)"
                 );
@@ -42,35 +41,18 @@ public partial class PatientDetailsPage : ContentPage
         Dispatcher.DispatchAsync(App.PatientPage.RefreshPatients);
     }
 
-    public async Task CreatePDF()
+    /*
+     * Generate the PDF.
+     */
+    public static async Task CreatePdf()
     {
+        App.PatientPage?.ForceSelectPatient(App.PatientPage.LastPatientSelected);
         PatientPageModel selectedPatient = App.PatientPage?.SelectedPatient;
 
         selectedPatient.GeneratingPdf = "Generating PDF, please wait...";
         System.Diagnostics.Debug.WriteLine($"Attempting to create PDF for patient ID {selectedPatient.Id}");
 
-        try
-        {
-            Patient patient = await App.Repo.GetPatient(selectedPatient.Id);
-
-            string pdfPath = Globals.GetLocalPath($"{patient.PatientName}_{patient.ClientName}_{patient.FoodName}.pdf");
-            FeedingSchedule feedingSchedule = new(patient);
-            ExportDoc output = new(feedingSchedule, pdfPath);
-
-            await Share.RequestAsync(new ShareFileRequest
-            {
-                Title = $"{patient.PatientName} {patient.ClientName} - Tube Feeding Plan",
-                File = new ShareFile(pdfPath)
-            });
-
-            selectedPatient.GeneratingPdf = "PDF creation successful.";
-            System.Diagnostics.Debug.WriteLine("PDF creation successful.");
-        }
-        catch (Exception ex)
-        {
-            selectedPatient.GeneratingPdf = "PDF generation failed. Error: " + ex.Message;
-            System.Diagnostics.Debug.WriteLine("PDF generation failed. Error: " + ex.Message);
-        }
+        //await selectedPatient.GeneratePdf();
     }
 
     /*

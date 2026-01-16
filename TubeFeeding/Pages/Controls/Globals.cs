@@ -1,8 +1,4 @@
-﻿using CommunityToolkit.Maui.Alerts;
-using CommunityToolkit.Maui.Storage;
-using System.Text;
-
-namespace TubeFeeding.Pages.Controls
+﻿namespace TubeFeeding.Pages.Controls
 {
     public static class Globals
     {
@@ -16,20 +12,6 @@ namespace TubeFeeding.Pages.Controls
         public static string GetLocalPath(string fileName)
         {
             return System.IO.Path.Combine(FileSystem.AppDataDirectory, fileName);
-        }
-
-        async static Task SaveFile(CancellationToken cancellationToken)
-        {
-            using var stream = new MemoryStream(Encoding.Default.GetBytes("Hello from the Community Toolkit!"));
-            var fileSaverResult = await FileSaver.Default.SaveAsync("test.txt", stream, cancellationToken);
-            if (fileSaverResult.IsSuccessful)
-            {
-                await Toast.Make($"The file was saved successfully to location: {fileSaverResult.FilePath}").Show(cancellationToken);
-            }
-            else
-            {
-                await Toast.Make($"The file was not saved successfully with error: {fileSaverResult.Exception.Message}").Show(cancellationToken);
-            }
         }
 
         /*

@@ -76,6 +76,13 @@
                     </Grid>
                 </ScrollView>
 
+                <Label Text="{Binding GeneratingPdf}" HorizontalOptions="Center" />
+
+                <Button Command="{Binding PickFolderCommand}"
+                        MinimumHeightRequest="{OnIdiom 44, Desktop=60}"
+                        Text="Pick Folder using FolderPicker from DI Container"
+                        Margin="30"/>
+
                 <Button x:Name="btnCreatePDF"
                         MinimumHeightRequest="{OnIdiom 44, Desktop=60}"
                         Text="Export to PDF"

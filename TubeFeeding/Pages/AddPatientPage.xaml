@@ -90,8 +90,6 @@
                            SemanticProperties.Description="Percentage water content of food" />
                 </sf:SfTextInputLayout>
 
-                <Label Text="{Binding GeneratingPdf}" />
-
                 <Button x:Name="btnSave"
                         MinimumHeightRequest="{OnIdiom 44, Desktop=60}"
                         Text="Save"

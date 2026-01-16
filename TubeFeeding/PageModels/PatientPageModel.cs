@@ -1,4 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
+using CommunityToolkit.Maui.Storage;
+using CommunityToolkit.Mvvm.Input;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using TubeFeeding.Models;
@@ -258,9 +262,80 @@ namespace TubeFeeding.PageModels
             FlushString = $"{_volPerFlush} ml";
 
             GeneratingPdf = "";
+            _generatingPdf = GeneratingPdf;
         }
 
         public void OnPropertyChanged([CallerMemberName] string name = "") =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+
+        static async Task<bool> ArePermissionsGranted()
+        {
+            var readPermissionStatus = await Permissions.RequestAsync<Permissions.StorageRead>();
+            var writePermissionStatus = await Permissions.RequestAsync<Permissions.StorageWrite>();
+
+            if (readPermissionStatus is PermissionStatus.Granted
+                && writePermissionStatus is PermissionStatus.Granted)
+            {
+                return true;
+            }
+
+            await Shell.Current.CurrentPage.DisplayAlertAsync("Storage permission is not granted.", "Please grant the permission to use this feature.", "OK");
+
+            return false;
+        }
+
+        [RelayCommand]
+        async Task PickFolder(CancellationToken cancellationToken)
+        {
+            if (!await ArePermissionsGranted())
+            {
+                return;
+            }
+
+            var folderPickerInstance = new FolderPickerImplementation();
+            try
+            {
+                var folderPickerResult = await folderPickerInstance.PickAsync(cancellationToken);
+                folderPickerResult.EnsureSuccess();
+
+                await Toast.Make($"Folder picked: Name - {folderPickerResult.Folder.Name}, Path - {folderPickerResult.Folder.Path}", ToastDuration.Long).Show(cancellationToken);
+
+                System.Diagnostics.Debug.WriteLine($"Folder picked: Name - {folderPickerResult.Folder.Name}, Path - {folderPickerResult.Folder.Path}"); 
+                await GeneratePdf(folderPickerResult.Folder.Path);
+            }
+            catch (Exception ex)
+            {
+                await Toast.Make($"Folder is not picked, {ex.Message}").Show(cancellationToken);
+            }
+        }
+
+        public async Task GeneratePdf(string path)
+        {
+            try
+            {
+                Patient patient = await App.Repo.GetPatient(Id);
+
+                GeneratingPdf = "Generating PDF, please wait...";
+                System.Diagnostics.Debug.WriteLine($"Attempting to create PDF for patient ID {Id}");
+
+                string pdfPath = Globals.GetLocalPath($"{patient.PatientName}_{patient.ClientName}_{patient.FoodName}.pdf");
+                FeedingSchedule feedingSchedule = new(patient);
+                ExportDoc output = new(feedingSchedule, pdfPath);
+
+                await Share.RequestAsync(new ShareFileRequest
+                {
+                    Title = $"{patient.PatientName} {patient.ClientName} - Tube Feeding Plan",
+                    File = new ShareFile(pdfPath)
+                });
+
+                GeneratingPdf = "PDF creation successful. File location: " + Globals.GetLocalPath(pdfPath);
+                System.Diagnostics.Debug.WriteLine("PDF creation successful.");
+            }
+            catch (Exception ex)
+            {
+                GeneratingPdf = "PDF generation failed. Error: " + ex.Message;
+                System.Diagnostics.Debug.WriteLine("PDF generation failed. Error: " + ex.Message);
+            }
+        }
     }
 }

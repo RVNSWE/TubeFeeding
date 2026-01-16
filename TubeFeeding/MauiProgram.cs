@@ -1,5 +1,5 @@
 ﻿using CommunityToolkit.Maui;
-using CommunityToolkit.Maui.Storage;
+using Microsoft.Extensions.Logging;
 using Syncfusion.Maui.Core.Hosting;
 using Syncfusion.Maui.Toolkit.Hosting;
 using TubeFeeding.Pages.Controls;
@@ -32,7 +32,6 @@ namespace TubeFeeding
 
             string dbPath = Globals.GetLocalPath(Globals.DatabaseName);
             builder.Services.AddSingleton<Repository>(s => ActivatorUtilities.CreateInstance<Repository>(s, dbPath));
-            builder.Services.AddSingleton<IFileSaver>(FileSaver.Default);
 
             return builder.Build();
         }
