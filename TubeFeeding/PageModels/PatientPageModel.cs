@@ -268,7 +268,7 @@ namespace TubeFeeding.PageModels
         public void OnPropertyChanged([CallerMemberName] string name = "") =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 
-        static async Task<bool> ArePermissionsGranted()
+        /*static async Task<bool> ArePermissionsGranted()
         {
             var readPermissionStatus = await Permissions.RequestAsync<Permissions.StorageRead>();
             var writePermissionStatus = await Permissions.RequestAsync<Permissions.StorageWrite>();
@@ -282,9 +282,9 @@ namespace TubeFeeding.PageModels
             await Shell.Current.CurrentPage.DisplayAlertAsync("Storage permission is not granted.", "Please grant the permission to use this feature.", "OK");
 
             return false;
-        }
+        }*/
 
-        [RelayCommand]
+        /*[RelayCommand]
         async Task PickFolder(CancellationToken cancellationToken)
         {
             if (!await ArePermissionsGranted())
@@ -292,7 +292,20 @@ namespace TubeFeeding.PageModels
                 return;
             }
 
-            var folderPickerInstance = new FolderPickerImplementation();
+            var result = await FolderPicker.Default.PickAsync(cancellationToken);
+            if (result.IsSuccessful)
+            {
+                await Toast.Make($"The folder was picked: Name - {result.Folder.Name}, Path - {result.Folder.Path}", ToastDuration.Long).Show(cancellationToken);
+
+                System.Diagnostics.Debug.WriteLine($"Folder picked: Name - {result.Folder.Name}, Path - {result.Folder.Path}");
+                await GeneratePdf(result.Folder.Path);
+            }
+            else
+            {
+                await Toast.Make($"The folder was not picked with error: {result.Exception.Message}").Show(cancellationToken);
+            }
+
+            *//*var folderPickerInstance = new FolderPickerImplementation();
             try
             {
                 var folderPickerResult = await folderPickerInstance.PickAsync(cancellationToken);
@@ -306,8 +319,8 @@ namespace TubeFeeding.PageModels
             catch (Exception ex)
             {
                 await Toast.Make($"Folder is not picked, {ex.Message}").Show(cancellationToken);
-            }
-        }
+            }*//*
+        }*/
 
         public async Task GeneratePdf(string path)
         {
@@ -315,10 +328,7 @@ namespace TubeFeeding.PageModels
             {
                 Patient patient = await App.Repo.GetPatient(Id);
 
-                GeneratingPdf = "Generating PDF, please wait...";
-                System.Diagnostics.Debug.WriteLine($"Attempting to create PDF for patient ID {Id}");
-
-                string pdfPath = Globals.GetLocalPath($"{patient.PatientName}_{patient.ClientName}_{patient.FoodName}.pdf");
+                string pdfPath = path + $"\\{patient.PatientName}_{patient.ClientName}_{patient.FoodName}.pdf";
                 FeedingSchedule feedingSchedule = new(patient);
                 ExportDoc output = new(feedingSchedule, pdfPath);
 

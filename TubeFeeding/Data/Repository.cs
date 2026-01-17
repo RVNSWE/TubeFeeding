@@ -233,7 +233,7 @@ namespace TubeFeeding.Data
         /*
          * Delete a patient.
          */
-        public async Task DeletePatient(PatientPageModel patientPageModel)
+        public async Task DeleteSchedule(PatientPageModel patientPageModel)
         {
             int result = 0;
             try

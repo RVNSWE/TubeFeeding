@@ -1,3 +1,4 @@
+using CommunityToolkit.Maui.Storage;
 using TubeFeeding.Pages.Controls;
 
 namespace TubeFeeding.Pages;
@@ -10,8 +11,8 @@ public partial class PatientDetailsPage : ContentPage
 
         InitializeComponent();
 
-        btnCreatePDF.Clicked += async (s, e) => await CreatePdf();
-        btnDeleteSchedule.Clicked += async (s, e) => await DeletePatient();
+        btnGeneratePdf.Clicked += async (s, e) => await OnGeneratePdfButtonPressed(s, e);
+        btnDeleteSchedule.Clicked += async (s, e) => await OnDeleteScheduleButtonPressed();
     }
 
     /*
@@ -27,49 +28,81 @@ public partial class PatientDetailsPage : ContentPage
         }
         else
         {
-            App.PatientPage.LastPatientSelected = App.PatientPage.SelectedPatient;
+            App.PatientPage?.LastPatientSelected = App.PatientPage?.SelectedPatient;
         }
 
         if (App.PatientPage?.SelectedPatient != null)
         {
             App.PatientPage.LastPatientSelected = App.PatientPage.SelectedPatient;
             System.Diagnostics.Debug.WriteLine(
-                $"Selected {App.PatientPage?.SelectedPatient.PatientName} {App.PatientPage.SelectedPatient.ClientName} (PatientDetailsPage)"
+                $"Selected {App.PatientPage.SelectedPatient.PatientName} {App.PatientPage.SelectedPatient.ClientName} (PatientDetailsPage)"
                 );
         }
 
         Dispatcher.DispatchAsync(App.PatientPage.RefreshPatients);
     }
 
-    /*
-     * Generate the PDF.
-     */
-    public static async Task CreatePdf()
+    static async Task<bool> ArePermissionsGranted()
     {
-        App.PatientPage?.ForceSelectPatient(App.PatientPage.LastPatientSelected);
-        PatientPageModel selectedPatient = App.PatientPage?.SelectedPatient;
+        var readPermissionStatus = await Permissions.RequestAsync<Permissions.StorageRead>();
+        var writePermissionStatus = await Permissions.RequestAsync<Permissions.StorageWrite>();
 
-        selectedPatient.GeneratingPdf = "Generating PDF, please wait...";
-        System.Diagnostics.Debug.WriteLine($"Attempting to create PDF for patient ID {selectedPatient.Id}");
+        if (readPermissionStatus is PermissionStatus.Granted
+            && writePermissionStatus is PermissionStatus.Granted)
+        {
+            return true;
+        }
 
-        //await selectedPatient.GeneratePdf();
+        await Shell.Current.CurrentPage.DisplayAlertAsync("Storage permission is not granted.", "Please grant the permission to use this feature.", "OK");
+
+        return false;
     }
 
     /*
-     * Delete this Patient.
+     * Generate the PDF.
      */
-    public static async Task DeletePatient()
+    public static async Task OnGeneratePdfButtonPressed(object sender, EventArgs e)
+    {
+        if (!await ArePermissionsGranted())
+        {
+            return;
+        }
+
+        PatientPageModel selectedPatient = App.PatientPage?.LastPatientSelected;
+
+        selectedPatient.GeneratingPdf = "Please select a save location";
+        System.Diagnostics.Debug.WriteLine($"Please select a save location");
+
+        CancellationTokenSource source = new();
+        CancellationToken token = source.Token;
+        var result = await FolderPicker.Default.PickAsync(token);
+
+        selectedPatient.GeneratingPdf = "Generating PDF, please wait...";
+        System.Diagnostics.Debug.WriteLine($"Attempting to create PDF for patient {selectedPatient.NameString}");
+
+        if (result.IsSuccessful)
+        {
+            await selectedPatient.GeneratePdf(result.Folder.Path);
+        }
+        else
+        {
+            selectedPatient.GeneratingPdf = "";
+            System.Diagnostics.Debug.WriteLine($"PDF generation cancelled");
+        }
+    }
+
+    public static async Task OnDeleteScheduleButtonPressed()
     {
         PatientPageModel lastPatientSelected = App.PatientPage?.LastPatientSelected;
         PatientPageModel selectedPatient = App.PatientPage?.SelectedPatient;
 
         if (selectedPatient == null && lastPatientSelected != null)
         {
-            await App.Repo.DeletePatient(lastPatientSelected);
+            await App.Repo.DeleteSchedule(lastPatientSelected);
         }
         else
         {
-            await App.Repo.DeletePatient(selectedPatient);
+            await App.Repo.DeleteSchedule(selectedPatient);
         }
 
         Globals.GoToList();
