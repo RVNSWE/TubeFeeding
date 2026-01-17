@@ -42,36 +42,8 @@ public partial class PatientDetailsPage : ContentPage
         Dispatcher.DispatchAsync(App.PatientPage.RefreshPatients);
     }
 
-#if ANDROID
-    static async Task<bool> ArePermissionsGranted()
-    {
-        var readPermissionStatus = await Permissions.RequestAsync<Permissions.StorageRead>();
-        var writePermissionStatus = await Permissions.RequestAsync<Permissions.StorageWrite>();
-
-        if (readPermissionStatus is PermissionStatus.Granted
-            && writePermissionStatus is PermissionStatus.Granted)
-        {
-            return true;
-        }
-
-        await Shell.Current.CurrentPage.DisplayAlertAsync("Storage permission is not granted.", "Please grant the permission to use this feature.", "OK");
-
-        return false;
-    }
-#endif
-
-    /*
-     * Generate the PDF.
-     */
     public static async Task OnGeneratePdfButtonPressed()
     {
-#if ANDROID
-        if (!await ArePermissionsGranted())
-        {
-            return;
-        }
-#endif
-
         PatientPageModel selectedPatient = App.PatientPage?.LastPatientSelected;
 
 #if WINDOWS
@@ -88,8 +60,8 @@ public partial class PatientDetailsPage : ContentPage
 
         if (result.IsSuccessful)
         {
-            string path = result.Folder.Path + "\\";
-            await selectedPatient.GeneratePdf(path);
+            selectedPatient.FilePath = result.Folder.Path;
+            selectedPatient.GeneratePdf();
         }
         else
         {
@@ -100,7 +72,7 @@ public partial class PatientDetailsPage : ContentPage
         selectedPatient.GeneratingPdf = "Generating PDF, please wait...";
         System.Diagnostics.Debug.WriteLine($"Attempting to create PDF for patient {selectedPatient.NameString}");
 
-        await selectedPatient.GeneratePdf("");
+        selectedPatient.GeneratePdf();
 #endif
     }
 

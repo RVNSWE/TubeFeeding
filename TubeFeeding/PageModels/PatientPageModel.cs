@@ -201,6 +201,7 @@ namespace TubeFeeding.PageModels
             }
         }
 
+        public string FilePath { get; set; }
         public string NameString { get; private set; }
         public string WeightString { get; private set; }
         public string KcalString { get; private set; }
@@ -259,28 +260,31 @@ namespace TubeFeeding.PageModels
 
             GeneratingPdf = "";
             _generatingPdf = GeneratingPdf;
+            FilePath = "";
         }
 
         public void OnPropertyChanged([CallerMemberName] string name = "") =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 
-        public async Task GeneratePdf(string path)
+        public async Task GeneratePdf()
         {
             try
             {
-                Patient patient = await App.Repo.GetPatient(Id);
-
-                string pdfPath = path + $"{patient.PatientName}_{patient.ClientName}_{patient.FoodName}.pdf";
-                FeedingSchedule feedingSchedule = new(patient);
+#if WINDOWS
+                string pdfPath = FilePath + $"\\{PatientName}_{ClientName}_{FoodName}.pdf";
+#else
+                string pdfPath = Globals.GetLocalPath($"{PatientName}_{ClientName}_{FoodName}.pdf");
+#endif
+                FeedingSchedule feedingSchedule = new(this);
                 ExportDoc output = new(feedingSchedule, pdfPath);
 
                 await Share.RequestAsync(new ShareFileRequest
                 {
-                    Title = $"{patient.PatientName} {patient.ClientName} - Tube Feeding Plan",
+                    Title = $"{PatientName} {ClientName} - Tube Feeding Plan",
                     File = new ShareFile(pdfPath)
                 });
 
-                GeneratingPdf = "PDF creation successful. File location: " + Globals.GetLocalPath(pdfPath);
+                GeneratingPdf = "PDF creation successful. File location: " + pdfPath;
                 System.Diagnostics.Debug.WriteLine("PDF creation successful.");
             }
             catch (Exception ex)

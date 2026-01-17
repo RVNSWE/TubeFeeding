@@ -6,9 +6,6 @@
 
         public const SQLite.SQLiteOpenFlags Flags = SQLite.SQLiteOpenFlags.ProtectionComplete;
 
-        /*
-         * Shorten a filepath name.
-         */
         public static string GetLocalPath(string fileName)
         {
             return System.IO.Path.Combine(FileSystem.AppDataDirectory, fileName);
@@ -31,9 +28,6 @@
             return value;
         }
 
-        /*
-         * Check whether a string is empty.
-         */
         public static bool IsStringEmpty(string value)
         {
             if (value == "")
@@ -42,56 +36,6 @@
             }
             return false;
         }
-
-        /*
-         * Check the phone number has no whitespace or non-digit characters.
-         * 
-         * TO DO: For usability, should be able to enter whitespace between numbers and exclude this from both the
-         * character limit and validity checking.
-         */
-        /*public static bool ValidatePhoneNumber(string phoneNumber)
-        {
-            foreach (char character in phoneNumber)
-            {
-                if (character < '0' || character > '9')
-                    return false;
-            }
-
-            if (phoneNumber.Length != 11)
-                return false;
-
-            return true;
-        }*/
-
-        /*
-         * Check whether a valid time has been entered.
-         */
-        /*public static bool ValidateTime(string time)
-        {
-            foreach (char character in time)
-            {
-                if (character < '0' || character > '9')
-                    return false;
-            }
-
-            if (time.Length != 2)
-                return false;
-
-            return true;
-        }*/
-
-        /*
-         * Validate an integer.
-         */
-        /*public static bool ValidateInt(string userInput)
-        {
-            if (int.TryParse(userInput, out var number))
-            {
-                return true;
-            }
-
-            return false;
-        }*/
 
         public static double CalculateRER(double bodyWeight, string species)
         {

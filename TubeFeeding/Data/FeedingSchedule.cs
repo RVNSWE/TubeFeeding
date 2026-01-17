@@ -1,12 +1,10 @@
-﻿using TubeFeeding.Models;
-using TubeFeeding.Pages.Controls;
+﻿using TubeFeeding.Pages.Controls;
 
 namespace TubeFeeding.Data
 {
     public class FeedingSchedule
     {
-        //public Food Food { get; set; }
-        public Patient Patient { get; set; }
+        public PatientPageModel Patient { get; set; }
         public List<double> FeedingTimes { get; set; }
         public List<double> FeedingTimesDayOne { get; set; }
         public List<double> FeedingTimesDayTwo { get; set; }
@@ -14,7 +12,7 @@ namespace TubeFeeding.Data
         public List<string> FormattedFeedingTimesDayOne { get; set; }
         public List<string> FormattedFeedingTimesDayTwo { get; set; }
 
-        public FeedingSchedule(Patient patient)
+        public FeedingSchedule(PatientPageModel patient)
         {
             Patient = patient;
             FeedingTimes = Globals.CalculateFeedingPlan(Patient.MealsPerDay);
@@ -23,8 +21,6 @@ namespace TubeFeeding.Data
             FormattedFeedingTimes = Globals.CreateFormattedListOfTimes(FeedingTimes);
             FormattedFeedingTimesDayOne = Globals.CreateFormattedListOfTimes(FeedingTimesDayOne);
             FormattedFeedingTimesDayTwo = Globals.CreateFormattedListOfTimes(FeedingTimesDayTwo);
-
-
         }
     }
 }
