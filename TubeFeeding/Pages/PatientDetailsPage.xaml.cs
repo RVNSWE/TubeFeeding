@@ -11,7 +11,7 @@ public partial class PatientDetailsPage : ContentPage
 
         InitializeComponent();
 
-        btnGeneratePdf.Clicked += async (s, e) => await OnGeneratePdfButtonPressed(s, e);
+        btnGeneratePdf.Clicked += async (s, e) => await OnGeneratePdfButtonPressed();
         btnDeleteSchedule.Clicked += async (s, e) => await OnDeleteScheduleButtonPressed();
     }
 
@@ -42,6 +42,7 @@ public partial class PatientDetailsPage : ContentPage
         Dispatcher.DispatchAsync(App.PatientPage.RefreshPatients);
     }
 
+#if ANDROID
     static async Task<bool> ArePermissionsGranted()
     {
         var readPermissionStatus = await Permissions.RequestAsync<Permissions.StorageRead>();
@@ -57,19 +58,23 @@ public partial class PatientDetailsPage : ContentPage
 
         return false;
     }
+#endif
 
     /*
      * Generate the PDF.
      */
-    public static async Task OnGeneratePdfButtonPressed(object sender, EventArgs e)
+    public static async Task OnGeneratePdfButtonPressed()
     {
+#if ANDROID
         if (!await ArePermissionsGranted())
         {
             return;
         }
+#endif
 
         PatientPageModel selectedPatient = App.PatientPage?.LastPatientSelected;
 
+#if WINDOWS
         selectedPatient.GeneratingPdf = "Please select a save location";
         System.Diagnostics.Debug.WriteLine($"Please select a save location");
 
@@ -79,16 +84,24 @@ public partial class PatientDetailsPage : ContentPage
 
         selectedPatient.GeneratingPdf = "Generating PDF, please wait...";
         System.Diagnostics.Debug.WriteLine($"Attempting to create PDF for patient {selectedPatient.NameString}");
+        
 
         if (result.IsSuccessful)
         {
-            await selectedPatient.GeneratePdf(result.Folder.Path);
+            string path = result.Folder.Path + "\\";
+            await selectedPatient.GeneratePdf(path);
         }
         else
         {
             selectedPatient.GeneratingPdf = "";
             System.Diagnostics.Debug.WriteLine($"PDF generation cancelled");
         }
+#else
+        selectedPatient.GeneratingPdf = "Generating PDF, please wait...";
+        System.Diagnostics.Debug.WriteLine($"Attempting to create PDF for patient {selectedPatient.NameString}");
+
+        await selectedPatient.GeneratePdf("");
+#endif
     }
 
     public static async Task OnDeleteScheduleButtonPressed()
