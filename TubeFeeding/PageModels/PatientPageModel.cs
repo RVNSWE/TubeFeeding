@@ -273,7 +273,7 @@ namespace TubeFeeding.PageModels
 #if WINDOWS
                 string pdfPath = FilePath + $"\\{PatientName}_{ClientName}_{FoodName}.pdf";
 #else
-                string pdfPath = Globals.GetLocalPath($"{PatientName}_{ClientName}_{FoodName}.pdf");
+                string pdfPath = Path.Combine(FileSystem.CacheDirectory, $"{PatientName}_{ClientName}_{FoodName}.pdf");
 #endif
                 FeedingSchedule feedingSchedule = new(this);
                 ExportDoc output = new(feedingSchedule, pdfPath);

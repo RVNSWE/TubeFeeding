@@ -10,73 +10,305 @@
         <ScrollView>
             <VerticalStackLayout Spacing="{StaticResource LayoutSpacing}" Padding="{StaticResource LayoutPadding}">
 
-                <ScrollView Orientation="Horizontal">
-                    <Grid ColumnDefinitions="Auto,Auto,Auto"
-                          RowDefinitions="*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*"
+                <Label HorizontalTextAlignment="Center" TextColor="{StaticResource Secondary}">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Tube Feeding Plan for " FontAttributes="Bold" FontSize="Title" />
+                            <Span Text="{Binding NameString}" FontAttributes="Bold" FontSize="Title" />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <Grid ColumnDefinitions="*,*"
+                      RowDefinitions="*,*,*,*,*,*"
+                      MinimumHeightRequest="{OnIdiom 44, Desktop=60}"
+                      ColumnSpacing="30"
+                      RowSpacing="{StaticResource LayoutSpacing}"
+                      HorizontalOptions="Center">
+                    <Label Grid.Row="1">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Species:  " FontAttributes="Bold" />
+                                <Span Text="{Binding Species}" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                    <Label Grid.Row="1" Grid.Column="1">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Body weight:  " FontAttributes="Bold" />
+                                <Span Text="{Binding WeightString}" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+
+                    <Label Grid.Row="3">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Diet:  " FontAttributes="Bold" />
+                                <Span Text="{Binding FoodName}" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                    <Label Grid.Row="3" Grid.Column="1">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Flush: " FontAttributes="Bold" />
+                                <Span Text="{Binding FlushString}" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+
+                    <Label Grid.Row="4">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="kcal/ml:  " FontAttributes="Bold" />
+                                <Span Text="{Binding KcalString}" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </Grid>
+
+                <VerticalStackLayout BackgroundColor="{StaticResource DarkSecondaryBackground}">
+                    <Label HorizontalTextAlignment="Center">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Maximum volume per meal" FontAttributes="Bold" TextDecorations="Underline" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                    <Label Text="" />
+                    <Grid ColumnDefinitions="*,*,*"
+                          RowDefinitions="*,*,*"
                           MinimumHeightRequest="{OnIdiom 44, Desktop=60}"
-                          ColumnSpacing="{StaticResource LayoutSpacing}"
-                          RowSpacing="{StaticResource LayoutSpacing}"
-                          HorizontalOptions="Center" >
-                        <Label Text="Patient:" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  />
-                        <Label Text="{Binding NameString}" Style="{StaticResource Body1}" Grid.Column="1" />
-
-                        <Label Text="Client name:" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="1" />
-                        <Label Text="{Binding ClientName}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="1" />
-
-                        <Label Text="Species:" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="2" />
-                        <Label Text="{Binding Species}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="2" />
-
-                        <Label Text="Body weight:" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="3" />
-                        <Label Text="{Binding WeightString}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="3" />
-
-                        <Label Text="Diet name:" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="4" />
-                        <Label Text="{Binding FoodName}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="4" />
-
-                        <Label Text="Diet kcal/ml:" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="5" />
-                        <Label Text="{Binding KcalString}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="5" />
-
-                        <Label Text="Feeds per day (day 1):" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="6" />
-                        <Label Text="{Binding MealsPerDayOne}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="6" />
-
-                        <Label Text="Feeds per day (day 2):" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="7" />
-                        <Label Text="{Binding MealsPerDayTwo}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="7" />
-
-                        <Label Text="Feeds per day (day 3+):" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="8" />
-                        <Label Text="{Binding MealsPerDay}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="8" />
-
-                        <Label Text="Max meal volume (day 1):" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="9" />
-                        <Label Text="{Binding MaxVolDayOneString}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="9" />
-
-                        <Label Text="Max meal volume (day 2):" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="10" />
-                        <Label Text="{Binding MaxVolDayTwoString}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="10" />
-
-                        <Label Text="Max meal volume (day 3+):" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="11" />
-                        <Label Text="{Binding MaxVolString}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="11" />
-
-                        <Label Text="Food per meal (day 1):" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="12" />
-                        <Label Text="{Binding FoodPerMealDayOneString}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="12" />
-
-                        <Label Text="Food per meal (day 2):" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="13" />
-                        <Label Text="{Binding FoodPerMealDayTwoString}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="13" />
-
-                        <Label Text="Food per meal (day 3+):" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="14" />
-                        <Label Text="{Binding FoodPerMealString}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="14" />
-
-                        <Label Text="Water to add (day 1):" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="15" />
-                        <Label Text="{Binding WaterPerMealDayOneString}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="15" />
-
-                        <Label Text="Water to add (day 2):" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="16" />
-                        <Label Text="{Binding WaterPerMealDayTwoString}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="16" />
-
-                        <Label Text="Water to add (day 3+):" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="17" />
-                        <Label Text="{Binding WaterPerMealString}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="17" />
-
-                        <Label Text="Water per flush:" Style="{StaticResource Body1Strong}" HorizontalTextAlignment="End"  Grid.Row="18" />
-                        <Label Text="{Binding FlushString}" Style="{StaticResource Body1}" Grid.Column="1" Grid.Row="18" />
+                          ColumnSpacing="30"
+                          RowSpacing="10"
+                          HorizontalOptions="Center">
+                        <Label HorizontalTextAlignment="Center">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="day 1" FontAttributes="Bold" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label Grid.Column="1" HorizontalTextAlignment="Center">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="day 2" FontAttributes="Bold" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label Grid.Column="2" HorizontalTextAlignment="Center">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="day 3 +" FontAttributes="Bold" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label Grid.Row="1" HorizontalTextAlignment="Center">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{Binding MaxVolDayOneString}" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label Grid.Row="1" Grid.Column="1" HorizontalTextAlignment="Center">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{Binding MaxVolDayTwoString}" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label Grid.Row="1" Grid.Column="2" HorizontalTextAlignment="Center">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{Binding MaxVolString}" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
                     </Grid>
-                </ScrollView>
+                </VerticalStackLayout>
 
-                <Label Text="{Binding GeneratingPdf}" HorizontalOptions="Center" />
+                <VerticalStackLayout BackgroundColor="{StaticResource DarkSecondaryBackground}">
+                    <Label HorizontalTextAlignment="Center">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Number of meals per day" FontAttributes="Bold" TextDecorations="Underline" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                    <Label Text="" />
+                    <Grid ColumnDefinitions="*,*,*"
+                          RowDefinitions="*,*,*"
+                          MinimumHeightRequest="{OnIdiom 44, Desktop=60}"
+                          ColumnSpacing="30"
+                          RowSpacing="10"
+                          HorizontalOptions="Center">
+                        <Label HorizontalTextAlignment="Center">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="day 1" FontAttributes="Bold" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label Grid.Column="1" HorizontalTextAlignment="Center">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="day 2" FontAttributes="Bold" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label Grid.Column="2" HorizontalTextAlignment="Center">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="day 3 +" FontAttributes="Bold" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label Grid.Row="1" HorizontalTextAlignment="Center">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{Binding MealsPerDayOne}" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label Grid.Row="1" Grid.Column="1" HorizontalTextAlignment="Center">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{Binding MealsPerDayTwo}" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label Grid.Row="1" Grid.Column="2" HorizontalTextAlignment="Center">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{Binding MealsPerDay}" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </Grid>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout BackgroundColor="{StaticResource DarkSecondaryBackground}">
+                    <Label HorizontalTextAlignment="Center">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Food per meal" FontAttributes="Bold" TextDecorations="Underline" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                    <Label Text="" />
+                    <Grid ColumnDefinitions="*,*,*"
+                          RowDefinitions="*,*,*"
+                          MinimumHeightRequest="{OnIdiom 44, Desktop=60}"
+                          ColumnSpacing="30"
+                          RowSpacing="10"
+                          HorizontalOptions="Center">
+                        <Label HorizontalTextAlignment="Center">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="day 1" FontAttributes="Bold" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label Grid.Column="1" HorizontalTextAlignment="Center">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="day 2" FontAttributes="Bold" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label Grid.Column="2" HorizontalTextAlignment="Center">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="day 3 +" FontAttributes="Bold" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label Grid.Row="1" HorizontalTextAlignment="Center">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{Binding FoodPerMealDayOneString}" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label Grid.Row="1" Grid.Column="1" HorizontalTextAlignment="Center">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{Binding FoodPerMealDayTwoString}" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label Grid.Row="1" Grid.Column="2" HorizontalTextAlignment="Center">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{Binding FoodPerMealString}" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </Grid>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout BackgroundColor="{StaticResource DarkSecondaryBackground}">
+                    <Label HorizontalTextAlignment="Center">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Water to add" FontAttributes="Bold" TextDecorations="Underline" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                    <Label Text="" />
+                    <Grid ColumnDefinitions="*,*,*"
+                          RowDefinitions="*,*,*"
+                          MinimumHeightRequest="{OnIdiom 44, Desktop=60}"
+                          ColumnSpacing="30"
+                          RowSpacing="10"
+                          HorizontalOptions="Center">
+                        <Label HorizontalTextAlignment="Center">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="day 1" FontAttributes="Bold" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label Grid.Column="1" HorizontalTextAlignment="Center">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="day 2" FontAttributes="Bold" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label Grid.Column="2" HorizontalTextAlignment="Center">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="day 3 +" FontAttributes="Bold" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label Grid.Row="1" HorizontalTextAlignment="Center">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{Binding WaterPerMealDayOneString}" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label Grid.Row="1" Grid.Column="1" HorizontalTextAlignment="Center">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{Binding WaterPerMealDayTwoString}" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label Grid.Row="1" Grid.Column="2" HorizontalTextAlignment="Center">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{Binding WaterPerMealString}" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </Grid>
+                </VerticalStackLayout>
+
+                <Label Text="{Binding GeneratingPdf}" TextColor="{StaticResource PrimaryDarkText}" FontAttributes="Italic" HorizontalTextAlignment="Center" Padding="10" />
 
                 <Button x:Name="btnGeneratePdf"
                         MinimumHeightRequest="{OnIdiom 44, Desktop=60}"
@@ -87,7 +319,7 @@
                         MinimumHeightRequest="{OnIdiom 44, Desktop=60}"
                         Text="Delete schedule"
                         Margin="30"
-                        BackgroundColor="#d76f8b" />
+                        BackgroundColor="{StaticResource CancelButton}" />
 
             </VerticalStackLayout>
 

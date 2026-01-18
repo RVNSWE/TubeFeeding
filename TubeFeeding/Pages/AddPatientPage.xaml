@@ -99,7 +99,7 @@
                         MinimumHeightRequest="{OnIdiom 44, Desktop=60}"
                         Text="Cancel"
                         Margin="30"
-                        BackgroundColor="#d76f8b" />
+                        BackgroundColor="{StaticResource CancelButton}" />
             </VerticalStackLayout>
         </ScrollView>
     </Grid>
