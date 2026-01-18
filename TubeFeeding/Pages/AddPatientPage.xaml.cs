@@ -39,8 +39,6 @@ public partial class AddPatientPage : ContentPage
         species = "None";
 
         btnSave.Clicked += async (s, e) => await SaveNewSchedule();
-
-        btnCancel.Clicked += (s, e) => Globals.GoToList();
     }
 
     void OnPickerSelectedIndexChanged(object sender, EventArgs e)

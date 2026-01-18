@@ -57,7 +57,6 @@ public partial class PatientDetailsPage : ContentPage
         selectedPatient.GeneratingPdf = "Generating PDF, please wait...";
         System.Diagnostics.Debug.WriteLine($"Attempting to create PDF for patient {selectedPatient.NameString}");
         
-
         if (result.IsSuccessful)
         {
             selectedPatient.FilePath = result.Folder.Path;

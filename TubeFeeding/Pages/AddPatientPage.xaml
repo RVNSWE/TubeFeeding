@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:TubeFeeding"
              x:Class="TubeFeeding.Pages.AddPatientPage"
              x:DataType="pages:PatientPageModel"
-             Title="Create Tube Feeding Schedule">
+             Title="Create Feeding Plan">
 
     <Grid>
         <ScrollView>
@@ -94,12 +94,6 @@
                         MinimumHeightRequest="{OnIdiom 44, Desktop=60}"
                         Text="Save"
                         Margin="30" />
-
-                <Button x:Name="btnCancel"
-                        MinimumHeightRequest="{OnIdiom 44, Desktop=60}"
-                        Text="Cancel"
-                        Margin="30"
-                        BackgroundColor="{StaticResource CancelButton}" />
             </VerticalStackLayout>
         </ScrollView>
     </Grid>
