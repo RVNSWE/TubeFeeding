@@ -61,7 +61,7 @@ public partial class PatientDetailsPage : ContentPage
         if (result.IsSuccessful)
         {
             selectedPatient.FilePath = result.Folder.Path;
-            selectedPatient.GeneratePdf();
+            await selectedPatient.GeneratePdf();
         }
         else
         {
@@ -72,7 +72,7 @@ public partial class PatientDetailsPage : ContentPage
         selectedPatient.GeneratingPdf = "Generating PDF, please wait...";
         System.Diagnostics.Debug.WriteLine($"Attempting to create PDF for patient {selectedPatient.NameString}");
 
-        selectedPatient.GeneratePdf();
+        await selectedPatient.GeneratePdf();
 #endif
     }
 
