@@ -90,24 +90,6 @@
                            SemanticProperties.Description="Percentage water content of food" />
                 </sf:SfTextInputLayout>
 
-                <CheckBox x:Name="refeedingCheckbox" IsChecked="True" />
-                <Label Text="Include refeeding instructions?" />
-
-                <sf:SfTextInputLayout Hint="Number of days to increase energy intake over"
-                                      HelperText="2 days = 1/2, full amount. 3 days = 1/3, 2/3, full amount."
-                                      ContainerType="Outlined"
-                                      Margin="20">
-                    <Picker x:Name="refeedpicker"
-                            Title="Select a species">
-                        <Picker.ItemsSource>
-                            <x:Array Type="{x:Type x:String}">
-                                <x:String>2 days</x:String>
-                                <x:String>3 days</x:String>
-                            </x:Array>
-                        </Picker.ItemsSource>
-                    </Picker>
-                </sf:SfTextInputLayout>
-
                 <Button x:Name="btnSave"
                         MinimumHeightRequest="{OnIdiom 44, Desktop=60}"
                         Text="Save"
