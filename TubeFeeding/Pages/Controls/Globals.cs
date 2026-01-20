@@ -46,19 +46,6 @@
             return rER;
         }
 
-        public static double CalculateWaterPerDay(double minWaterPerDay, double maxWaterPerDay)
-        {
-            if (minWaterPerDay < 0)
-            {
-                if (maxWaterPerDay < 0)
-                {
-                    return 0;
-                }
-                return maxWaterPerDay;
-            }
-            return minWaterPerDay;
-        }
-
         public static double FluidCalculationOne(int multiplier, double bodyWeight)
         {
             double totalFluidsPerDay = multiplier * bodyWeight;
@@ -86,23 +73,12 @@
                 minWaterPerDay = totalFluidsPerDayCalcTwo - foodWaterContent;
             }
 
+            if (minWaterPerDay < 0)
+            {
+                minWaterPerDay = 0;
+            }
+
             return minWaterPerDay;
-        }
-
-        public static double GetMaxWaterPerDay(double totalFluidsPerDayCalcOne, double totalFluidsPerDayCalcTwo, double foodWaterContent)
-        {
-            double maxWaterPerDay;
-
-            if (totalFluidsPerDayCalcOne > totalFluidsPerDayCalcTwo)
-            {
-                maxWaterPerDay = totalFluidsPerDayCalcOne - foodWaterContent;
-            }
-            else
-            {
-                maxWaterPerDay = totalFluidsPerDayCalcTwo - foodWaterContent;
-            }
-
-            return maxWaterPerDay;
         }
 
         public static double GetFlushPerMeal(double bodyWeight)
