@@ -13,9 +13,6 @@ public partial class AddPatientPage : ContentPage
     private double waterPerMealDayOne;
     private double waterPerMealDayTwo;
     private double waterPerMeal;
-    private double waterToAddPerMealDayOne;
-    private double waterToAddPerMealDayTwo;
-    private double waterToAddPerMeal;
     private double totalVolumePerMealDayOne;
     private double totalVolumePerMealDayTwo;
     private double totalVolumePerMeal;
@@ -106,7 +103,7 @@ public partial class AddPatientPage : ContentPage
 
             double kcalPerMl = kcal * 0.001;
             double waterContent = waterPercentage * 0.01;
-            double rER = Globals.CalculateRER(bodyWeight, species);
+            double rER = Globals.CalculateRER(bodyWeight);
             double foodPerDay = rER / kcalPerMl;
             double foodPerDayOne = foodPerDay * 0.33;
             double foodPerDayTwo = foodPerDay * 0.66;
@@ -117,30 +114,31 @@ public partial class AddPatientPage : ContentPage
             double maxTotalVolumePerMealDayTwo = bodyWeight * MAX_ML_PER_KG_DAY_TWO;
             double maxTotalVolumePerMeal = bodyWeight * MAX_ML_PER_KG;
             double flushPerMeal = Globals.GetFlushPerMeal(bodyWeight);
-            double calcMinTotalFluidsPerDay;
-            double calcMaxTotalFluidsPerDay;
+            double totalFluidsCalcOne;
+            double totalFluidsCalcTwo;
 
             if (species == "Cat")
             {
-                calcMinTotalFluidsPerDay = Globals.MinFluidCalculation(40, bodyWeight);
-                calcMaxTotalFluidsPerDay = Globals.MaxFluidCalculation(80, bodyWeight);
+                totalFluidsCalcOne = Globals.FluidCalculationOne(40, bodyWeight);
+                totalFluidsCalcTwo = Globals.FluidCalculationTwo(80, bodyWeight);
             }
             else
             {
-                calcMinTotalFluidsPerDay = Globals.MinFluidCalculation(60, bodyWeight);
-                calcMaxTotalFluidsPerDay = Globals.MaxFluidCalculation(132, bodyWeight);
+                totalFluidsCalcOne = Globals.FluidCalculationOne(60, bodyWeight);
+                totalFluidsCalcTwo = Globals.FluidCalculationTwo(132, bodyWeight);
             }
 
-            double minWaterPerDayOne = calcMinTotalFluidsPerDay - foodWaterContentDayOne;
-            double minWaterPerDayTwo = calcMinTotalFluidsPerDay - foodWaterContentDayTwo;
-            double minWaterPerDay = calcMinTotalFluidsPerDay - foodWaterContent;
-            double maxWaterPerDayOne = calcMaxTotalFluidsPerDay - foodWaterContentDayOne;
-            double maxWaterPerDayTwo = calcMaxTotalFluidsPerDay - foodWaterContentDayTwo;
-            double maxWaterPerDay = calcMaxTotalFluidsPerDay - foodWaterContent;
+            double minWaterPerDayOne = Globals.GetMinWaterPerDay(totalFluidsCalcOne, totalFluidsCalcTwo, foodWaterContentDayOne);
+            double minWaterPerDayTwo = Globals.GetMinWaterPerDay(totalFluidsCalcOne, totalFluidsCalcTwo, foodWaterContentDayTwo);
+            double minWaterPerDay = Globals.GetMinWaterPerDay(totalFluidsCalcOne, totalFluidsCalcTwo, foodWaterContent);
 
-            waterPerDayOne = Globals.CalculateInitialWaterPerDay(minWaterPerDayOne, maxWaterPerDayOne);
-            waterPerDayTwo = Globals.CalculateInitialWaterPerDay(minWaterPerDayTwo, maxWaterPerDayTwo);
-            waterPerDay = Globals.CalculateInitialWaterPerDay(minWaterPerDay, maxWaterPerDay);
+            double maxWaterPerDayOne = Globals.GetMaxWaterPerDay(totalFluidsCalcOne, totalFluidsCalcTwo, foodWaterContentDayOne);
+            double maxWaterPerDayTwo = Globals.GetMaxWaterPerDay(totalFluidsCalcOne, totalFluidsCalcTwo, foodWaterContentDayTwo);
+            double maxWaterPerDay = Globals.GetMaxWaterPerDay(totalFluidsCalcOne, totalFluidsCalcTwo, foodWaterContent);
+
+            waterPerDayOne = Globals.CalculateWaterPerDay(minWaterPerDayOne, maxWaterPerDayOne);
+            waterPerDayTwo = Globals.CalculateWaterPerDay(minWaterPerDayTwo, maxWaterPerDayTwo);
+            waterPerDay = Globals.CalculateWaterPerDay(minWaterPerDay, maxWaterPerDay);
 
             totalFoodAndWaterPerDayOne = foodPerDayOne + waterPerDayOne;
             totalFoodAndWaterPerDayTwo = foodPerDayTwo + waterPerDayTwo;
@@ -150,15 +148,15 @@ public partial class AddPatientPage : ContentPage
             int mealsPerDayTwo = (int)Math.Round(totalFoodAndWaterPerDayTwo / maxTotalVolumePerMealDayTwo, 0, MidpointRounding.AwayFromZero);
             int mealsPerDay = (int)Math.Round(totalFoodAndWaterPerDay / maxTotalVolumePerMeal, 0, MidpointRounding.AwayFromZero);
 
-            CalculateMealsForDay(1, foodPerDayOne, flushPerMeal, mealsPerDayOne, foodWaterContentDayOne, maxWaterPerDayOne);
-            CalculateMealsForDay(2, foodPerDayTwo, flushPerMeal, mealsPerDayTwo, foodWaterContentDayTwo, maxWaterPerDayTwo);
-            CalculateMealsForDay(3, foodPerDay, flushPerMeal, mealsPerDay, foodWaterContent, maxWaterPerDay);
+            CalculateMealsForDay(1, foodPerDayOne, flushPerMeal, mealsPerDayOne, minWaterPerDayOne, maxWaterPerDayOne);
+            CalculateMealsForDay(2, foodPerDayTwo, flushPerMeal, mealsPerDayTwo, minWaterPerDayTwo, maxWaterPerDayTwo);
+            CalculateMealsForDay(3, foodPerDay, flushPerMeal, mealsPerDay, minWaterPerDay, maxWaterPerDay);
 
             while (totalVolumePerMealDayOne > maxTotalVolumePerMealDayOne)
             {
                 mealsPerDayOne += 1;
 
-                CalculateMealsForDay(1, foodPerDayOne, flushPerMeal, mealsPerDayOne, foodWaterContentDayOne, maxWaterPerDayOne);
+                CalculateMealsForDay(1, foodPerDayOne, flushPerMeal, mealsPerDayOne, minWaterPerDayOne, maxWaterPerDayOne);
 
                 if (mealsPerDayOne > 23)
                 {
@@ -169,7 +167,7 @@ public partial class AddPatientPage : ContentPage
             {
                 mealsPerDayTwo += 1;
 
-                CalculateMealsForDay(2, foodPerDayTwo, flushPerMeal, mealsPerDayTwo, foodWaterContentDayTwo, maxWaterPerDayTwo);
+                CalculateMealsForDay(2, foodPerDayTwo, flushPerMeal, mealsPerDayTwo, minWaterPerDayTwo, maxWaterPerDayTwo);
 
                 if (mealsPerDayTwo > 23)
                 {
@@ -180,7 +178,7 @@ public partial class AddPatientPage : ContentPage
             {
                 mealsPerDay += 1;
 
-                CalculateMealsForDay(3, foodPerDay, flushPerMeal, mealsPerDay, foodWaterContent, maxWaterPerDay);
+                CalculateMealsForDay(3, foodPerDay, flushPerMeal, mealsPerDay, minWaterPerDay, maxWaterPerDay);
 
                 if (mealsPerDay > 23)
                 {
@@ -207,9 +205,9 @@ public partial class AddPatientPage : ContentPage
                 Math.Round(foodPerMealDayOne, 1, MidpointRounding.AwayFromZero),
                 Math.Round(foodPerMealDayTwo, 1, MidpointRounding.AwayFromZero),
                 flushPerMeal / 2,
-                Math.Round(waterToAddPerMeal, 1, MidpointRounding.AwayFromZero),
-                Math.Round(waterToAddPerMealDayOne, 1, MidpointRounding.AwayFromZero),
-                Math.Round(waterToAddPerMealDayTwo, 1, MidpointRounding.AwayFromZero),
+                Math.Round(waterPerMeal, 1, MidpointRounding.AwayFromZero),
+                Math.Round(waterPerMealDayOne, 1, MidpointRounding.AwayFromZero),
+                Math.Round(waterPerMealDayTwo, 1, MidpointRounding.AwayFromZero),
                 mealsPerDay,
                 mealsPerDayOne,
                 mealsPerDayTwo,
@@ -222,70 +220,70 @@ public partial class AddPatientPage : ContentPage
         }
     }
 
-    private void CalculateMealsForDay(int day, double foodPerDay, double flushPerMeal, double mealsPerDay, double foodWaterContent, double maxWaterPerDay)
+    private void CalculateMealsForDay(int day, double foodPerDay, double flushPerMeal, double mealsPerDay, double minWaterPerDay, double maxWaterPerDay)
     {
         if (day == 1)
         {
-            foodPerMealDayOne = foodPerDay / mealsPerDay;
-            waterPerMealDayOne = waterPerDayOne / mealsPerDay;
-            waterToAddPerMealDayOne = waterPerMealDayOne - flushPerMeal;
+            double minWaterMinusFlush = minWaterPerDay - (flushPerMeal * mealsPerDay * 2);
+            double maxWaterMinusFlush = maxWaterPerDay - (flushPerMeal * mealsPerDay * 2);
 
-            if (waterToAddPerMealDayOne < 0)
+            waterPerDayOne = minWaterMinusFlush;
+            if (minWaterMinusFlush < 0)
             {
-                waterPerDayOne = maxWaterPerDay;
-                waterPerMealDayOne = waterPerDayOne / mealsPerDay;
-                waterToAddPerMealDayOne = waterPerMealDayOne - flushPerMeal;
-
-                if (waterToAddPerMealDayOne < 0)
+                if (maxWaterMinusFlush < 0)
                 {
-                    waterToAddPerMealDayOne = 0;
+                    maxWaterMinusFlush = 0;
                 }
+                waterPerDayOne = maxWaterMinusFlush;
             }
 
+            foodPerMealDayOne = foodPerDay / mealsPerDay;
+            waterPerMealDayOne = waterPerDayOne / mealsPerDay;
+
             totalFoodAndWaterPerDayOne = foodPerDay + waterPerDayOne;
-            totalVolumePerMealDayOne = foodPerMealDayOne + flushPerMeal + waterToAddPerMealDayOne;
+            totalVolumePerMealDayOne = foodPerMealDayOne + flushPerMeal + waterPerMealDayOne;
         }
         if (day == 2)
         {
-            foodPerMealDayTwo = foodPerDay / mealsPerDay;
-            waterPerMealDayTwo = waterPerDayTwo / mealsPerDay;
-            waterToAddPerMealDayTwo = waterPerMealDayTwo - flushPerMeal;
+            double minWaterMinusFlush = minWaterPerDay - (flushPerMeal * mealsPerDay * 2);
+            double maxWaterMinusFlush = maxWaterPerDay - (flushPerMeal * mealsPerDay * 2);
 
-            if (waterToAddPerMealDayTwo < 0)
+            waterPerDayTwo = minWaterMinusFlush;
+            if (minWaterMinusFlush < 0)
             {
-                waterPerDayTwo = maxWaterPerDay;
-                waterPerMealDayTwo = waterPerDayTwo / mealsPerDay;
-                waterToAddPerMealDayTwo = waterPerMealDayTwo - flushPerMeal;
-
-                if (waterToAddPerMealDayTwo < 0)
+                if (maxWaterMinusFlush < 0)
                 {
-                    waterToAddPerMealDayTwo = 0;
+                    maxWaterMinusFlush = 0;
                 }
+                waterPerDayTwo = maxWaterMinusFlush;
             }
 
+            foodPerMealDayTwo = foodPerDay / mealsPerDay;
+            waterPerMealDayTwo = waterPerDayTwo / mealsPerDay;
+
             totalFoodAndWaterPerDayTwo = foodPerDay + waterPerDayTwo;
-            totalVolumePerMealDayTwo = foodPerMealDayTwo + flushPerMeal + waterToAddPerMealDayTwo;
+            totalVolumePerMealDayTwo = foodPerMealDayTwo + flushPerMeal + waterPerMealDayTwo;
         }
         if (day == 3)
         {
-            foodPerMeal = foodPerDay / mealsPerDay;
-            waterPerMeal = waterPerDay / mealsPerDay;
-            waterToAddPerMeal = waterPerMeal - flushPerMeal;
+            double minWaterMinusFlush = minWaterPerDay - (flushPerMeal * mealsPerDay * 2);
+            double maxWaterMinusFlush = maxWaterPerDay - (flushPerMeal * mealsPerDay * 2);
 
-            if (waterToAddPerMeal < 0)
+            waterPerDay = minWaterMinusFlush;
+            if (minWaterMinusFlush < 0)
             {
-                waterPerDay = maxWaterPerDay;
-                waterPerMeal = waterPerDay / mealsPerDay;
-                waterToAddPerMeal = waterPerMeal - flushPerMeal;
-
-                if (waterToAddPerMeal < 0)
+                if (maxWaterMinusFlush < 0)
                 {
-                    waterToAddPerMeal = 0;
+                    maxWaterMinusFlush = 0;
                 }
+                waterPerDay = maxWaterMinusFlush;
             }
 
+            foodPerMeal = foodPerDay / mealsPerDay;
+            waterPerMeal = waterPerDay / mealsPerDay;
+
             totalFoodAndWaterPerDay = foodPerDay + waterPerDay;
-            totalVolumePerMeal = foodPerMeal + flushPerMeal + waterToAddPerMeal;
+            totalVolumePerMeal = foodPerMeal + flushPerMeal + waterPerMeal;
         }
     }
 

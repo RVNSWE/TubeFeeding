@@ -37,23 +37,16 @@
             return false;
         }
 
-        public static double CalculateRER(double bodyWeight, string species)
+        public static double CalculateRER(double bodyWeight)
         {
             double rER;
 
-            if (species == "Cat")
-            {
-                rER = bodyWeight * 30 + 70;
-            }
-            else
-            {
-                rER = 70 * Math.Pow(bodyWeight, 0.75);
-            }
+            rER = 70 * Math.Pow(bodyWeight, 0.75);
 
             return rER;
         }
 
-        public static double CalculateInitialWaterPerDay(double minWaterPerDay, double maxWaterPerDay)
+        public static double CalculateWaterPerDay(double minWaterPerDay, double maxWaterPerDay)
         {
             if (minWaterPerDay < 0)
             {
@@ -66,18 +59,50 @@
             return minWaterPerDay;
         }
 
-        public static double MinFluidCalculation(int multiplier, double bodyWeight)
+        public static double FluidCalculationOne(int multiplier, double bodyWeight)
         {
-            double resultOneTotalFluidsPerDay = multiplier * bodyWeight;
+            double totalFluidsPerDay = multiplier * bodyWeight;
 
-            return resultOneTotalFluidsPerDay;
+            return totalFluidsPerDay;
         }
 
-        public static double MaxFluidCalculation(int multiplier, double bodyWeight)
+        public static double FluidCalculationTwo(int multiplier, double bodyWeight)
         {
-            double resultTwoTotalFluidsPerDay = multiplier * Math.Pow(bodyWeight, 0.75);
+            double totalFluidsPerDay = multiplier * Math.Pow(bodyWeight, 0.75);
 
-            return resultTwoTotalFluidsPerDay;
+            return totalFluidsPerDay;
+        }
+
+        public static double GetMinWaterPerDay(double totalFluidsPerDayCalcOne, double totalFluidsPerDayCalcTwo, double foodWaterContent)
+        {
+            double minWaterPerDay;
+
+            if (totalFluidsPerDayCalcOne < totalFluidsPerDayCalcTwo)
+            {
+                minWaterPerDay = totalFluidsPerDayCalcOne - foodWaterContent;
+            }
+            else
+            {
+                minWaterPerDay = totalFluidsPerDayCalcTwo - foodWaterContent;
+            }
+
+            return minWaterPerDay;
+        }
+
+        public static double GetMaxWaterPerDay(double totalFluidsPerDayCalcOne, double totalFluidsPerDayCalcTwo, double foodWaterContent)
+        {
+            double maxWaterPerDay;
+
+            if (totalFluidsPerDayCalcOne > totalFluidsPerDayCalcTwo)
+            {
+                maxWaterPerDay = totalFluidsPerDayCalcOne - foodWaterContent;
+            }
+            else
+            {
+                maxWaterPerDay = totalFluidsPerDayCalcTwo - foodWaterContent;
+            }
+
+            return maxWaterPerDay;
         }
 
         public static double GetFlushPerMeal(double bodyWeight)
