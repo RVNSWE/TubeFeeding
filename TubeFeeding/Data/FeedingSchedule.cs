@@ -5,12 +5,12 @@ namespace TubeFeeding.Data
     public class FeedingSchedule
     {
         public PatientPageModel Patient { get; set; }
-        public List<double> FeedingTimes { get; set; }
-        public List<double> FeedingTimesDayOne { get; set; }
-        public List<double> FeedingTimesDayTwo { get; set; }
-        public List<string> FormattedFeedingTimes { get; set; }
-        public List<string> FormattedFeedingTimesDayOne { get; set; }
-        public List<string> FormattedFeedingTimesDayTwo { get; set; }
+        public IReadOnlyCollection<double> FeedingTimes { get; set; }
+        public IReadOnlyCollection<double> FeedingTimesDayOne { get; set; }
+        public IReadOnlyCollection<double> FeedingTimesDayTwo { get; set; }
+        public IReadOnlyCollection<string> FormattedFeedingTimes { get; set; }
+        public IReadOnlyCollection<string> FormattedFeedingTimesDayOne { get; set; }
+        public IReadOnlyCollection<string> FormattedFeedingTimesDayTwo { get; set; }
 
         public FeedingSchedule(PatientPageModel patient)
         {

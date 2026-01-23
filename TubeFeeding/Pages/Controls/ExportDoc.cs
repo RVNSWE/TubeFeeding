@@ -25,9 +25,9 @@ namespace TubeFeeding.Pages.Controls
         private readonly double interval;
         private readonly double intervalDayOne;
         private readonly double intervalDayTwo;
-        private readonly List<string> scheduleList;
-        private readonly List<string> scheduleListDayOne;
-        private readonly List<string> scheduleListDayTwo;
+        private readonly IReadOnlyCollection<string> scheduleList;
+        private readonly IReadOnlyCollection<string> scheduleListDayOne;
+        private readonly IReadOnlyCollection<string> scheduleListDayTwo;
 
         public ExportDoc(FeedingSchedule schedule, string pdfPath)
         {
@@ -376,7 +376,7 @@ namespace TubeFeeding.Pages.Controls
             return p;
         }
 
-        private static Paragraph PrintSchedule(List<string> schedule)
+        private static Paragraph PrintSchedule(IReadOnlyCollection<string> schedule)
         {
             Paragraph p = new();
 

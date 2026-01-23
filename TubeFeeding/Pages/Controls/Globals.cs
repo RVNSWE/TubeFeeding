@@ -167,7 +167,7 @@
                 return feedingTimes;
         }
 
-        public static List<string> CreateFormattedListOfTimes(List<double> list)
+        public static List<string> CreateFormattedListOfTimes(IReadOnlyCollection<double> list)
         {
             List<string> formattedList = [];
 
