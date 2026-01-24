@@ -35,81 +35,11 @@ namespace TubeFeeding.Data
         }
 
         /*
-         * FOR DEBUGGING - Drop the current Patient table.
-         */
-        /*public async Task DropPatientTable()
-        {
-            System.Diagnostics.Debug.WriteLine("Attempting to drop patient table");
-
-            try
-            {
-                await conn.DropTableAsync<Patient>();
-                System.Diagnostics.Debug.WriteLine("Dropping patient table");
-                await conn.CreateTableAsync<Patient>();
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("Could not drop table. Error: {1}", ex.Message);
-            }
-        }*/
-
-        /*
          * Add a new patient.
          */
-        public async Task AddNewPatient(
-            string foodName,
-            double kcalPerMl,
-            double waterContent,
-            string patientName,
-            string clientName,
-            string species,
-            double bodyWeight,
-            double maxTotalVolumePerMeal,
-            double maxTotalVolumePerMealDayOne,
-            double maxTotalVolumePerMealDayTwo,
-            double foodPerMeal,
-            double foodPerMealDayOne,
-            double foodPerMealDayTwo,
-            double volPerFlush,
-            double waterToAddPerMeal,
-            double waterToAddPerMealDayOne,
-            double waterToAddPerMealDayTwo,
-            int mealsPerDay,
-            int mealsPerDayOne,
-            int mealsPerDayTwo,
-            double cansPerDay,
-            double cansPerDayOne,
-            double cansPerDayTwo
-            )
+        public async Task AddNewPatient(Patient patient)
         {
             System.Diagnostics.Debug.WriteLine("Attempting to add patient");
-
-            Patient patient = new()
-            {
-                FoodName = foodName,
-                KcalPerMl = kcalPerMl,
-                WaterContent = waterContent,
-                PatientName = patientName,
-                ClientName = clientName,
-                Species = species,
-                BodyWeight = bodyWeight,
-                MaxTotalVolumePerMeal = maxTotalVolumePerMeal,
-                MaxTotalVolumePerMealDayOne = maxTotalVolumePerMealDayOne,
-                MaxTotalVolumePerMealDayTwo = maxTotalVolumePerMealDayTwo,
-                FoodPerMeal = foodPerMeal,
-                FoodPerMealDayOne = foodPerMealDayOne,
-                FoodPerMealDayTwo = foodPerMealDayTwo,
-                VolPerFlush = volPerFlush,
-                WaterToAddPerMeal = waterToAddPerMeal,
-                WaterToAddPerMealDayOne = waterToAddPerMealDayOne,
-                WaterToAddPerMealDayTwo = waterToAddPerMealDayTwo,
-                MealsPerDay = mealsPerDay,
-                MealsPerDayOne = mealsPerDayOne,
-                MealsPerDayTwo = mealsPerDayTwo,
-                CansPerDay = cansPerDay,
-                CansPerDayOne = cansPerDayOne,
-                CansPerDayTwo = cansPerDayTwo
-            };
 
             int result;
             try
@@ -127,69 +57,6 @@ namespace TubeFeeding.Data
 
             await App.PatientPage?.UpdatePatients(patient);
         }
-
-        /*
-         * Update the currently selected patient.
-         */
-        /*public async Task UpdatePatient(
-            int id,
-            string foodName,
-            double kcalPerMl,
-            double waterContent,
-            string patientName,
-            string clientName,
-            string species,
-            double bodyWeight,
-            double maxTotalVolumePerMeal,
-            double maxTotalVolumePerMealDayOne,
-            double maxTotalVolumePerMealDayTwo,
-            double foodPerMeal,
-            double foodPerMealDayOne,
-            double foodPerMealDayTwo,
-            double volPerFlush,
-            double waterToAddPerMeal,
-            double waterToAddPerMealDayOne,
-            double waterToAddPerMealDayTwo,
-            int mealsPerDay,
-            int mealsPerDayOne,
-            int mealsPerDayTwo,
-            double cansPerDay,
-            double cansPerDayOne,
-            double cansPerDayTwo
-            )
-        {
-            Patient patient = new()
-            {
-                Id = id,
-                FoodName = foodName,
-                KcalPerMl = kcalPerMl,
-                WaterContent = waterContent,
-                PatientName = patientName,
-                ClientName = clientName,
-                Species = species,
-                BodyWeight = bodyWeight,
-                MaxTotalVolumePerMeal = maxTotalVolumePerMeal,
-                MaxTotalVolumePerMealDayOne = maxTotalVolumePerMealDayOne,
-                MaxTotalVolumePerMealDayTwo = maxTotalVolumePerMealDayTwo,
-                FoodPerMeal = foodPerMeal,
-                FoodPerMealDayOne = foodPerMealDayOne,
-                FoodPerMealDayTwo = foodPerMealDayTwo,
-                VolPerFlush = volPerFlush,
-                WaterToAddPerMeal = waterToAddPerMeal,
-                WaterToAddPerMealDayOne = waterToAddPerMealDayOne,
-                WaterToAddPerMealDayTwo = waterToAddPerMealDayTwo,
-                MealsPerDay = mealsPerDay,
-                MealsPerDayOne = mealsPerDayOne,
-                MealsPerDayTwo = mealsPerDayTwo,
-                CansPerDay = cansPerDay,
-                CansPerDayOne = cansPerDayOne,
-                CansPerDayTwo = cansPerDayTwo
-            };
-
-            await conn.UpdateAsync(patient);
-
-            await App.PatientPage?.UpdatePatients(patient);
-        }*/
 
         /*
          * Get a list of all patients.

@@ -5,7 +5,7 @@
              xmlns:pages="clr-namespace:TubeFeeding.PageModels"
              xmlns:local="clr-namespace:TubeFeeding"
              x:Class="TubeFeeding.Pages.AddPatientPage"
-             x:DataType="pages:PatientPageModel"
+             x:DataType="pages:PatientListPageModel"
              Title="Create Feeding Plan">
 
     <Grid>
@@ -13,7 +13,7 @@
             <VerticalStackLayout Spacing="{StaticResource LayoutSpacing}" Padding="{StaticResource LayoutPadding}">
 
                 <sf:SfTextInputLayout Hint="Patient"
-                                      HelperText="The patient's name"
+                                      HelperText="{Binding PatientNameHelper}"
                                       CharMaxLength="30"
                                       ContainerType="Outlined"
                                       Margin="20">
@@ -22,7 +22,7 @@
                 </sf:SfTextInputLayout>
 
                 <sf:SfTextInputLayout Hint="Client"
-                                      HelperText="The client's surname"
+                                      HelperText="{Binding ClientNameHelper}"
                                       CharMaxLength="30"
                                       ContainerType="Outlined"
                                       Margin="20">
@@ -31,7 +31,7 @@
                 </sf:SfTextInputLayout>
 
                 <sf:SfTextInputLayout Hint="Species"
-                                      HelperText="Select the species"
+                                      HelperText="{Binding SpeciesHelper}"
                                       ContainerType="Outlined"
                                       Margin="20">
                     <Picker x:Name="picker"
@@ -46,7 +46,7 @@
                 </sf:SfTextInputLayout>
 
                 <sf:SfTextInputLayout Hint="Body weight in kg"
-                                      HelperText="Eg. 10"
+                                      HelperText="{Binding BodyWeightHelper}"
                                       CharMaxLength="6"
                                       ContainerType="Outlined"
                                       Margin="20">
@@ -55,7 +55,7 @@
                 </sf:SfTextInputLayout>
 
                 <sf:SfTextInputLayout Hint="Diet"
-                                      HelperText="The name of the diet to be fed"
+                                      HelperText="{Binding DietHelper}"
                                       CharMaxLength="30"
                                       ContainerType="Outlined"
                                       Margin="20">
@@ -64,7 +64,7 @@
                 </sf:SfTextInputLayout>
 
                 <sf:SfTextInputLayout Hint="Diet kcal per kg"
-                                      HelperText="Eg. 1000"
+                                      HelperText="{Binding KcalHelper}"
                                       CharMaxLength="7"
                                       ContainerType="Outlined"
                                       Margin="20">
@@ -73,7 +73,7 @@
                 </sf:SfTextInputLayout>
 
                 <sf:SfTextInputLayout Hint="Food per container"
-                                      HelperText="Volume (ml) or weight (g), eg. 180"
+                                      HelperText="{Binding NetWeightHelper}"
                                       CharMaxLength="6"
                                       ContainerType="Outlined"
                                       Margin="20">
@@ -82,7 +82,7 @@
                 </sf:SfTextInputLayout>
 
                 <sf:SfTextInputLayout Hint="Percentage of water"
-                                      HelperText="% water content of the food, eg. 77"
+                                      HelperText="{Binding PercentWaterHelper}"
                                       CharMaxLength="3"
                                       ContainerType="Outlined"
                                       Margin="20">
