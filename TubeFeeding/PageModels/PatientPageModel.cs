@@ -8,7 +8,8 @@ namespace TubeFeeding.PageModels
 {
     public partial class PatientPageModel : ObservableObject, INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
+        private Patient patient;
 
         private int _id;
         private string _foodName;

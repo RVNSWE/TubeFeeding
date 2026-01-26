@@ -3,12 +3,9 @@ using TubeFeeding.Models;
 
 namespace TubeFeeding.Data
 {
-    /*
-     * Class for managing SQLite database interactions.
-     */
     public class Repository
     {
-        string _dbPath; // database pdf location
+        string _dbPath;
 
         private SQLiteAsyncConnection conn;
 
@@ -37,7 +34,7 @@ namespace TubeFeeding.Data
         /*
          * Add a new patient.
          */
-        public async Task AddNewPatient(Patient patient)
+        public async Task AddNewSchedule(Patient patient)
         {
             System.Diagnostics.Debug.WriteLine("Attempting to add patient");
 
@@ -59,9 +56,19 @@ namespace TubeFeeding.Data
         }
 
         /*
+         * Update the currently selected patient.
+         */
+        public async Task UpdateSchedule(Patient patient)
+        {
+            await conn.UpdateAsync(patient);
+
+            await App.PatientPage?.UpdatePatients(patient);
+        }
+
+        /*
          * Get a list of all patients.
          */
-        public async Task<List<Patient>> GetAllPatients()
+        public async Task<List<Patient>> GetAllSchedules()
         {
             try
             {
@@ -79,7 +86,7 @@ namespace TubeFeeding.Data
         /*
          * Get a specific patient by ID.
          */
-        public async Task<Patient> GetPatient(int id)
+        /*public async Task<Patient> GetSchedule(int id)
         {
             Patient schedule = new();
 
@@ -95,7 +102,7 @@ namespace TubeFeeding.Data
             }
 
             return schedule;
-        }
+        }*/
 
         /*
          * Delete a patient.

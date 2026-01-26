@@ -8,15 +8,16 @@ public partial class AddPatientPage : ContentPage
 
     public AddPatientPage()
     {
-        BindingContext = App.PatientPage?.SelectedPatient;
-
         InitializeComponent();
+
+        App.PatientPage?.NewPatient = new AddPatientPageModel();
+        BindingContext = App.PatientPage?.NewPatient;
 
         speciesLabel = new Label();
         speciesLabel.Text = "None";
         speciesLabel.SetBinding(Label.TextProperty, Binding.Create(static (Picker picker) => picker.SelectedItem, source: picker));
 
-        btnSave.Clicked += async (s, e) => await App.PatientPage.SaveNewSchedule(
+        btnSave.Clicked += async (s, e) => await App.PatientPage.NewPatient.SaveNewSchedule(
             newPatientName.Text,
             newClientName.Text,
             speciesLabel.Text,

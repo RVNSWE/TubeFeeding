@@ -5,7 +5,7 @@
              xmlns:pages="clr-namespace:TubeFeeding.PageModels"
              xmlns:local="clr-namespace:TubeFeeding"
              x:Class="TubeFeeding.Pages.AddPatientPage"
-             x:DataType="pages:PatientListPageModel"
+             x:DataType="pages:AddPatientPageModel"
              Title="Create Feeding Plan">
 
     <Grid>
