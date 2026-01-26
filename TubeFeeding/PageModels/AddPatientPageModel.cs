@@ -9,8 +9,8 @@ namespace TubeFeeding.PageModels
     public partial class AddPatientPageModel : ObservableObject, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
-        private Patient patient;
 
+        private Patient patient;
         private const int MAX_ML_PER_KG_DAY_ONE = 10;
         private const int MAX_ML_PER_KG_DAY_TWO = 15;
         private const int MAX_ML_PER_KG = 20;
@@ -23,6 +23,7 @@ namespace TubeFeeding.PageModels
         private double totalFoodAndWaterPerDayOne;
         private double totalFoodAndWaterPerDayTwo;
         private double totalFoodAndWaterPerDay;
+        private double foodNetWeight;
 
         private string _patientNameHelper;
         private string _clientNameHelper;
@@ -32,6 +33,7 @@ namespace TubeFeeding.PageModels
         private string _kcalHelper;
         private string _netWeightHelper;
         private string _percentWaterHelper;
+        private string _validationFailureMessage;
 
         private readonly string enterNumber;
         private readonly string patientNameErrorMessage;
@@ -143,35 +145,129 @@ namespace TubeFeeding.PageModels
             }
         }
 
+        public string ValidationFailureMessage
+        {
+            get => _validationFailureMessage;
+            set
+            {
+                if (_validationFailureMessage != value)
+                {
+                    _validationFailureMessage = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public AddPatientPageModel()
         {
-            PatientNameHelper = "The patient's name";
-            ClientNameHelper = "The client's surname";
-            SpeciesHelper = "Select the species";
-            BodyWeightHelper = "Eg. 10kg";
-            DietHelper = "The name of the diet to be fed";
-            KcalHelper = "Eg. 1000";
-            NetWeightHelper = "Net volume or weight in ml or g, eg. 180";
-            PercentWaterHelper = "% water content of the food, eg. 77";
-
+            InitialiseNewPatient();
             enterNumber = "Please enter either a whole number or decimal";
             patientNameErrorMessage = "Please enter the patient's name";
             clientNameErrorMessage = "Please enter the client's name";
             speciesErrorMessage = "Please select the patient's species";
             dietErrorMessage = "Please enter the name of the food";
-
-            _patientNameHelper = PatientNameHelper;
-            _clientNameHelper = ClientNameHelper;
-            _speciesHelper = SpeciesHelper;
-            _bodyWeightHelper = BodyWeightHelper;
-            _dietHelper = DietHelper;
-            _kcalHelper = KcalHelper;
-            _netWeightHelper = NetWeightHelper;
-            _percentWaterHelper = PercentWaterHelper;
         }
 
         public void OnPropertyChanged([CallerMemberName] string name = "") =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+
+        private void InitialiseNewPatient()
+        {
+            patient = new();
+            PatientNameHelper = "";
+            ClientNameHelper = "";
+            SpeciesHelper = "";
+            BodyWeightHelper = "";
+            DietHelper = "";
+            KcalHelper = "";
+            NetWeightHelper = "";
+            PercentWaterHelper = "";
+            ValidationFailureMessage = "";
+        }
+
+        private bool ValidPatientName()
+        {
+            if (Globals.IsStringEmpty(patient.PatientName))
+            {
+                PatientNameHelper = patientNameErrorMessage;
+                return false;
+            }
+            return true;
+        }
+
+        private bool ValidClientName()
+        {
+            if (Globals.IsStringEmpty(patient.ClientName))
+            {
+                ClientNameHelper = clientNameErrorMessage;
+                return false;
+            }
+            return true;
+        }
+
+        private bool ValidSpecies()
+        {
+            if (Globals.IsStringEmpty(patient.Species) || patient.Species == "None")
+            {
+                SpeciesHelper = speciesErrorMessage;
+                return false;
+            }
+            return true;
+        }
+
+        private bool ValidFoodName()
+        {
+            if (Globals.IsStringEmpty(patient.FoodName))
+            {
+                DietHelper = dietErrorMessage;
+                return false;
+            }
+            return true;
+        }
+
+        private bool ValidBodyWeight(string rawBodyWeight)
+        {
+            if (Globals.IsStringEmpty(rawBodyWeight) || !double.TryParse(rawBodyWeight, out double bodyWeight))
+            {
+                BodyWeightHelper = enterNumber;
+                return false;
+            }
+            patient.BodyWeight = bodyWeight;
+            return true;
+        }
+
+        private bool ValidKcal(string rawKcal)
+        {
+            if (Globals.IsStringEmpty(rawKcal) || !double.TryParse(rawKcal, out double kcal))
+            {
+                KcalHelper = enterNumber;
+                return false;
+            }
+            patient.KcalPerMl = kcal * 0.001;
+            return true;
+        }
+
+        private bool ValidFoodNetWeight(string rawNetWeight)
+        {
+            if (Globals.IsStringEmpty(rawNetWeight) || !double.TryParse(rawNetWeight, out double netWeight))
+            {
+                NetWeightHelper = enterNumber;
+                return false;
+            }
+            foodNetWeight = netWeight;
+            return true;
+        }
+
+        private bool ValidWaterPercentage(string rawWaterPercentage)
+        {
+            if (Globals.IsStringEmpty(rawWaterPercentage) || !double.TryParse(rawWaterPercentage, out double waterPercentage))
+            {
+                PercentWaterHelper = enterNumber;
+                return false;
+            }
+            patient.WaterContent = waterPercentage * 0.01;
+            return true;
+        }
 
         public async Task SaveNewSchedule(
             string newPatientNameText,
@@ -184,70 +280,24 @@ namespace TubeFeeding.PageModels
             string newWaterPercentageText
             )
         {
-            patient = new();
-            List<bool> errorCount = [false, false, false, false, false, false, false, false];
-
-            double bodyWeight = 0;
-            double kcal = 0;
-            double netWeight = 0;
-            double waterPercentage = 0;
-
+            InitialiseNewPatient();
             patient.PatientName = Globals.FormatString(newPatientNameText);
             patient.ClientName = Globals.FormatString(newClientNameText);
-            string rawBodyWeight = Globals.FormatString(newBodyWeightText);
             patient.FoodName = Globals.FormatString(newFoodNameText);
+            patient.Species = Globals.FormatString(speciesLabelText);
+            string rawBodyWeight = Globals.FormatString(newBodyWeightText);
             string rawKcal = Globals.FormatString(newKcalText);
             string rawNetWeight = Globals.FormatString(newNetWeightText);
             string rawWaterPercentage = Globals.FormatString(newWaterPercentageText);
-            patient.Species = speciesLabelText;
 
-            if (Globals.IsStringEmpty(patient.PatientName))
+            if (!InputValid(rawBodyWeight, rawKcal, rawNetWeight, rawWaterPercentage))
             {
-                PatientNameHelper = patientNameErrorMessage;
-                errorCount[0] = true;
+                ValidationFailureMessage = "Please address the errors highlighted above and then try again";
             }
-            if (Globals.IsStringEmpty(patient.ClientName))
-            {
-                ClientNameHelper = clientNameErrorMessage;
-                errorCount[1] = true;
-            }
-            if (Globals.IsStringEmpty(patient.Species) || patient.Species == "None")
-            {
-                SpeciesHelper = speciesErrorMessage;
-                errorCount[2] = true;
-            }
-            if (Globals.IsStringEmpty(rawBodyWeight) || !double.TryParse(rawBodyWeight, out bodyWeight))
-            {
-                BodyWeightHelper = enterNumber;
-                errorCount[3] = true;
-            }
-            if (Globals.IsStringEmpty(patient.FoodName))
-            {
-                DietHelper = dietErrorMessage;
-                errorCount[4] = true;
-            }
-            if (Globals.IsStringEmpty(rawKcal) || !double.TryParse(rawKcal, out kcal))
-            {
-                KcalHelper = enterNumber;
-                errorCount[5] = true;
-            }
-            if (Globals.IsStringEmpty(rawNetWeight) || !double.TryParse(rawNetWeight, out netWeight))
-            {
-                NetWeightHelper = enterNumber;
-                errorCount[6] = true;
-            }
-            if (Globals.IsStringEmpty(rawWaterPercentage) || !double.TryParse(rawWaterPercentage, out waterPercentage))
-            {
-                PercentWaterHelper = enterNumber;
-                errorCount[7] = true;
-            }
-            if (!errorCount.Contains(true))
+            else
             {
                 Globals.GoToList(); // So "back" from the details page navigates back to the list instead of AddPatientPage
 
-                patient.BodyWeight = bodyWeight;
-                patient.KcalPerMl = kcal * 0.001;
-                patient.WaterContent = waterPercentage * 0.01;
                 double rER = Globals.CalculateRER(patient.BodyWeight);
                 double foodPerDay = rER / patient.KcalPerMl;
                 double foodPerDayOne = foodPerDay * 0.33;
@@ -323,9 +373,9 @@ namespace TubeFeeding.PageModels
                     }
                 }
 
-                patient.CansPerDayOne = foodPerDayOne / netWeight;
-                patient.CansPerDayTwo = foodPerDayTwo / netWeight;
-                patient.CansPerDay = foodPerDay / netWeight;
+                patient.CansPerDayOne = foodPerDayOne / foodNetWeight;
+                patient.CansPerDayTwo = foodPerDayTwo / foodNetWeight;
+                patient.CansPerDay = foodPerDay / foodNetWeight;
                 patient.VolPerFlush = flushPerMeal / 2;
 
                 patient.KcalPerMl = Math.Round(patient.KcalPerMl, 3, MidpointRounding.AwayFromZero);

@@ -149,7 +149,7 @@
                         MinimumHeightRequest="{OnIdiom 44, Desktop=60}"
                         Text="Delete"
                         Margin="30"
-                        BackgroundColor="{StaticResource CancelButton}" />
+                        BackgroundColor="{StaticResource WarningColour}" />
 
             </VerticalStackLayout>
 

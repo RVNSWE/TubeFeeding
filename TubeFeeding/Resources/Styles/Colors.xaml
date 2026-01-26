@@ -11,7 +11,7 @@
     <Color x:Key="Secondary">#9bded1</Color>
     <Color x:Key="SecondaryDarkText">#38d798</Color>
     <Color x:Key="Tertiary">#093d4b</Color>
-    <Color x:Key="CancelButton">#d76f8b</Color>
+    <Color x:Key="WarningColour">#d76f8b</Color>
 
     <Color x:Key="DarkBackground">#17171a</Color>
     <Color x:Key="LightOnDarkBackground">#ecf9ff</Color>

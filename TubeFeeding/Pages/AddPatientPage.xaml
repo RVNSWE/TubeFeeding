@@ -10,86 +10,107 @@
 
     <Grid>
         <ScrollView>
-            <VerticalStackLayout Spacing="{StaticResource LayoutSpacing}" Padding="{StaticResource LayoutPadding}">
+            <VerticalStackLayout Spacing="{StaticResource LayoutSpacing}" Padding="{StaticResource LayoutPadding}" >
 
-                <sf:SfTextInputLayout Hint="Patient"
-                                      HelperText="{Binding PatientNameHelper}"
+                <Grid Margin="20">
+                    <Label Text="{Binding PatientNameHelper}" TextColor="{StaticResource WarningColour}" LineHeight="0.1" />
+                    <sf:SfTextInputLayout Hint="Patient"
+                                      HelperText="The patient's name"
                                       CharMaxLength="30"
-                                      ContainerType="Outlined"
-                                      Margin="20">
-                    <Entry x:Name="newPatientName"
+                                      ContainerType="Outlined">
+                        <Entry x:Name="newPatientName"
                            SemanticProperties.Description="Patient name" />
-                </sf:SfTextInputLayout>
+                    </sf:SfTextInputLayout>
+                </Grid>
 
-                <sf:SfTextInputLayout Hint="Client"
-                                      HelperText="{Binding ClientNameHelper}"
+                <Grid Margin="20">
+                    <Label Text="{Binding ClientNameHelper}" TextColor="{StaticResource WarningColour}" LineHeight="0.1" />
+                    <sf:SfTextInputLayout Hint="Client"
+                                      HelperText="The client's surname"
                                       CharMaxLength="30"
-                                      ContainerType="Outlined"
-                                      Margin="20">
-                    <Entry x:Name="newClientName"
+                                      ContainerType="Outlined">
+                        <Entry x:Name="newClientName"
                            SemanticProperties.Description="Client surname" />
-                </sf:SfTextInputLayout>
+                    </sf:SfTextInputLayout>
+                </Grid>
 
-                <sf:SfTextInputLayout Hint="Species"
-                                      HelperText="{Binding SpeciesHelper}"
-                                      ContainerType="Outlined"
-                                      Margin="20">
-                    <Picker x:Name="picker"
+                <Grid Margin="20">
+                    <Label Text="{Binding SpeciesHelper}" TextColor="{StaticResource WarningColour}" LineHeight="0.1" />
+                    <sf:SfTextInputLayout Hint="Species"
+                                      HelperText="Select the species"
+                                      ContainerType="Outlined">
+                        <Picker x:Name="picker"
                             Title="Select a species">
-                        <Picker.ItemsSource>
-                            <x:Array Type="{x:Type x:String}">
-                                <x:String>Cat</x:String>
-                                <x:String>Dog</x:String>
-                            </x:Array>
-                        </Picker.ItemsSource>
-                    </Picker>
-                </sf:SfTextInputLayout>
+                            <Picker.ItemsSource>
+                                <x:Array Type="{x:Type x:String}">
+                                    <x:String>Cat</x:String>
+                                    <x:String>Dog</x:String>
+                                </x:Array>
+                            </Picker.ItemsSource>
+                        </Picker>
+                    </sf:SfTextInputLayout>
+                </Grid>
 
-                <sf:SfTextInputLayout Hint="Body weight in kg"
-                                      HelperText="{Binding BodyWeightHelper}"
+                <Grid Margin="20">
+                    <Label Text="{Binding BodyWeightHelper}" TextColor="{StaticResource WarningColour}" LineHeight="0.1" />
+                    <sf:SfTextInputLayout Hint="Body weight in kg"
+                                      HelperText="Eg. 10kg"
                                       CharMaxLength="6"
-                                      ContainerType="Outlined"
-                                      Margin="20">
-                    <Entry x:Name="newBodyWeight"
-                           SemanticProperties.Description="Patient body weight (kg)" />
-                </sf:SfTextInputLayout>
+                                      ContainerType="Outlined">
+                        <Entry x:Name="newBodyWeight"
+                           SemanticProperties.Description="Patient body weight (kg)"
+                           Keyboard="Numeric" />
+                    </sf:SfTextInputLayout>
+                </Grid>
 
-                <sf:SfTextInputLayout Hint="Diet"
-                                      HelperText="{Binding DietHelper}"
+                <Grid Margin="20">
+                    <Label Text="{Binding DietHelper}" TextColor="{StaticResource WarningColour}" LineHeight="0.1" />
+                    <sf:SfTextInputLayout Hint="Diet"
+                                      HelperText="The name of the diet to be fed"
                                       CharMaxLength="30"
-                                      ContainerType="Outlined"
-                                      Margin="20">
-                    <Entry x:Name="newFoodName"
+                                      ContainerType="Outlined">
+                        <Entry x:Name="newFoodName"
                            SemanticProperties.Description="The name of the diet to be fed" />
-                </sf:SfTextInputLayout>
+                    </sf:SfTextInputLayout>
+                </Grid>
 
-                <sf:SfTextInputLayout Hint="Diet kcal per kg"
-                                      HelperText="{Binding KcalHelper}"
+                <Grid Margin="20">
+                    <Label Text="{Binding KcalHelper}" TextColor="{StaticResource WarningColour}" LineHeight="0.1" />
+                    <sf:SfTextInputLayout Hint="Diet kcal per kg"
+                                      HelperText="Eg. 1000"
                                       CharMaxLength="7"
-                                      ContainerType="Outlined"
-                                      Margin="20">
-                    <Entry x:Name="newKcal"
-                           SemanticProperties.Description="Kcals per kg of food" />
-                </sf:SfTextInputLayout>
+                                      ContainerType="Outlined">
+                        <Entry x:Name="newKcal"
+                           SemanticProperties.Description="Kcals per kg of food"
+                           Keyboard="Numeric" />
+                    </sf:SfTextInputLayout>
+                </Grid>
 
-                <sf:SfTextInputLayout Hint="Food per container"
-                                      HelperText="{Binding NetWeightHelper}"
+                <Grid Margin="20">
+                    <Label Text="{Binding NetWeightHelper}" TextColor="{StaticResource WarningColour}" LineHeight="0.1" />
+                    <sf:SfTextInputLayout Hint="Food per container"
+                                      HelperText="Net volume or weight in ml or g, eg. 180"
                                       CharMaxLength="6"
-                                      ContainerType="Outlined"
-                                      Margin="20">
-                    <Entry x:Name="newNetWeight"
-                           SemanticProperties.Description="Weight (g) or volume (ml) of food per container" />
-                </sf:SfTextInputLayout>
+                                      ContainerType="Outlined">
+                        <Entry x:Name="newNetWeight"
+                           SemanticProperties.Description="Weight (g) or volume (ml) of food per container"
+                           Keyboard="Numeric" />
+                    </sf:SfTextInputLayout>
+                </Grid>
 
-                <sf:SfTextInputLayout Hint="Percentage of water"
-                                      HelperText="{Binding PercentWaterHelper}"
+                <Grid Margin="20">
+                    <Label Text="{Binding PercentWaterHelper}" TextColor="{StaticResource WarningColour}" LineHeight="0.1" />
+                    <sf:SfTextInputLayout Hint="Percentage of water"
+                                      HelperText="% water content of the food, eg. 77"
                                       CharMaxLength="3"
-                                      ContainerType="Outlined"
-                                      Margin="20">
-                    <Entry x:Name="newWaterPercentage"
-                           SemanticProperties.Description="Percentage water content of food" />
-                </sf:SfTextInputLayout>
+                                      ContainerType="Outlined">
+                        <Entry x:Name="newWaterPercentage"
+                           SemanticProperties.Description="Percentage water content of food"
+                           Keyboard="Numeric" />
+                    </sf:SfTextInputLayout>
+                </Grid>
 
+                <Label Text="{Binding ValidationFailureMessage}" TextColor="{StaticResource WarningColour}" LineHeight="0.1" />
                 <Button x:Name="btnSave"
                         MinimumHeightRequest="{OnIdiom 44, Desktop=60}"
                         Text="Save"
