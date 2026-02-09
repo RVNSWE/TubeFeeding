@@ -290,7 +290,7 @@ namespace TubeFeeding.PageModels
             string rawNetWeight = Globals.FormatString(newNetWeightText);
             string rawWaterPercentage = Globals.FormatString(newWaterPercentageText);
 
-            if (!InputValid(rawBodyWeight, rawKcal, rawNetWeight, rawWaterPercentage))
+            if (!InputValid(rawBodyWeight, rawKcal, rawNetWeight, rawWaterPercentage)) // ignore for now - experimenting
             {
                 ValidationFailureMessage = "Please address the errors highlighted above and then try again";
             }

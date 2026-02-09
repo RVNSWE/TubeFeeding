@@ -81,6 +81,10 @@
             return minWaterPerDay;
         }
 
+        /*
+         * If bodyweight is greater than value, check next value. Stop at first value lower than bodyweight, and return output as total volume
+         * of flush to be adminstered per meal.
+         */
         public static double GetFlushPerMeal(double bodyWeight)
         {
             double flushPerMeal = bodyWeight switch
@@ -107,60 +111,63 @@
             int hours = 15; // Number of hours to spread the feeds over
 
             double preciseInterval = hours / mealsPerDay;
-            double interval = Math.Round(preciseInterval / 5, 1, MidpointRounding.AwayFromZero) * 5; // To the nearest 5 = to the nearest half hour
+            double interval = Math.Round(preciseInterval / 5, 1, MidpointRounding.AwayFromZero) * 5; // Round to the nearest 5 = to the nearest half hour
             
-            if (interval < 1)
+            if (interval < 1) // If interval less than one hour
             {
-                interval = 1; // Minimum feeding interval is always 1 hour
+                interval = 1; // Set feeding interval to one hour (constraint: interval can never be less than an hour)
             }
 
             return interval;
         }
 
+        /*
+         * Calculate the first and last feeding times of the day from an initial assumed midpoint of 16:00 (4pm).
+         */
         public static List<double> CalculateFeedingPlan(double mealsPerDay)
         {
             double interval = CalculateInterval(mealsPerDay);
 
-            double preciseMealHalfTime = (mealsPerDay * interval) / 2; // Effectively hours / 2
-            double mealHalfTime = Math.Round(preciseMealHalfTime / 5, 1, MidpointRounding.AwayFromZero) * 5;
+            double preciseMealHalfTime = (mealsPerDay * interval) / 2; // Effectively half the total number of hours to adminster feeds over per day
+            double mealHalfTime = Math.Round(preciseMealHalfTime / 5, 1, MidpointRounding.AwayFromZero) * 5; // Round to the nearest 5
             int midPoint = 16; // Corresponding to 16:00 or 4pm
-            double startTime = midPoint - mealHalfTime;
-            double endTime = startTime + mealHalfTime;
+            double startTime = midPoint - mealHalfTime; // Calculate the feeding schedule start time from its mid point
+            double endTime = startTime + mealHalfTime; // Calculate the end time from the mid point
 
-            while (endTime > 23.5)
+            while (endTime > 23.5) // While current end time is later than 23:30
             {
-                midPoint -= 1;
-                startTime = midPoint - mealHalfTime;
-                endTime = midPoint + mealHalfTime;
+                midPoint -= 1; // Shift the mid point one hour earlier
+                startTime = midPoint - mealHalfTime; // Recalculate the start time
+                endTime = midPoint + mealHalfTime; // Recalculate the end time
             }
 
-            double time = startTime;
+            double time = startTime; // Start from the calculated start time
 
-            List<double> feedingTimes = [];
+            List<double> feedingTimes = []; // Initialise the output list
 
-            if (interval > 1)
+            if (interval > 1) // If the interval is longer than 1 hour
             {
-                for (int i = 0; i < mealsPerDay; i++)
+                for (int i = 0; i < mealsPerDay; i++) // For each meal to be scheduled
                 {
-                    feedingTimes.Add(time);
-                    time += interval;
+                    feedingTimes.Add(time); // Add this time to the list
+                    time += interval; // Increment the time by the calculated interval
                 }
             }
-            else if (mealsPerDay > 23)
+            else if (mealsPerDay > 23) // Otherwise, if the patient needs more than 23 meals per day
             {
-                time = 0;
-                for (int i = 0; i < 24; i++)
+                time = 0; // Set the time to midnight
+                for (int i = 0; i < 24; i++) // For each meal (which will be every hour)
                 {
-                    feedingTimes.Add(time);
-                    time++;
+                    feedingTimes.Add(time); // Add the current time to the list
+                    time++; // Increment time by one hour
                 }
             }
-            else
+            else // Otherwise
             {
-                for (int i = 0; i < mealsPerDay; i++)
+                for (int i = 0; i < mealsPerDay; i++) // For each meal to be scheduled
                 {
-                    feedingTimes.Add(time);
-                    time++;
+                    feedingTimes.Add(time); // Add this time to the list
+                    time++; // Increment the time by one hour
                 }
             }
 
