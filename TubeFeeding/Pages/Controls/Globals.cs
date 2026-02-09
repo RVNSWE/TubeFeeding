@@ -28,6 +28,9 @@
             return value;
         }
 
+        /*
+         * Check if string is empty.
+         */
         public static bool IsStringEmpty(string value)
         {
             if (value == "")
@@ -37,15 +40,21 @@
             return false;
         }
 
+        /*
+         * Calculate resting energy requirement.
+         */
         public static double CalculateRER(double bodyWeight)
         {
             double rER;
 
-            rER = 70 * Math.Pow(bodyWeight, 0.75);
+            rER = 70 * Math.Pow(bodyWeight, 0.75); // Use the more accurate universal calculation.
 
             return rER;
         }
 
+        /*
+         * Calculate estimated total required fluid input per day using simple fluid calculation.
+         */
         public static double FluidCalculationOne(int multiplier, double bodyWeight)
         {
             double totalFluidsPerDay = multiplier * bodyWeight;
@@ -53,6 +62,9 @@
             return totalFluidsPerDay;
         }
 
+        /*
+         * Calculate estimated total required fluid input per day using more complex calculation.
+         */
         public static double FluidCalculationTwo(int multiplier, double bodyWeight)
         {
             double totalFluidsPerDay = multiplier * Math.Pow(bodyWeight, 0.75);
@@ -60,11 +72,14 @@
             return totalFluidsPerDay;
         }
 
+        /*
+         * Calculate fluids provided by food and return the minimum amount of additional water to administer.
+         */
         public static double GetMinWaterPerDay(double totalFluidsPerDayCalcOne, double totalFluidsPerDayCalcTwo, double foodWaterContent)
         {
             double minWaterPerDay;
 
-            if (totalFluidsPerDayCalcOne < totalFluidsPerDayCalcTwo)
+            if (totalFluidsPerDayCalcOne < totalFluidsPerDayCalcTwo) // Use the calculation that provides the lowest estimate
             {
                 minWaterPerDay = totalFluidsPerDayCalcOne - foodWaterContent;
             }
@@ -73,9 +88,9 @@
                 minWaterPerDay = totalFluidsPerDayCalcTwo - foodWaterContent;
             }
 
-            if (minWaterPerDay < 0)
+            if (minWaterPerDay < 0) // If the food provides more than the minimum requirement already
             {
-                minWaterPerDay = 0;
+                minWaterPerDay = 0; // Set additional water to zero
             }
 
             return minWaterPerDay;
