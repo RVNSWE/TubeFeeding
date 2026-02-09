@@ -174,32 +174,35 @@
                 return feedingTimes;
         }
 
+        /*
+         * Convert the calculated times into a human readable list of times
+         */
         public static List<string> CreateFormattedListOfTimes(IReadOnlyCollection<double> list)
         {
-            List<string> formattedList = [];
+            List<string> formattedList = []; // Initialise output list
 
-            foreach (double time in list)
+            foreach (double time in list) // For each time in the calculated feeding schedule
             {
-                int roundedTime = (int)Math.Round(time, 0, MidpointRounding.AwayFromZero);
-                string formattedTime;
+                int roundedTime = (int)Math.Round(time, 0, MidpointRounding.AwayFromZero); // Round the time to the nearest int
+                string formattedTime; // Prepare a string field for the formatted (human readable) time
 
-                string hours = time.ToString();
-                string minutes = ":00";
+                string hours = time.ToString(); // Store the hour as a string
+                string minutes = ":00"; // Set the minutes to 0
 
-                if (time < roundedTime)
+                if (time < roundedTime) // If the real time is less than the rounded time then it was rounded upwards, meaning minutes were 30+
                 {
-                    hours = Math.Round(time, 0, MidpointRounding.ToZero).ToString();
-                    minutes = ":30";
+                    hours = Math.Round(time, 0, MidpointRounding.ToZero).ToString(); // So round the hour down
+                    minutes = ":30"; // And set minutes to 30
                 }
 
-                if (time < 10)
+                if (time < 10) // If time is less than 10 then the hour is only one digit long
                 {
-                    hours = "0" + Math.Round(time, 0, MidpointRounding.ToZero).ToString();
+                    hours = "0" + Math.Round(time, 0, MidpointRounding.ToZero).ToString(); // So add a zero before it
                 }
 
-                formattedTime = hours + minutes;
+                formattedTime = hours + minutes; // Combine the hours and minutes into one string
 
-                formattedList.Add(formattedTime);
+                formattedList.Add(formattedTime); // Add the human readable time to the output list
             }
 
             return formattedList;
