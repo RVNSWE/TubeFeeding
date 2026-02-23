@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Security.AccessControl;
 using TubeFeeding.Models;
 using TubeFeeding.Pages.Controls;
 
@@ -188,59 +187,73 @@ namespace TubeFeeding.PageModels
 
         private bool InputValid(string rawBodyWeight, string rawKcal, string rawNetWeight, string rawWaterPercentage)
         {
+            bool isValid = true;
+
             if (Globals.IsStringEmpty(patient.PatientName))
             {
                 PatientNameHelper = patientNameErrorMessage;
-                return false;
+                isValid = false;
             }
 
             if (Globals.IsStringEmpty(patient.ClientName))
             {
                 ClientNameHelper = clientNameErrorMessage;
-                return false;
+                isValid = false;
             }
 
             if (Globals.IsStringEmpty(patient.Species) || patient.Species == "None")
             {
                 SpeciesHelper = speciesErrorMessage;
-                return false;
+                isValid = false;
             }
 
             if (Globals.IsStringEmpty(patient.FoodName))
             {
                 DietHelper = dietErrorMessage;
-                return false;
+                isValid = false;
             }
 
             if (Globals.IsStringEmpty(rawBodyWeight) || !double.TryParse(rawBodyWeight, out double bodyWeight))
             {
                 BodyWeightHelper = enterNumber;
-                return false;
+                isValid = false;
             }
-            patient.BodyWeight = bodyWeight;
+            else
+            {
+                patient.BodyWeight = bodyWeight;
+            }
 
             if (Globals.IsStringEmpty(rawKcal) || !double.TryParse(rawKcal, out double kcal))
             {
                 KcalHelper = enterNumber;
-                return false;
+                isValid = false;
             }
-            patient.KcalPerMl = kcal * 0.001;
+            else
+            {
+                patient.KcalPerMl = kcal * 0.001;
+            }
 
             if (Globals.IsStringEmpty(rawNetWeight) || !double.TryParse(rawNetWeight, out double netWeight))
             {
                 NetWeightHelper = enterNumber;
-                return false;
+                isValid = false;
             }
-            foodNetWeight = netWeight;
+            else
+            {
+                foodNetWeight = netWeight;
+            }
 
             if (Globals.IsStringEmpty(rawWaterPercentage) || !double.TryParse(rawWaterPercentage, out double waterPercentage))
             {
                 PercentWaterHelper = enterNumber;
-                return false;
+                isValid = false;
             }
-            patient.WaterContent = waterPercentage * 0.01;
+            else
+            {
+                patient.WaterContent = waterPercentage * 0.01;
+            }
 
-            return true;
+            return isValid;
         }
 
 
