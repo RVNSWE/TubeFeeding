@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Security.AccessControl;
 using TubeFeeding.Models;
 using TubeFeeding.Pages.Controls;
 
@@ -185,89 +186,63 @@ namespace TubeFeeding.PageModels
             ValidationFailureMessage = "";
         }
 
-        private bool ValidPatientName()
+        private bool InputValid(string rawBodyWeight, string rawKcal, string rawNetWeight, string rawWaterPercentage)
         {
             if (Globals.IsStringEmpty(patient.PatientName))
             {
                 PatientNameHelper = patientNameErrorMessage;
                 return false;
             }
-            return true;
-        }
 
-        private bool ValidClientName()
-        {
             if (Globals.IsStringEmpty(patient.ClientName))
             {
                 ClientNameHelper = clientNameErrorMessage;
                 return false;
             }
-            return true;
-        }
 
-        private bool ValidSpecies()
-        {
             if (Globals.IsStringEmpty(patient.Species) || patient.Species == "None")
             {
                 SpeciesHelper = speciesErrorMessage;
                 return false;
             }
-            return true;
-        }
 
-        private bool ValidFoodName()
-        {
             if (Globals.IsStringEmpty(patient.FoodName))
             {
                 DietHelper = dietErrorMessage;
                 return false;
             }
-            return true;
-        }
 
-        private bool ValidBodyWeight(string rawBodyWeight)
-        {
             if (Globals.IsStringEmpty(rawBodyWeight) || !double.TryParse(rawBodyWeight, out double bodyWeight))
             {
                 BodyWeightHelper = enterNumber;
                 return false;
             }
             patient.BodyWeight = bodyWeight;
-            return true;
-        }
 
-        private bool ValidKcal(string rawKcal)
-        {
             if (Globals.IsStringEmpty(rawKcal) || !double.TryParse(rawKcal, out double kcal))
             {
                 KcalHelper = enterNumber;
                 return false;
             }
             patient.KcalPerMl = kcal * 0.001;
-            return true;
-        }
 
-        private bool ValidFoodNetWeight(string rawNetWeight)
-        {
             if (Globals.IsStringEmpty(rawNetWeight) || !double.TryParse(rawNetWeight, out double netWeight))
             {
                 NetWeightHelper = enterNumber;
                 return false;
             }
             foodNetWeight = netWeight;
-            return true;
-        }
 
-        private bool ValidWaterPercentage(string rawWaterPercentage)
-        {
             if (Globals.IsStringEmpty(rawWaterPercentage) || !double.TryParse(rawWaterPercentage, out double waterPercentage))
             {
                 PercentWaterHelper = enterNumber;
                 return false;
             }
             patient.WaterContent = waterPercentage * 0.01;
+
             return true;
         }
+
 
         public async Task SaveNewSchedule(
             string newPatientNameText,
@@ -290,7 +265,7 @@ namespace TubeFeeding.PageModels
             string rawNetWeight = Globals.FormatString(newNetWeightText);
             string rawWaterPercentage = Globals.FormatString(newWaterPercentageText);
 
-            if (!InputValid(rawBodyWeight, rawKcal, rawNetWeight, rawWaterPercentage)) // ignore for now - experimenting
+            if (!InputValid(rawBodyWeight, rawKcal, rawNetWeight, rawWaterPercentage))
             {
                 ValidationFailureMessage = "Please address the errors highlighted above and then try again";
             }
