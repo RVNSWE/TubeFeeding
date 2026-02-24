@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:sf="clr-namespace:Syncfusion.Maui.Toolkit.TextInputLayout;assembly=Syncfusion.Maui.Toolkit"
              xmlns:pages="clr-namespace:TubeFeeding.PageModels"
              xmlns:local="clr-namespace:TubeFeeding"
@@ -19,7 +20,15 @@
                                       CharMaxLength="30"
                                       ContainerType="Outlined">
                         <Entry x:Name="newPatientName"
-                           SemanticProperties.Description="Patient name" />
+                               SemanticProperties.Description="Patient name">
+                            <Entry.Behaviors>
+                                <toolkit:TextValidationBehavior
+                                    InvalidStyle="{StaticResource InvalidEntryStyle}"
+                                    ValidStyle="{StaticResource ValidEntryStyle}"
+                                    Flags="ValidateOnValueChanged"
+                                    MinimumLength="1" />
+                            </Entry.Behaviors>
+                        </Entry>
                     </sf:SfTextInputLayout>
                 </Grid>
 
@@ -30,7 +39,15 @@
                                       CharMaxLength="30"
                                       ContainerType="Outlined">
                         <Entry x:Name="newClientName"
-                           SemanticProperties.Description="Client surname" />
+                           SemanticProperties.Description="Client surname">
+                            <Entry.Behaviors>
+                                <toolkit:TextValidationBehavior
+                                    InvalidStyle="{StaticResource InvalidEntryStyle}"
+                                    ValidStyle="{StaticResource ValidEntryStyle}"
+                                    Flags="ValidateOnValueChanged"
+                                    MinimumLength="1" />
+                            </Entry.Behaviors>
+                        </Entry>
                     </sf:SfTextInputLayout>
                 </Grid>
 
@@ -59,7 +76,16 @@
                                       ContainerType="Outlined">
                         <Entry x:Name="newBodyWeight"
                            SemanticProperties.Description="Patient body weight (kg)"
-                           Keyboard="Numeric" />
+                           Keyboard="Numeric">
+                            <Entry.Behaviors>
+                                <toolkit:NumericValidationBehavior
+                                    InvalidStyle="{StaticResource InvalidEntryStyle}"
+                                    ValidStyle="{StaticResource ValidEntryStyle}"
+                                    Flags="ValidateOnValueChanged"
+                                    MinimumValue="0.001"
+                                    MaximumValue="200.0" />
+                            </Entry.Behaviors>
+                        </Entry>
                     </sf:SfTextInputLayout>
                 </Grid>
 
@@ -70,7 +96,15 @@
                                       CharMaxLength="30"
                                       ContainerType="Outlined">
                         <Entry x:Name="newFoodName"
-                           SemanticProperties.Description="The name of the diet to be fed" />
+                           SemanticProperties.Description="The name of the diet to be fed">
+                            <Entry.Behaviors>
+                                <toolkit:TextValidationBehavior
+                                    InvalidStyle="{StaticResource InvalidEntryStyle}"
+                                    ValidStyle="{StaticResource ValidEntryStyle}"
+                                    Flags="ValidateOnValueChanged"
+                                    MinimumLength="1" />
+                            </Entry.Behaviors>
+                        </Entry>
                     </sf:SfTextInputLayout>
                 </Grid>
 
@@ -82,7 +116,15 @@
                                       ContainerType="Outlined">
                         <Entry x:Name="newKcal"
                            SemanticProperties.Description="Kcals per kg of food"
-                           Keyboard="Numeric" />
+                           Keyboard="Numeric">
+                            <Entry.Behaviors>
+                                <toolkit:NumericValidationBehavior
+                                    InvalidStyle="{StaticResource InvalidEntryStyle}"
+                                    ValidStyle="{StaticResource ValidEntryStyle}"
+                                    Flags="ValidateOnValueChanged"
+                                    MinimumValue="1.0" />
+                            </Entry.Behaviors>
+                        </Entry>
                     </sf:SfTextInputLayout>
                 </Grid>
 
@@ -94,7 +136,15 @@
                                       ContainerType="Outlined">
                         <Entry x:Name="newNetWeight"
                            SemanticProperties.Description="Weight (g) or volume (ml) of food per container"
-                           Keyboard="Numeric" />
+                           Keyboard="Numeric">
+                            <Entry.Behaviors>
+                                <toolkit:NumericValidationBehavior
+                                    InvalidStyle="{StaticResource InvalidEntryStyle}"
+                                    ValidStyle="{StaticResource ValidEntryStyle}"
+                                    Flags="ValidateOnValueChanged"
+                                    MinimumValue="1.0" />
+                            </Entry.Behaviors>
+                        </Entry>
                     </sf:SfTextInputLayout>
                 </Grid>
 
@@ -106,11 +156,21 @@
                                       ContainerType="Outlined">
                         <Entry x:Name="newWaterPercentage"
                            SemanticProperties.Description="Percentage water content of food"
-                           Keyboard="Numeric" />
+                           Keyboard="Numeric">
+                            <Entry.Behaviors>
+                                <toolkit:NumericValidationBehavior
+                                    InvalidStyle="{StaticResource InvalidEntryStyle}"
+                                    ValidStyle="{StaticResource ValidEntryStyle}"
+                                    Flags="ValidateOnValueChanged"
+                                    MinimumValue="1.0"
+                                    MaximumValue="99.99" />
+                            </Entry.Behaviors>
+                        </Entry>
                     </sf:SfTextInputLayout>
                 </Grid>
 
                 <Label Text="{Binding ValidationFailureMessage}" TextColor="{StaticResource WarningColour}" LineHeight="0.1" />
+
                 <Button x:Name="btnSave"
                         MinimumHeightRequest="{OnIdiom 44, Desktop=60}"
                         Text="Save"

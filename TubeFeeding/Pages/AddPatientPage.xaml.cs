@@ -17,8 +17,6 @@ public partial class AddPatientPage : ContentPage
         speciesLabel.Text = "None";
         speciesLabel.SetBinding(Label.TextProperty, Binding.Create(static (Picker picker) => picker.SelectedItem, source: picker));
 
-
-
         btnSave.Clicked += async (s, e) => await App.PatientPage.NewPatient.SaveNewSchedule(
             newPatientName.Text,
             newClientName.Text,
@@ -30,14 +28,6 @@ public partial class AddPatientPage : ContentPage
             newWaterPercentage.Text
             );
     }
-
-    /*
-     * On Entry Text Changed
-     * if input invalid
-     * label text = error message
-     * else
-     * label text = blank
-     */
 
     void OnPickerSelectedIndexChanged(object sender, EventArgs e)
     {

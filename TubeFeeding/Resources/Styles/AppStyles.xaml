@@ -254,6 +254,13 @@
                 Value="{OnPlatform WinUI=None, Default=Bold}" />
     </Style>
 
+    <Style x:Key="InvalidEntryStyle" TargetType="Entry">
+        <Setter Property="TextColor" Value="{StaticResource WarningColour}" />
+    </Style>
+    <Style x:Key="ValidEntryStyle" TargetType="Entry">
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource DarkOnLightBackground}, Dark={StaticResource LightOnDarkBackground}}" />
+    </Style>
+
     <Style TargetType="Border">
         <Setter Property="StrokeShape" Value="RoundRectangle 20"/>
         <Setter Property="Background" Value="{AppThemeBinding Light={StaticResource LightSecondaryBackground},Dark={StaticResource DarkSecondaryBackground}}"/>
@@ -278,7 +285,6 @@
         <Setter Property="HelperLabelStyle" Value="{AppThemeBinding Light={StaticResource lightThemeLabelStyle}, Dark={StaticResource darkThemeLabelStyle}}"/>
     </Style>
     
-
     <Style TargetType="BoxView" x:Key="ShimmerCustomViewStyle">
         <Setter Property="BackgroundColor" Value="Gray" />
         <Setter Property="HorizontalOptions" Value="Fill" />
