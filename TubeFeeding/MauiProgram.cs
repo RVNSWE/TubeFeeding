@@ -4,7 +4,6 @@ using Syncfusion.Maui.Core.Hosting;
 using Syncfusion.Maui.Toolkit.Hosting;
 using TubeFeeding.Pages.Controls;
 
-
 namespace TubeFeeding
 {
     public static class MauiProgram
